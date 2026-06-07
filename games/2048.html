@@ -1,37 +1,4 @@
-const HOME = `<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>xiaosh.xyz</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: #fff;
-    }
-    h1 { font-size: clamp(2rem, 8vw, 4rem); text-align: center; }
-    p { text-align: center; margin-top: 1rem; opacity: 0.85; font-size: 1.1rem; }
-    .links { margin-top: 2rem; text-align: center; }
-    .links a { color: #fff; text-decoration: none; padding: 8px 20px; border: 2px solid rgba(255,255,255,0.5); border-radius: 20px; transition: all .2s; }
-    .links a:hover { background: rgba(255,255,255,0.15); border-color: #fff; }
-  </style>
-</head>
-<body>
-  <div>
-    <h1>xiaosh.xyz</h1>
-    <p>网站搭建中...</p>
-    <div class="links">
-      <a href="https://2048.xiaosh.xyz">玩 2048</a>
-    </div>
-  </div>
-</body>
-</html>`;
-
-const GAME_2048 = `<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -67,12 +34,10 @@ h1{font-size:48px;color:#776e65;font-weight:bold}
 .game-over{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(238,228,218,0.73);display:flex;align-items:center;justify-content:center;border-radius:6px;z-index:10}
 .game-over div{font-size:40px;font-weight:bold;color:#776e65;text-align:center}
 .game-over button{margin-top:12px;font-size:16px}
-a.back{display:inline-block;margin-bottom:10px;color:#776e65;text-decoration:none;font-size:14px}
 </style>
 </head>
 <body>
 <div class="container">
-<a class="back" href="https://xiaosh.xyz">← xiaosh.xyz</a>
 <div class="header">
 <h1>2048</h1>
 <div class="scores">
@@ -95,10 +60,11 @@ a.back{display:inline-block;margin-bottom:10px;color:#776e65;text-decoration:non
 let grid=[],score=0,best=0;
 function init(){
 grid=Array(16).fill(0);score=0;
-best=parseInt(localStorage.getItem('best2048-xyz'))||0;
+best=parseInt(localStorage.getItem('best2048'))||0;
 document.getElementById('best').textContent=best;
 document.getElementById('score').textContent=score;
 addTile();addTile();render();
+document.getElementById('board').style.opacity='1';
 }
 function addTile(){
 let empty=grid.reduce((a,v,i)=>{if(!v)a.push(i);return a},[]);
@@ -107,14 +73,15 @@ if(empty.length)grid[empty[Math.floor(Math.random()*empty.length)]]=Math.random(
 function render(){
 let tiles=document.getElementById('board').querySelectorAll('.tile');
 tiles.forEach((t,i)=>{
-t.className='tile tile-'+(grid[i]>2048?'super':grid[i]);
+t.className='tile tile-'+grid[i];
+if(grid[i]>2048)t.className='tile tile-super';
 t.textContent=grid[i]||'';
 });
 document.getElementById('score').textContent=score;
-if(score>best){best=score;localStorage.setItem('best2048-xyz',best);document.getElementById('best').textContent=best;}
+if(score>best){best=score;localStorage.setItem('best2048',best);document.getElementById('best').textContent=best;}
 }
 function move(dir){
-let old=grid.slice();
+let moved=false,old=grid.slice();
 let lines=[[],[],[],[]];
 if(dir===0||dir===1)for(let r=0;r<4;r++){lines[r]=[];for(let c=0;c<4;c++)lines[r].push(r*4+c);}
 else for(let c=0;c<4;c++){lines[c]=[];for(let r=0;r<4;r++)lines[c].push(r*4+c);}
@@ -128,9 +95,8 @@ else merged.push(vals[i]);skip=vals[i]!==vals[i+1]||!skip?false:skip;
 }
 while(merged.length<4)merged.push(0);
 if(dir===1||dir===3)merged.reverse();
-line.forEach((idx,i)=>{grid[idx]=merged[i];});
+line.forEach((idx,i)=>{if(grid[idx]!==merged[i])moved=true;grid[idx]=merged[i];});
 });
-let moved=old.some((v,i)=>v!==grid[i]);
 if(moved){addTile();render();if(isGameOver())showGameOver();}
 }
 function isGameOver(){
@@ -162,22 +128,4 @@ if(map[e.code]!==undefined){e.preventDefault();move(map[e.code]);}
 init();
 </script>
 </body>
-</html>`;
-
-export default {
-  async fetch(request) {
-    const url = new URL(request.url);
-    const host = url.hostname;
-
-    let html;
-    if (host === '2048.xiaosh.xyz' || host.startsWith('2048.')) {
-      html = GAME_2048;
-    } else {
-      html = HOME;
-    }
-
-    return new Response(html, {
-      headers: { "content-type": "text/html;charset=UTF-8" },
-    });
-  },
-};
+</html>
