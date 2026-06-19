@@ -4,29 +4,265 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>xiaosh.xyz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      background: #f5f2ee;
+      color: #1a1a1a;
       min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+      overflow-x: hidden;
     }
-    h1 { font-size: clamp(2rem, 8vw, 4rem); text-align: center; }
-    p { text-align: center; margin-top: 1rem; opacity: 0.85; font-size: 1.1rem; }
-    .links { margin-top: 2rem; text-align: center; }
-    .links a { color: #fff; text-decoration: none; padding: 8px 20px; border: 2px solid rgba(255,255,255,0.5); border-radius: 20px; transition: all .2s; }
-    .links a:hover { background: rgba(255,255,255,0.15); border-color: #fff; }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 0% 30%, rgba(167,139,250,0.10), transparent),
+        radial-gradient(ellipse 60% 50% at 100% 70%, rgba(251,146,60,0.07), transparent),
+        radial-gradient(ellipse 50% 40% at 50% 0%, rgba(59,130,246,0.05), transparent);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 860px;
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+    }
+
+    .glass {
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.9);
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
+    }
+
+    .profile {
+      flex: 0 0 250px;
+      padding: 2rem 1.5rem 1.5rem;
+      text-align: center;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .avatar {
+      width: 88px; height: 88px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255,255,255,0.9);
+      box-shadow: 0 4px 24px rgba(167,139,250,0.25);
+      margin-bottom: 0.9rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .avatar:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 32px rgba(167,139,250,0.35);
+    }
+
+    .name {
+      font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #7c3aed, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.1rem;
+    }
+
+    .role {
+      font-size: 0.82rem; color: #8a8a8a; line-height: 1.6; min-height: 2.6rem;
+    }
+    .role-cursor { display: inline; animation: blink 0.8s step-end infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .divider { height: 1px; background: rgba(0,0,0,0.06); margin: 0.9rem 0; }
+
+    .links {
+      display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.82rem;
+    }
+    .links a {
+      color: #8a8a8a; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 0.4rem; justify-content: center;
+      transition: color 0.2s;
+    }
+    .links a:hover { color: #7c3aed; }
+    .links a svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    .projects {
+      flex: 1; display: flex; flex-direction: column; gap: 0.75rem;
+    }
+    .section-label {
+      font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.06em; color: #8a8a8a; padding: 0 0.2rem;
+    }
+
+    .project-card {
+      padding: 0;
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.9);
+      border-radius: 20px;
+      text-decoration: none; color: #1a1a1a;
+      transition: all 0.25s ease; cursor: pointer; overflow: hidden;
+      animation: fadeUp 0.7s ease both;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
+    }
+    .project-card:nth-child(2) { animation-delay: 0.12s; }
+    .project-card:nth-child(3) { animation-delay: 0.24s; }
+
+    .about-quote {
+      font-size: 0.82rem;
+      line-height: 1.7;
+      color: #4a4a4a;
+    }
+
+    .about-quote .quote-mark {
+      font-size: 1.6rem;
+      color: #7c3aed;
+      opacity: 0.5;
+      line-height: 0;
+      vertical-align: middle;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      justify-content: center;
+    }
+
+    .tag {
+      background: rgba(124,58,237,0.08);
+      color: #7c3aed;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 500;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .project-card:hover {
+      background: rgba(255,255,255,0.88);
+      border-color: rgba(167,139,250,0.25);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+      transform: translateY(-2px);
+    }
+    .project-screenshot {
+      width: 100%; height: auto; display: block;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+    .project-body { padding: 0.9rem 1.2rem 1.1rem; }
+    .project-title { font-weight: 600; font-size: 0.95rem; }
+    .project-desc { font-size: 0.85rem; color: #8a8a8a; margin-top: 0.2rem; line-height: 1.5; }
+    .project-footer {
+      font-size: 0.78rem; color: #7c3aed; margin-top: 0.4rem;
+      opacity: 0.7; transition: opacity 0.2s;
+    }
+    .project-card:hover .project-footer { opacity: 1; }
+    .footer-note {
+      text-align: center; margin-top: 1.5rem;
+      font-size: 0.75rem; color: #8a8a8a; opacity: 0.45;
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 1.2rem 0.8rem; }
+      .container { flex-direction: column; gap: 1.25rem; }
+      .profile { flex: 0 0 auto; width: 100%; padding: 1.6rem 1.2rem 1.2rem; }
+      .profile .avatar { width: 72px; height: 72px; }
+      .links { flex-direction: row; justify-content: center; gap: 1rem; }
+      .about-quote { font-size: 0.85rem; }
+      .project-screenshot { display: none; }
+    }
   </style>
 </head>
 <body>
-  <div>
-    <h1>xiaosh.xyz</h1>
-    <p>网站搭建中...</p>
-    <div class="links">
-      <a href="https://2048.xiaosh.xyz">玩 2048</a>
+  <div class="container">
+    <div class="profile glass">
+      <img class="avatar" src="https://github.com/mexiaosqwq.png" alt="avatar" loading="lazy">
+      <div class="name">me xiao sh</div>
+      <div class="role" id="typewriter"></div>
+      <div class="divider"></div>
+      <div class="links">
+        <a href="https://github.com/mexiaosqwq" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          GitHub · mexiaosqwq
+        </a>
+        <a href="mailto:1078628894@qq.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          1078628894@qq.com
+        </a>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="about-quote">
+        <span class="quote-mark">"</span> 一个 Claude Code 新手，发掘好玩的内容，做点好用的工具。仅此而已。 <span class="quote-mark">"</span>
+      </div>
+      <div class="tags" style="margin-top:0.5rem;justify-content:center;">
+        <span class="tag">Minecraft</span>
+        <span class="tag">模组汉化</span>
+        <span class="tag">AI Agent</span>
+        <span class="tag">前端开发</span>
+        <span class="tag">独立开发</span>
+        <span class="tag">Claude Code</span>
+      </div>
+    </div>
+
+    <div class="projects">
+      <div class="section-label">Projects</div>
+      <div class="project-card" onclick="window.open('https://github.com/mexiaosqwq/mc-search-skill','_blank')">
+        <img class="project-screenshot" src="mc-search-skill-header.png" alt="mc-search-skill" loading="lazy">
+        <div class="project-body">
+          <div class="project-title">mc-search-skill</div>
+          <div class="project-desc">AI Agent 优先的 Minecraft 聚合搜索 Skill，四平台并行，自动融合去重</div>
+          <div class="project-footer">github.com/mexiaosqwq/mc-search-skill →</div>
+        </div>
+      </div>
+      <div class="project-card" onclick="window.open('https://github.com/mexiaosqwq/Zh-ModTranslations','_blank')">
+        <img class="project-screenshot" src="zh-modtranslations-header.png" alt="Zh-ModTranslations" loading="lazy">
+        <div class="project-body">
+          <div class="project-title">Zh-ModTranslations</div>
+          <div class="project-desc">小石的个人 Minecraft 模组汉化集合包，覆盖 34+ 模组，持续更新</div>
+          <div class="project-footer">github.com/mexiaosqwq/Zh-ModTranslations →</div>
+        </div>
+      </div>
+      <div class="footer-note">© 2026 xiaosh.xyz</div>
     </div>
   </div>
+
+  <script>
+    const text = "独立开发者 / Minecraft 模组汉化";
+    const el = document.getElementById("typewriter");
+    let i = 0;
+    const speed = 65;
+    function type() {
+      if (i < text.length) { el.textContent += text.charAt(i); i++; setTimeout(type, speed); }
+      else {
+        const c = document.createElement("span");
+        c.className = "role-cursor"; c.textContent = "|";
+        el.appendChild(c);
+        setTimeout(() => { c.style.display = "none"; }, 3000);
+      }
+    }
+    setTimeout(type, 400);
+  </script>
 </body>
 </html>

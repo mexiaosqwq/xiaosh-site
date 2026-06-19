@@ -14,16 +14,16 @@ xiaosh.xyz 个人网站，基于 Cloudflare Workers + 静态资源托管。Worke
 
 - **worker.js**: 3 行路由，根据 hostname 选择页面（`2048.*` → 2048 游戏，其余 → 主页）
 - **public/**: 所有静态页面，Worker 不内嵌 HTML
-- **wrangler.toml**: `[assets]` 配置使 `public/` 目录作为静态资源被 Worker 的 `env.ASSETS` 访问
+- **wrangler.toml**: `[assets]` 配置使 `public/` 目录作为静态资源被 Worker 的 `env.ASSETS` 访问；`[observability]` 已启用
 - **Worker 名称**: `proud-sun-003e`（Cloudflare Dashboard 中的名称，wrangler.toml 的 `name` 必须与之匹配）
+- **package.json**: `npm run deploy` → `wrangler deploy`，`npm run dev` → `wrangler dev`
 
 ## 部署
 
 **本地无法运行 wrangler**（Android ARM64 不支持 workerd 运行时），所有部署通过 CI/CD：
 
 - `git push main` → GitHub Actions 触发 `cloudflare/wrangler-action@v3` → `wrangler deploy`
-- 需要 GitHub Secret: `CLOUDFLARE_API_TOKEN`（已配置）
-- 部署命令：`wrangler deploy`（自动携带 public/ 静态资源，由 wrangler.toml 的 `[assets]` 声明）
+- 支持通过 GitHub UI 手动触发（`workflow_dispatch`）
 
 ## 域名
 
