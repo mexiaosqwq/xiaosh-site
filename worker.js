@@ -20,12 +20,11 @@ export default {
       try {
         const list = await env.IMAGE_BUCKET.list();
         const files = list.objects
-          .map(o => o.key)
-          .sort((a, b) => {
-            const oa = list.objects.find(o => o.key === a);
-            const ob = list.objects.find(o => o.key === b);
-            return (ob?.uploaded || 0) - (oa?.uploaded || 0);
-          });
+          .map(o => ({
+            name: o.key,
+            uploaded: o.uploaded instanceof Date ? o.uploaded.toISOString() : null,
+          }))
+          .sort((a, b) => new Date(b.uploaded || 0) - new Date(a.uploaded || 0));
         return new Response(JSON.stringify(files), {
           headers: { ...cors, 'Content-Type': 'application/json' },
         });

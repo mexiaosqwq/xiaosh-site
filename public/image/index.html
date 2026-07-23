@@ -176,6 +176,13 @@ body {
   min-width: 0;
 }
 
+.card-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .card .copy-btn {
   flex-shrink: 0;
   width: 30px;
@@ -290,6 +297,13 @@ body {
 }
 .lightbox .lb-close-text:hover {
   color: rgba(255,255,255,0.8);
+}
+
+.lightbox .lb-time {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.78rem;
+  margin-top: 0.6rem;
+  text-align: center;
 }
 
 /* Toast */
@@ -413,18 +427,19 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 0.3rem;
-    background: linear-gradient(transparent, rgba(0,0,0,0.35));
+    padding: 0.35rem 0.4rem;
+    background: linear-gradient(transparent, rgba(0,0,0,0.4));
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: space-between;
     border-radius: 0 0 6px 6px;
   }
   .card .filename { display: none; }
   .card .copy-btn {
-    width: 32px; height: 32px;
-    font-size: 0.85rem;
-    border-radius: 8px;
-    background: rgba(255,255,255,0.85);
+    width: 30px; height: 30px;
+    font-size: 0.8rem;
+    border-radius: 7px;
+    background: rgba(255,255,255,0.8);
     color: #444;
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
@@ -476,6 +491,10 @@ body {
   }
   .lightbox .lb-close-text {
     display: none;
+  }
+  .lightbox .lb-time {
+    font-size: 0.7rem;
+    margin-top: 0.4rem;
   }
 
   /* Mobile close hint */
@@ -562,6 +581,7 @@ body {
 <div class="lightbox" id="lightbox">
   <button class="close-btn" id="lbClose">&times;</button>
   <img id="lbImg" src="" alt="">
+  <div class="lb-time" id="lbTime"></div>
   <div class="lb-actions">
     <button class="lb-copy" id="lbCopy">📋 复制链接</button>
     <button class="lb-delete" id="lbDelete">🗑️ 删除</button>
@@ -593,6 +613,7 @@ body {
   const lbDelete = document.getElementById('lbDelete');
   const lbClose = document.getElementById('lbClose');
   const lbCloseText = document.getElementById('lbCloseText');
+  const lbTime = document.getElementById('lbTime');
   const toast = document.getElementById('toast');
   const uploadArea = document.getElementById('uploadArea');
   const fileInput = document.getElementById('fileInput');
@@ -605,7 +626,24 @@ body {
   const base = window.location.origin;
 
   let currentFilename = '';
+  let currentUploadTime = '';
   let confirmCallback = null;
+
+  // ===== Time formatting =====
+  function formatTime(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    const pad = n => String(n).padStart(2, '0');
+    const now = new Date();
+    const month = pad(d.getMonth() + 1);
+    const day = pad(d.getDate());
+    const hour = pad(d.getHours());
+    const min = pad(d.getMinutes());
+    if (d.getFullYear() === now.getFullYear()) {
+      return `${month}-${day} ${hour}:${min}`;
+    }
+    return `${d.getFullYear()}-${month}-${day}`;
+  }
 
   // ===== Toast =====
   let toastTimer = null;
@@ -675,7 +713,8 @@ body {
         grid.innerHTML = '';
 
         files.forEach(f => {
-          const url = base + '/image/' + encodeURIComponent(f);
+          const fileName = f.name || f;
+          const url = base + '/image/' + encodeURIComponent(fileName);
 
           const card = document.createElement('div');
           card.className = 'card';
@@ -685,17 +724,22 @@ body {
 
           const img = document.createElement('img');
           img.src = url;
-          img.alt = f;
+          img.alt = fileName;
           img.loading = 'lazy';
           thumbWrap.appendChild(img);
 
           const body = document.createElement('div');
           body.className = 'card-body';
 
+          const info = document.createElement('div');
+          info.className = 'card-info';
+
           const fn = document.createElement('span');
           fn.className = 'filename';
-          fn.title = f;
-          fn.textContent = f;
+          fn.title = fileName;
+          fn.textContent = fileName;
+
+          info.appendChild(fn);
 
           const btn = document.createElement('button');
           btn.className = 'copy-btn';
@@ -708,13 +752,15 @@ body {
             setTimeout(() => this.classList.remove('copied'), 1200);
           });
 
-          body.appendChild(fn);
+          body.appendChild(info);
           body.appendChild(btn);
 
           card.addEventListener('click', function() {
-            currentFilename = f;
+            currentFilename = fileName;
+            currentUploadTime = f.uploaded || '';
             lbImg.src = url;
-            lbImg.alt = f;
+            lbImg.alt = fileName;
+            lbTime.textContent = formatTime(currentUploadTime);
             lbCopy.textContent = '📋 复制链接';
             lbCopy.classList.remove('copied');
             lightbox.classList.add('active');
