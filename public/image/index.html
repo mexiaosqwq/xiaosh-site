@@ -388,21 +388,101 @@ body {
 @media (max-width: 900px) {
   .grid { grid-template-columns: repeat(3, 1fr); gap: 0.8rem; }
 }
-@media (max-width: 600px) {
-  body { padding: 1.5rem 0.8rem 3rem; }
-  .grid { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
+
+@media (max-width: 700px) {
+  body { padding: 1.2rem 0.6rem 2rem; }
+
   .header h1 { font-size: 1.3rem; }
-  .header .subtitle { font-size: 0.8rem; }
-  .card .card-body { padding: 0.4rem 0.5rem 0.45rem; }
-  .card .filename { font-size: 0.65rem; }
-  .card .copy-btn { width: 26px; height: 26px; font-size: 0.8rem; }
-  .lightbox { padding: 1rem; }
-  .lightbox img { max-width: 95vw; max-height: 65vh; }
-  .upload-area { padding: 1.2rem 1rem; }
-  .upload-area .upload-icon { font-size: 1.4rem; }
-}
-@media (max-width: 400px) {
+  .header .subtitle { font-size: 0.78rem; }
+  .header .count { font-size: 0.75rem; }
+
   .grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+
+  .card { border-radius: 10px; }
+  .card .card-body { padding: 0.35rem 0.45rem 0.4rem; }
+  .card .filename { font-size: 0.6rem; }
+  .card .copy-btn {
+    width: 36px; height: 36px;
+    font-size: 1rem;
+    border-radius: 9px;
+  }
+
+  .upload-area {
+    padding: 1.2rem 1rem;
+    border-radius: 12px;
+  }
+  .upload-area .upload-icon { font-size: 1.5rem; }
+  .upload-area .upload-text { font-size: 0.85rem; }
+  .upload-area .upload-hint { font-size: 0.72rem; }
+
+  .upload-progress .progress-item {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .lightbox { padding: 0.5rem; }
+  .lightbox img {
+    max-width: 98vw;
+    max-height: 60vh;
+  }
+  .lightbox .close-btn {
+    top: 0.6rem;
+    right: 0.8rem;
+    font-size: 1.8rem;
+  }
+  .lightbox .lb-actions {
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+  }
+  .lightbox .lb-actions button {
+    padding: 0.65rem 1.2rem;
+    font-size: 0.9rem;
+    border-radius: 12px;
+    min-height: 44px;
+  }
+  .lightbox .lb-close-text {
+    display: none;
+  }
+
+  .toast {
+    bottom: 1.5rem;
+    font-size: 0.8rem;
+    padding: 0.5rem 1.2rem;
+  }
+
+  .confirm-box {
+    padding: 1.5rem 1.5rem 1.2rem;
+  }
+  .confirm-box p { font-size: 0.9rem; }
+  .confirm-box button {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
+    min-height: 44px;
+  }
+
+  .loading, .error, .empty {
+    padding: 2.5rem 0;
+    font-size: 0.85rem;
+  }
+}
+
+/* Mobile: show a mobile close hint instead of ESC */
+@media (max-width: 700px) {
+  .lightbox .lb-actions .lb-close-text {
+    display: flex;
+    color: rgba(255,255,255,0.4);
+    font-size: 0.78rem;
+    cursor: pointer;
+  }
+  .lightbox .lb-actions .lb-close-text::before {
+    content: '✕ 关闭';
+  }
+}
+
+@media (max-width: 380px) {
+  .grid { gap: 0.4rem; }
+  .card .copy-btn { width: 32px; height: 32px; font-size: 0.9rem; }
+  .upload-area { padding: 1rem 0.8rem; }
 }
 </style>
 </head>
