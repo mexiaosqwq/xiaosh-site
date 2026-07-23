@@ -20,7 +20,7 @@ body {
 /* Header */
 .header {
   max-width: 1200px;
-  margin: 0 auto 2rem;
+  margin: 0 auto 1.2rem;
 }
 .header h1 {
   font-size: 1.6rem;
@@ -40,6 +40,82 @@ body {
   margin-top: 0.5rem;
 }
 
+/* Upload Area */
+.upload-area {
+  max-width: 1200px;
+  margin: 0 auto 1.5rem;
+  border: 2px dashed #ddd;
+  border-radius: 14px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.25s, background 0.25s;
+  background: rgba(255,255,255,0.5);
+}
+.upload-area:hover {
+  border-color: #bbb;
+  background: rgba(255,255,255,0.7);
+}
+.upload-area.dragover {
+  border-color: #7c3aed;
+  background: rgba(124,58,237,0.06);
+}
+.upload-area .upload-icon {
+  font-size: 1.8rem;
+  margin-bottom: 0.4rem;
+}
+.upload-area .upload-text {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+}
+.upload-area .upload-hint {
+  font-size: 0.78rem;
+  color: #aaa;
+  margin-top: 0.25rem;
+}
+.upload-area.uploading {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.upload-progress {
+  max-width: 1200px;
+  margin: 0 auto 0.8rem;
+  display: none;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.upload-progress.active {
+  display: flex;
+}
+.upload-progress .progress-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+  color: #666;
+  padding: 0.3rem 0.6rem;
+  background: rgba(255,255,255,0.6);
+  border-radius: 8px;
+}
+.upload-progress .progress-item .name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.upload-progress .progress-item .status {
+  flex-shrink: 0;
+  font-weight: 500;
+}
+.upload-progress .progress-item .status.done {
+  color: #2e7d32;
+}
+.upload-progress .progress-item .status.error {
+  color: #c62828;
+}
+
 /* Grid */
 .grid {
   max-width: 1200px;
@@ -57,6 +133,7 @@ body {
   box-shadow: 0 1px 4px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.02);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
+  position: relative;
 }
 .card:hover {
   transform: translateY(-2px);
@@ -159,7 +236,7 @@ body {
 
 .lightbox img {
   max-width: 90vw;
-  max-height: 80vh;
+  max-height: 75vh;
   object-fit: contain;
   border-radius: 8px;
   box-shadow: 0 8px 40px rgba(0,0,0,0.3);
@@ -170,6 +247,8 @@ body {
   display: flex;
   gap: 0.8rem;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .lightbox .lb-actions button {
@@ -195,13 +274,22 @@ body {
   color: #155724;
 }
 
+.lightbox .lb-delete {
+  background: rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.7);
+}
+.lightbox .lb-delete:hover {
+  background: #e53935;
+  color: #fff;
+}
+
 .lightbox .lb-close-text {
   color: rgba(255,255,255,0.5);
   font-size: 0.8rem;
+  cursor: pointer;
 }
 .lightbox .lb-close-text:hover {
   color: rgba(255,255,255,0.8);
-  cursor: pointer;
 }
 
 /* Toast */
@@ -228,7 +316,7 @@ body {
 }
 
 /* Loading & Error */
-.loading, .error {
+.loading, .error, .empty {
   grid-column: 1 / -1;
   text-align: center;
   padding: 4rem 0;
@@ -236,6 +324,65 @@ body {
   color: #999;
 }
 .error { color: #c0392b; }
+.empty { color: #bbb; }
+
+/* Confirm dialog */
+.confirm-overlay {
+  display: none;
+  position: fixed;
+  z-index: 3000;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+.confirm-overlay.active {
+  display: flex;
+}
+.confirm-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.8rem 2rem 1.5rem;
+  max-width: 360px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+}
+.confirm-box p {
+  font-size: 0.95rem;
+  color: #2c2c2c;
+  margin-bottom: 1.2rem;
+  line-height: 1.5;
+}
+.confirm-box .confirm-actions {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+}
+.confirm-box button {
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.confirm-box .btn-cancel {
+  background: #f0eeeb;
+  color: #666;
+}
+.confirm-box .btn-cancel:hover {
+  background: #e5e3e0;
+}
+.confirm-box .btn-confirm {
+  background: #e53935;
+  color: #fff;
+}
+.confirm-box .btn-confirm:hover {
+  background: #c62828;
+}
 
 /* Responsive */
 @media (max-width: 900px) {
@@ -250,9 +397,10 @@ body {
   .card .filename { font-size: 0.65rem; }
   .card .copy-btn { width: 26px; height: 26px; font-size: 0.8rem; }
   .lightbox { padding: 1rem; }
-  .lightbox img { max-width: 95vw; max-height: 70vh; }
+  .lightbox img { max-width: 95vw; max-height: 65vh; }
+  .upload-area { padding: 1.2rem 1rem; }
+  .upload-area .upload-icon { font-size: 1.4rem; }
 }
-
 @media (max-width: 400px) {
   .grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
 }
@@ -266,6 +414,18 @@ body {
   <p class="count" id="count">加载中...</p>
 </div>
 
+<!-- Upload Area -->
+<div class="upload-area" id="uploadArea">
+  <div class="upload-icon">📁</div>
+  <div class="upload-text">点击上传图片</div>
+  <div class="upload-hint">支持 PNG / JPG / GIF / WebP，可多选</div>
+</div>
+<input type="file" id="fileInput" multiple accept="image/*" style="display:none">
+
+<!-- Upload Progress -->
+<div class="upload-progress" id="uploadProgress"></div>
+
+<!-- Image Grid -->
 <div class="grid" id="grid">
   <div class="loading">加载中...</div>
 </div>
@@ -276,7 +436,19 @@ body {
   <img id="lbImg" src="" alt="">
   <div class="lb-actions">
     <button class="lb-copy" id="lbCopy">📋 复制链接</button>
+    <button class="lb-delete" id="lbDelete">🗑️ 删除</button>
     <span class="lb-close-text" id="lbCloseText">ESC 关闭</span>
+  </div>
+</div>
+
+<!-- Confirm Dialog -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <p id="confirmMsg">确定要删除这张图片吗？</p>
+    <div class="confirm-actions">
+      <button class="btn-cancel" id="confirmCancel">取消</button>
+      <button class="btn-confirm" id="confirmOk">删除</button>
+    </div>
   </div>
 </div>
 
@@ -290,12 +462,24 @@ body {
   const lightbox = document.getElementById('lightbox');
   const lbImg = document.getElementById('lbImg');
   const lbCopy = document.getElementById('lbCopy');
+  const lbDelete = document.getElementById('lbDelete');
   const lbClose = document.getElementById('lbClose');
   const lbCloseText = document.getElementById('lbCloseText');
   const toast = document.getElementById('toast');
+  const uploadArea = document.getElementById('uploadArea');
+  const fileInput = document.getElementById('fileInput');
+  const uploadProgress = document.getElementById('uploadProgress');
+  const confirmOverlay = document.getElementById('confirmOverlay');
+  const confirmMsg = document.getElementById('confirmMsg');
+  const confirmOk = document.getElementById('confirmOk');
+  const confirmCancel = document.getElementById('confirmCancel');
 
   const base = window.location.origin;
 
+  let currentFilename = '';
+  let confirmCallback = null;
+
+  // ===== Toast =====
   let toastTimer = null;
   function showToast(msg) {
     toast.textContent = msg;
@@ -304,18 +488,14 @@ body {
     toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
   }
 
+  // ===== Copy =====
   function copyUrl(url) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(url).then(() => {
-        showToast('✅ 已复制链接');
-      }).catch(() => {
-        fallbackCopy(url);
-      });
+      navigator.clipboard.writeText(url).then(() => showToast('✅ 已复制链接')).catch(() => fallbackCopy(url));
     } else {
       fallbackCopy(url);
     }
   }
-
   function fallbackCopy(url) {
     const ta = document.createElement('textarea');
     ta.value = url;
@@ -323,126 +503,232 @@ body {
     ta.style.opacity = '0';
     document.body.appendChild(ta);
     ta.select();
-    try {
-      document.execCommand('copy');
-      showToast('✅ 已复制链接');
-    } catch(e) {
-      showToast('❌ 复制失败');
-    }
+    try { document.execCommand('copy'); showToast('✅ 已复制链接'); } catch(e) { showToast('❌ 复制失败'); }
     document.body.removeChild(ta);
   }
 
-  let currentUrl = '';
+  // ===== Confirm Dialog =====
+  function showConfirm(msg, callback) {
+    confirmMsg.textContent = msg;
+    confirmCallback = callback;
+    confirmOverlay.classList.add('active');
+  }
+  function hideConfirm() {
+    confirmOverlay.classList.remove('active');
+    confirmCallback = null;
+  }
+  confirmCancel.addEventListener('click', hideConfirm);
+  confirmOk.addEventListener('click', function() {
+    if (confirmCallback) confirmCallback();
+    hideConfirm();
+  });
+  confirmOverlay.addEventListener('click', function(e) {
+    if (e.target === confirmOverlay) hideConfirm();
+  });
 
-  // Load images
-  fetch('images.json')
-    .then(r => {
-      if (!r.ok) throw new Error('Failed to load manifest');
-      return r.json();
-    })
-    .then(files => {
-      if (!files || files.length === 0) {
-        grid.innerHTML = '<div class="loading">暂无图片</div>';
-        count.textContent = '共 0 张图片';
-        return;
-      }
+  // ===== Load Images =====
+  function loadImages() {
+    grid.innerHTML = '<div class="loading">加载中...</div>';
+    count.textContent = '加载中...';
 
-      count.textContent = `共 ${files.length} 张图片`;
-      grid.innerHTML = '';
+    fetch('/api/images')
+      .then(r => {
+        if (!r.ok) throw new Error('Failed to load');
+        return r.json();
+      })
+      .then(files => {
+        if (!files || files.length === 0) {
+          grid.innerHTML = '<div class="empty">暂无图片，点击上方区域上传</div>';
+          count.textContent = '共 0 张图片';
+          return;
+        }
 
-      files.forEach(f => {
-        const url = `${base}/image/${encodeURIComponent(f)}`;
+        count.textContent = `共 ${files.length} 张图片`;
+        grid.innerHTML = '';
 
-        const card = document.createElement('div');
-        card.className = 'card';
+        files.forEach(f => {
+          const url = base + '/image/' + encodeURIComponent(f);
 
-        const thumbWrap = document.createElement('div');
-        thumbWrap.className = 'thumb-wrap';
+          const card = document.createElement('div');
+          card.className = 'card';
 
-        const img = document.createElement('img');
-        img.src = url;
-        img.alt = f;
-        img.loading = 'lazy';
+          const thumbWrap = document.createElement('div');
+          thumbWrap.className = 'thumb-wrap';
 
-        thumbWrap.appendChild(img);
+          const img = document.createElement('img');
+          img.src = url;
+          img.alt = f;
+          img.loading = 'lazy';
+          thumbWrap.appendChild(img);
 
-        const body = document.createElement('div');
-        body.className = 'card-body';
+          const body = document.createElement('div');
+          body.className = 'card-body';
 
-        const fn = document.createElement('span');
-        fn.className = 'filename';
-        fn.title = f;
-        fn.textContent = f;
+          const fn = document.createElement('span');
+          fn.className = 'filename';
+          fn.title = f;
+          fn.textContent = f;
 
-        const btn = document.createElement('button');
-        btn.className = 'copy-btn';
-        btn.textContent = '📋';
-        btn.title = '复制链接';
+          const btn = document.createElement('button');
+          btn.className = 'copy-btn';
+          btn.textContent = '📋';
+          btn.title = '复制链接';
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            copyUrl(url);
+            this.classList.add('copied');
+            setTimeout(() => this.classList.remove('copied'), 1200);
+          });
 
-        btn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          copyUrl(url);
-          this.classList.add('copied');
-          setTimeout(() => this.classList.remove('copied'), 1200);
+          body.appendChild(fn);
+          body.appendChild(btn);
+
+          card.addEventListener('click', function() {
+            currentFilename = f;
+            lbImg.src = url;
+            lbImg.alt = f;
+            lbCopy.textContent = '📋 复制链接';
+            lbCopy.classList.remove('copied');
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+          });
+
+          card.appendChild(thumbWrap);
+          card.appendChild(body);
+          grid.appendChild(card);
         });
-
-        body.appendChild(fn);
-        body.appendChild(btn);
-
-        card.addEventListener('click', function() {
-          currentUrl = url;
-          lbImg.src = url;
-          lbImg.alt = f;
-          lbCopy.textContent = '📋 复制链接';
-          lbCopy.classList.remove('copied');
-          lightbox.classList.add('active');
-          document.body.style.overflow = 'hidden';
-        });
-
-        card.appendChild(thumbWrap);
-        card.appendChild(body);
-        grid.appendChild(card);
+      })
+      .catch(err => {
+        grid.innerHTML = '<div class="error">❌ 加载失败，请刷新重试</div>';
+        count.textContent = '加载失败';
+        console.error(err);
       });
-    })
-    .catch(err => {
-      grid.innerHTML = '<div class="error">❌ 加载失败，请刷新重试</div>';
-      count.textContent = '加载失败';
-      console.error(err);
-    });
+  }
 
-  // Lightbox controls
+  // ===== Upload =====
+  function uploadFiles(files) {
+    if (files.length === 0) return;
+
+    uploadProgress.innerHTML = '';
+    uploadProgress.classList.add('active');
+    uploadArea.classList.add('uploading');
+
+    let completed = 0;
+    const total = files.length;
+
+    Array.from(files).forEach(file => {
+      const item = document.createElement('div');
+      item.className = 'progress-item';
+      item.innerHTML = `<span class="name">${file.name}</span><span class="status">上传中...</span>`;
+      uploadProgress.appendChild(item);
+      const statusEl = item.querySelector('.status');
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      fetch('/api/upload', { method: 'POST', body: formData })
+        .then(r => {
+          if (!r.ok) throw new Error('Upload failed');
+          return r.json();
+        })
+        .then(data => {
+          statusEl.textContent = '✅';
+          statusEl.className = 'status done';
+          completed++;
+          if (completed === total) {
+            uploadArea.classList.remove('uploading');
+            setTimeout(() => {
+              uploadProgress.classList.remove('active');
+              uploadProgress.innerHTML = '';
+            }, 1500);
+            loadImages();
+          }
+        })
+        .catch(err => {
+          statusEl.textContent = '❌';
+          statusEl.className = 'status error';
+          completed++;
+          if (completed === total) {
+            uploadArea.classList.remove('uploading');
+          }
+        });
+    });
+  }
+
+  uploadArea.addEventListener('click', function() {
+    fileInput.click();
+  });
+
+  fileInput.addEventListener('change', function() {
+    if (this.files.length > 0) {
+      uploadFiles(this.files);
+      this.value = '';
+    }
+  });
+
+  // Drag & Drop
+  uploadArea.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    this.classList.add('dragover');
+  });
+  uploadArea.addEventListener('dragleave', function(e) {
+    e.preventDefault();
+    this.classList.remove('dragover');
+  });
+  uploadArea.addEventListener('drop', function(e) {
+    e.preventDefault();
+    this.classList.remove('dragover');
+    if (e.dataTransfer.files.length > 0) {
+      uploadFiles(e.dataTransfer.files);
+    }
+  });
+
+  // ===== Lightbox =====
   function closeLightbox() {
     lightbox.classList.remove('active');
     document.body.style.overflow = '';
-    lbImg.src = '';
+    setTimeout(() => { lbImg.src = ''; }, 200);
   }
 
   lbClose.addEventListener('click', closeLightbox);
   lbCloseText.addEventListener('click', closeLightbox);
-
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && lightbox.classList.contains('active')) {
       closeLightbox();
     }
   });
-
   lightbox.addEventListener('click', function(e) {
-    if (e.target === lightbox) {
-      closeLightbox();
-    }
+    if (e.target === lightbox) closeLightbox();
   });
 
   lbCopy.addEventListener('click', function() {
-    if (currentUrl) {
-      copyUrl(currentUrl);
+    if (currentFilename) {
+      const url = base + '/image/' + encodeURIComponent(currentFilename);
+      copyUrl(url);
       this.textContent = '✅ 已复制';
       this.classList.add('copied');
-      setTimeout(() => {
-        this.textContent = '📋 复制链接';
-        this.classList.remove('copied');
-      }, 2000);
+      setTimeout(() => { this.textContent = '📋 复制链接'; this.classList.remove('copied'); }, 2000);
     }
   });
+
+  lbDelete.addEventListener('click', function() {
+    if (!currentFilename) return;
+    showConfirm('确定要删除这张图片吗？', function() {
+      fetch('/api/images?name=' + encodeURIComponent(currentFilename), { method: 'DELETE' })
+        .then(r => {
+          if (!r.ok) throw new Error('Delete failed');
+          showToast('🗑️ 已删除');
+          closeLightbox();
+          loadImages();
+        })
+        .catch(err => {
+          showToast('❌ 删除失败');
+        });
+    });
+  });
+
+  // ===== Init =====
+  loadImages();
 })();
 </script>
 </body>

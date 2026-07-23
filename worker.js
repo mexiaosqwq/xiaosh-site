@@ -1,5 +1,126 @@
 export default {
   async fetch(request, env) {
+    const url = new URL(request.url);
+    const path = url.pathname;
+    const method = request.method;
+
+    // CORS headers (same-origin, but keep for safety)
+    const cors = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    };
+
+    if (method === 'OPTIONS') {
+      return new Response(null, { headers: cors });
+    }
+
+    // ===== API: List images =====
+    if (path === '/api/images' && method === 'GET') {
+      try {
+        const list = await env.IMAGE_BUCKET.list();
+        const files = list.objects
+          .map(o => o.key)
+          .sort((a, b) => {
+            const oa = list.objects.find(o => o.key === a);
+            const ob = list.objects.find(o => o.key === b);
+            return (ob?.uploaded || 0) - (oa?.uploaded || 0);
+          });
+        return new Response(JSON.stringify(files), {
+          headers: { ...cors, 'Content-Type': 'application/json' },
+        });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), {
+          status: 500,
+          headers: { ...cors, 'Content-Type': 'application/json' },
+        });
+      }
+    }
+
+    // ===== API: Upload image =====
+    if (path === '/api/upload' && method === 'POST') {
+      try {
+        const formData = await request.formData();
+        const file = formData.get('file');
+        if (!file) {
+          return new Response(JSON.stringify({ error: 'No file' }), {
+            status: 400, headers: { ...cors, 'Content-Type': 'application/json' },
+          });
+        }
+        if (!file.type.startsWith('image/')) {
+          return new Response(JSON.stringify({ error: 'Not an image' }), {
+            status: 400, headers: { ...cors, 'Content-Type': 'application/json' },
+          });
+        }
+
+        let name = file.name.replace(/[/\\]/g, '_');
+
+        // Handle duplicate filenames
+        const existing = await env.IMAGE_BUCKET.get(name);
+        if (existing) {
+          const dot = name.lastIndexOf('.');
+          if (dot > 0) {
+            name = name.slice(0, dot) + '_' + Date.now() + name.slice(dot);
+          } else {
+            name = name + '_' + Date.now();
+          }
+        }
+
+        await env.IMAGE_BUCKET.put(name, await file.arrayBuffer(), {
+          httpMetadata: { contentType: file.type },
+        });
+
+        return new Response(JSON.stringify({ url: '/image/' + encodeURIComponent(name), name }), {
+          headers: { ...cors, 'Content-Type': 'application/json' },
+        });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), {
+          status: 500,
+          headers: { ...cors, 'Content-Type': 'application/json' },
+        });
+      }
+    }
+
+    // ===== API: Delete image =====
+    if (path === '/api/images' && method === 'DELETE') {
+      try {
+        const name = url.searchParams.get('name');
+        if (!name) {
+          return new Response(JSON.stringify({ error: 'Missing name' }), {
+            status: 400, headers: { ...cors, 'Content-Type': 'application/json' },
+          });
+        }
+        await env.IMAGE_BUCKET.delete(name);
+        return new Response(JSON.stringify({ success: true }), {
+          headers: { ...cors, 'Content-Type': 'application/json' },
+        });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), {
+          status: 500,
+          headers: { ...cors, 'Content-Type': 'application/json' },
+        });
+      }
+    }
+
+    // ===== Serve images from R2 =====
+    if (path.startsWith('/image/') && method === 'GET') {
+      const key = decodeURIComponent(path.slice(7));
+      if (key) {
+        const object = await env.IMAGE_BUCKET.get(key);
+        if (object) {
+          return new Response(object.body, {
+            headers: {
+              'Content-Type': object.httpMetadata?.contentType || 'image/png',
+              'Cache-Control': 'public, max-age=31536000',
+              'Access-Control-Allow-Origin': '*',
+            },
+          });
+        }
+        // Fall through to static assets if not in R2
+      }
+    }
+
+    // ===== Fallback: static assets =====
     return env.ASSETS.fetch(request);
   },
 };
