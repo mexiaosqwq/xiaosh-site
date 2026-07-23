@@ -3,905 +3,2010 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Image Host - xiaosh.xyz</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+<title>图床 · xiaosh.xyz</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #f7f6f3;
+  --surface: rgba(255, 255, 255, 0.88);
+  --surface-solid: #ffffff;
+  --surface-muted: #f3f1ed;
+  --text: #242424;
+  --text-soft: #707070;
+  --text-faint: #a6a6a6;
+  --line: #e7e4de;
+  --line-strong: #d9d5ce;
+  --primary: #6d4aff;
+  --primary-hover: #5935ed;
+  --primary-soft: #f0edff;
+  --success: #16834a;
+  --success-soft: #e8f7ee;
+  --danger: #d94040;
+  --danger-soft: #fff0f0;
+  --shadow-sm: 0 1px 2px rgba(36, 36, 36, 0.04), 0 4px 12px rgba(36, 36, 36, 0.03);
+  --shadow-md: 0 12px 32px rgba(36, 36, 36, 0.09);
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-sm: 9px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  min-height: 100%;
+}
 
 body {
-  font-family: 'Inter', -apple-system, system-ui, sans-serif;
-  background: #f5f3f0;
-  color: #2c2c2c;
   min-height: 100vh;
-  padding: 2.5rem 1.5rem 4rem;
+  padding: 2.8rem 1.5rem 4rem;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 8% 4%, rgba(145, 113, 255, 0.11), transparent 26rem),
+    radial-gradient(circle at 94% 20%, rgba(236, 177, 120, 0.1), transparent 24rem),
+    var(--bg);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  border: 0;
+}
+
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 3px solid rgba(109, 74, 255, 0.3);
+  outline-offset: 3px;
+}
+
+.app-shell {
+  width: min(1200px, 100%);
+  margin: 0 auto;
 }
 
 /* Header */
-.header {
-  max-width: 1200px;
-  margin: 0 auto 1.2rem;
-}
-.header h1 {
-  font-size: 1.6rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: #1a1a1a;
-}
-.header .subtitle {
-  font-size: 0.85rem;
-  color: #999;
-  margin-top: 0.4rem;
-  line-height: 1.6;
-}
-.header .count {
-  font-size: 0.82rem;
-  color: #aaa;
-  margin-top: 0.5rem;
+.site-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.35rem;
 }
 
-/* Upload Area */
-.upload-area {
-  max-width: 1200px;
-  margin: 0 auto 1.5rem;
-  border: 2px dashed #ddd;
-  border-radius: 14px;
-  padding: 2rem 1.5rem;
-  text-align: center;
-  cursor: pointer;
-  transition: border-color 0.25s, background 0.25s;
-  background: rgba(255,255,255,0.5);
+.header-main {
+  min-width: 0;
 }
-.upload-area:hover {
-  border-color: #bbb;
-  background: rgba(255,255,255,0.7);
+
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
 }
-.upload-area.dragover {
-  border-color: #7c3aed;
-  background: rgba(124,58,237,0.06);
+
+.brand-mark {
+  display: grid;
+  width: 43px;
+  height: 43px;
+  flex: 0 0 43px;
+  place-items: center;
+  border: 1px solid rgba(109, 74, 255, 0.18);
+  border-radius: 13px;
+  color: var(--primary);
+  background: linear-gradient(145deg, #fff, #efebff);
+  box-shadow: 0 5px 12px rgba(109, 74, 255, 0.12);
 }
-.upload-area .upload-icon {
-  font-size: 1.8rem;
-  margin-bottom: 0.4rem;
+
+.brand-mark svg {
+  width: 23px;
+  height: 23px;
 }
-.upload-area .upload-text {
-  font-size: 0.9rem;
-  color: #666;
+
+.header-title-wrap {
+  min-width: 0;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.header-title h1 {
+  font-size: 1.38rem;
+  font-weight: 700;
+  letter-spacing: -0.045em;
+}
+
+.domain-tag {
+  padding: 0.2rem 0.48rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text-faint);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.subtitle {
+  margin-top: 0.34rem;
+  color: var(--text-soft);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.count-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 0 0 auto;
+  min-height: 34px;
+  padding: 0.42rem 0.72rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text-soft);
+  background: rgba(255, 255, 255, 0.6);
+  font-size: 0.76rem;
   font-weight: 500;
 }
-.upload-area .upload-hint {
-  font-size: 0.78rem;
-  color: #aaa;
-  margin-top: 0.25rem;
-}
-.upload-area.uploading {
-  pointer-events: none;
-  opacity: 0.6;
+
+.count-chip svg {
+  width: 15px;
+  height: 15px;
+  color: var(--primary);
 }
 
+/* Upload */
+.upload-area {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  margin-bottom: 0.85rem;
+  padding: 1rem 1.15rem;
+  overflow: hidden;
+  border: 1.5px dashed var(--line-strong);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.66);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.22s ease, background 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.upload-area::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  background: linear-gradient(100deg, rgba(109, 74, 255, 0.08), rgba(109, 74, 255, 0.015));
+  content: "";
+  transition: opacity 0.22s ease;
+}
+
+.upload-area > * {
+  position: relative;
+  z-index: 1;
+}
+
+.upload-area:hover {
+  border-color: #ad9bff;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 8px 22px rgba(71, 51, 158, 0.08);
+  transform: translateY(-1px);
+}
+
+.upload-area:hover::before,
+.upload-area.dragover::before {
+  opacity: 1;
+}
+
+.upload-area.dragover {
+  border-color: var(--primary);
+  background: #fbfaff;
+  box-shadow: 0 0 0 4px rgba(109, 74, 255, 0.11);
+}
+
+.upload-area.is-uploading {
+  cursor: wait;
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.upload-illustration {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 13px;
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.upload-illustration svg {
+  width: 23px;
+  height: 23px;
+}
+
+.upload-copy {
+  min-width: 0;
+}
+
+.upload-title {
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.upload-hint {
+  margin-top: 0.18rem;
+  color: var(--text-faint);
+  font-size: 0.74rem;
+}
+
+.upload-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  padding: 0.52rem 0.72rem;
+  border-radius: 9px;
+  color: var(--primary);
+  background: #f4f1ff;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.upload-cta svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* Upload progress */
 .upload-progress {
-  max-width: 1200px;
-  margin: 0 auto 0.8rem;
   display: none;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.45rem;
+  margin-bottom: 0.9rem;
 }
+
 .upload-progress.active {
   display: flex;
 }
-.upload-progress .progress-item {
+
+.progress-item {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  font-size: 0.82rem;
-  color: #666;
-  padding: 0.3rem 0.6rem;
-  background: rgba(255,255,255,0.6);
-  border-radius: 8px;
+  gap: 0.65rem;
+  min-height: 39px;
+  padding: 0.45rem 0.66rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--text-soft);
+  background: rgba(255, 255, 255, 0.8);
+  font-size: 0.76rem;
 }
-.upload-progress .progress-item .name {
+
+.progress-file {
+  overflow: hidden;
   flex: 1;
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
 }
-.upload-progress .progress-item .status {
-  flex-shrink: 0;
-  font-weight: 500;
+
+.progress-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.26rem;
+  flex: 0 0 auto;
+  font-weight: 600;
 }
-.upload-progress .progress-item .status.done {
-  color: #2e7d32;
+
+.progress-status svg {
+  width: 15px;
+  height: 15px;
 }
-.upload-progress .progress-item .status.error {
-  color: #c62828;
+
+.progress-status.done {
+  color: var(--success);
+}
+
+.progress-status.error {
+  color: var(--danger);
 }
 
 /* Grid */
 .grid {
-  max-width: 1200px;
-  margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
 }
 
 /* Card */
 .card {
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.02);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer;
-  position: relative;
-}
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.03);
+  overflow: visible;
+  border: 1px solid rgba(224, 220, 213, 0.86);
+  border-radius: var(--radius-md);
+  background: var(--surface-solid);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 }
 
-.card .thumb-wrap {
+.card:hover {
+  border-color: #dcd5f7;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+.preview-button {
+  position: relative;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  border: 0;
+  border-radius: 11px 11px 0 0;
+  cursor: zoom-in;
+  background: #efede9;
+}
+
+.thumb-wrap {
   position: relative;
   width: 100%;
-  padding-bottom: 100%;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
-  background: #f0eeeb;
 }
-.card .thumb-wrap img {
+
+.thumb-wrap::after {
   position: absolute;
   inset: 0;
+  opacity: 0;
+  background: linear-gradient(180deg, transparent 52%, rgba(18, 16, 25, 0.45));
+  content: "";
+  transition: opacity 0.22s ease;
+}
+
+.thumb-wrap img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
-}
-.card:hover .thumb-wrap img {
-  transform: scale(1.05);
+  transition: transform 0.35s ease;
 }
 
-.card .card-body {
-  padding: 0.55rem 0.7rem 0.6rem;
+.card:hover .thumb-wrap img {
+  transform: scale(1.045);
+}
+
+.card:hover .thumb-wrap::after {
+  opacity: 1;
+}
+
+.view-chip {
+  position: absolute;
+  right: 0.58rem;
+  bottom: 0.58rem;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  padding: 0.34rem 0.48rem;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 8px;
+  opacity: 0;
+  color: #fff;
+  background: rgba(22, 20, 30, 0.46);
+  font-size: 0.68rem;
+  font-weight: 600;
+  transform: translateY(4px);
+  backdrop-filter: blur(8px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.view-chip svg {
+  width: 14px;
+  height: 14px;
+}
+
+.card:hover .view-chip,
+.preview-button:focus-visible .view-chip {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card-footer {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.5rem;
+  min-height: 56px;
+  padding: 0.52rem 0.58rem 0.56rem 0.7rem;
 }
 
-.card .filename {
+.file-meta {
+  min-width: 0;
   flex: 1;
-  font-size: 0.72rem;
-  color: #888;
-  white-space: nowrap;
+}
+
+.filename {
   overflow: hidden;
+  color: #565656;
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.3;
+  white-space: nowrap;
   text-overflow: ellipsis;
-  min-width: 0;
 }
 
-.card-info {
-  flex: 1;
-  min-width: 0;
+.file-time {
+  margin-top: 0.15rem;
+  overflow: hidden;
+  color: var(--text-faint);
+  font-size: 0.65rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.card-actions {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  flex: 0 0 auto;
 }
 
-.card .copy-btn {
-  flex-shrink: 0;
-  width: 30px;
-  height: 30px;
-  border: none;
+.icon-action {
+  position: relative;
+  display: inline-grid;
+  width: 31px;
+  height: 31px;
+  place-items: center;
+  border: 1px solid transparent;
   border-radius: 8px;
-  background: #f0eeeb;
-  color: #666;
-  font-size: 0.9rem;
+  color: #696969;
   cursor: pointer;
+  background: var(--surface-muted);
+  transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.icon-action:hover {
+  border-color: #ddd6fb;
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.icon-action:active {
+  transform: scale(0.93);
+}
+
+.icon-action svg {
+  width: 16px;
+  height: 16px;
+}
+
+.icon-action.is-copied {
+  border-color: #b9e7cb;
+  color: var(--success);
+  background: var(--success-soft);
+}
+
+@media (hover: hover) {
+  .icon-action[data-tooltip]::after {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 7px);
+    z-index: 20;
+    width: max-content;
+    max-width: 180px;
+    padding: 0.36rem 0.5rem;
+    border-radius: 7px;
+    opacity: 0;
+    color: #fff;
+    background: #2c2b31;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+    content: attr(data-tooltip);
+    font-size: 0.67rem;
+    font-weight: 500;
+    line-height: 1.2;
+    pointer-events: none;
+    transform: translateY(3px);
+    transition: opacity 0.16s ease, transform 0.16s ease;
+  }
+
+  .icon-action[data-tooltip]:hover::after {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Empty / loading states */
+.state {
   display: flex;
+  grid-column: 1 / -1;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s, color 0.2s;
+  min-height: 250px;
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-faint);
 }
-.card .copy-btn:hover {
-  background: #e5e3e0;
-  color: #333;
+
+.state-icon {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  margin-bottom: 0.75rem;
+  border-radius: 14px;
+  color: #9b8cf1;
+  background: #efecff;
 }
-.card .copy-btn.copied {
-  background: #d4edda;
-  color: #155724;
+
+.state-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.state.error .state-icon {
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.state-title {
+  color: var(--text-soft);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.state-desc {
+  margin-top: 0.25rem;
+  color: var(--text-faint);
+  font-size: 0.76rem;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(109, 74, 255, 0.18);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 /* Lightbox */
 .lightbox {
-  display: none;
   position: fixed;
-  z-index: 1000;
   inset: 0;
-  background: rgba(0,0,0,0.72);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  justify-content: center;
+  z-index: 1000;
+  display: flex;
   align-items: center;
-  flex-direction: column;
-  padding: 2rem;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  background: rgba(16, 15, 21, 0.76);
+  backdrop-filter: blur(10px);
+  transition: opacity 0.2s ease, visibility 0.2s ease;
 }
+
 .lightbox.active {
-  display: flex;
+  opacity: 1;
+  visibility: visible;
 }
 
-.lightbox .close-btn {
+.lightbox-panel {
+  display: flex;
+  width: min(920px, 100%);
+  max-height: calc(100vh - 3rem);
+  flex-direction: column;
+  opacity: 0;
+  transform: translateY(10px) scale(0.985);
+  transition: transform 0.22s ease, opacity 0.22s ease;
+}
+
+.lightbox.active .lightbox-panel {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.lightbox-close {
   position: absolute;
-  top: 1.2rem;
-  right: 1.5rem;
-  background: none;
-  border: none;
-  color: rgba(255,255,255,0.7);
-  font-size: 2rem;
+  top: 1.1rem;
+  right: 1.1rem;
+  display: grid;
+  width: 41px;
+  height: 41px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.17);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.86);
   cursor: pointer;
-  transition: color 0.2s;
-  line-height: 1;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
 }
-.lightbox .close-btn:hover {
+
+.lightbox-close:hover {
   color: #fff;
+  background: rgba(255, 255, 255, 0.19);
+  transform: rotate(3deg);
 }
 
-.lightbox img {
-  max-width: 90vw;
-  max-height: 75vh;
-  object-fit: contain;
-  border-radius: 8px;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+.lightbox-close svg {
+  width: 20px;
+  height: 20px;
 }
 
-.lightbox .lb-actions {
-  margin-top: 1.2rem;
+.lightbox-image-wrap {
   display: flex;
-  gap: 0.8rem;
+  min-height: 160px;
   align-items: center;
-  flex-wrap: wrap;
   justify-content: center;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  background:
+    linear-gradient(45deg, rgba(255,255,255,0.025) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255,255,255,0.025) 25%, transparent 25%),
+    #17161d;
+  background-position: 0 0, 12px 0;
+  background-size: 24px 24px;
+  box-shadow: 0 20px 65px rgba(0, 0, 0, 0.34);
 }
 
-.lightbox .lb-actions button {
-  padding: 0.55rem 1.4rem;
-  border: none;
-  border-radius: 10px;
-  font-size: 0.85rem;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-weight: 500;
+.lightbox-image-wrap img {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 230px);
+  object-fit: contain;
 }
 
-.lightbox .lb-copy {
-  background: #fff;
-  color: #2c2c2c;
-}
-.lightbox .lb-copy:hover {
-  background: #f0eeeb;
-}
-.lightbox .lb-copy.copied {
-  background: #d4edda;
-  color: #155724;
+.lightbox-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.9rem;
+  padding: 0.78rem 0.1rem 0;
 }
 
-.lightbox .lb-delete {
-  background: rgba(255,255,255,0.15);
-  color: rgba(255,255,255,0.7);
-}
-.lightbox .lb-delete:hover {
-  background: #e53935;
-  color: #fff;
+.lightbox-file-info {
+  min-width: 0;
 }
 
-.lightbox .lb-close-text {
-  color: rgba(255,255,255,0.5);
+.lightbox-filename {
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.92);
   font-size: 0.8rem;
-  cursor: pointer;
-}
-.lightbox .lb-close-text:hover {
-  color: rgba(255,255,255,0.8);
+  font-weight: 500;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
-.lightbox .lb-time {
-  color: rgba(255,255,255,0.5);
-  font-size: 0.78rem;
-  margin-top: 0.6rem;
+.lightbox-time {
+  margin-top: 0.18rem;
+  color: rgba(255, 255, 255, 0.46);
+  font-size: 0.7rem;
+}
+
+.lb-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.action-button {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.38rem;
+  padding: 0.5rem 0.68rem;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  color: #3d3b43;
+  cursor: pointer;
+  background: #fff;
+  font-size: 0.73rem;
+  font-weight: 600;
+  transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+
+.action-button:hover {
+  background: #f2f0ed;
+}
+
+.action-button:active {
+  transform: scale(0.97);
+}
+
+.action-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.action-button.markdown {
+  border-color: rgba(181, 169, 246, 0.68);
+  color: #e9e4ff;
+  background: rgba(109, 74, 255, 0.36);
+}
+
+.action-button.markdown:hover {
+  background: rgba(109, 74, 255, 0.56);
+}
+
+.action-button.danger {
+  color: #ffc1c1;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.action-button.danger:hover {
+  color: #fff;
+  background: var(--danger);
+}
+
+.action-button.is-copied {
+  border-color: #b7e8c9;
+  color: var(--success);
+  background: var(--success-soft);
+}
+
+/* Confirmation */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  background: rgba(22, 21, 28, 0.48);
+  backdrop-filter: blur(4px);
+  transition: opacity 0.18s ease, visibility 0.18s ease;
+}
+
+.confirm-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.confirm-box {
+  width: min(390px, 100%);
+  padding: 1.3rem;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 17px;
   text-align: center;
+  background: #fff;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.2);
+  transform: translateY(8px) scale(0.98);
+  transition: transform 0.18s ease;
+}
+
+.confirm-overlay.active .confirm-box {
+  transform: translateY(0) scale(1);
+}
+
+.confirm-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  margin: 0 auto 0.68rem;
+  border-radius: 13px;
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.confirm-icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.confirm-box h2 {
+  color: var(--text);
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
+.confirm-box p {
+  margin-top: 0.4rem;
+  color: var(--text-soft);
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.55rem;
+  margin-top: 1.15rem;
+}
+
+.confirm-actions button {
+  min-width: 102px;
+  min-height: 38px;
+  padding: 0.52rem 0.9rem;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.confirm-actions button:active {
+  transform: scale(0.97);
+}
+
+.btn-cancel {
+  color: #666;
+  background: var(--surface-muted);
+}
+
+.btn-cancel:hover {
+  background: #eae7e2;
+}
+
+.btn-confirm {
+  color: #fff;
+  background: var(--danger);
+}
+
+.btn-confirm:hover {
+  background: #bd3030;
 }
 
 /* Toast */
 .toast {
   position: fixed;
-  bottom: 2rem;
+  bottom: 1.7rem;
   left: 50%;
-  transform: translateX(-50%) translateY(80px);
-  background: #2c2c2c;
-  color: #fff;
-  padding: 0.6rem 1.4rem;
-  border-radius: 10px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  max-width: calc(100vw - 2rem);
+  padding: 0.62rem 0.82rem;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 11px;
   opacity: 0;
-  transition: opacity 0.35s ease, transform 0.35s ease;
-  z-index: 2000;
+  color: #fff;
+  background: rgba(38, 37, 43, 0.95);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+  font-size: 0.78rem;
+  font-weight: 500;
   pointer-events: none;
+  transform: translate(-50%, 18px);
+  transition: opacity 0.24s ease, transform 0.24s ease;
 }
+
 .toast.show {
   opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  transform: translate(-50%, 0);
 }
 
-/* Loading & Error */
-.loading, .error, .empty {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 4rem 0;
-  font-size: 0.95rem;
-  color: #999;
-}
-.error { color: #c0392b; }
-.empty { color: #bbb; }
-
-/* Confirm dialog */
-.confirm-overlay {
-  display: none;
-  position: fixed;
-  z-index: 3000;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  justify-content: center;
-  align-items: center;
-}
-.confirm-overlay.active {
-  display: flex;
-}
-.confirm-box {
-  background: #fff;
-  border-radius: 16px;
-  padding: 1.8rem 2rem 1.5rem;
-  max-width: 360px;
-  width: 90%;
-  text-align: center;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.2);
-}
-.confirm-box p {
-  font-size: 0.95rem;
-  color: #2c2c2c;
-  margin-bottom: 1.2rem;
-  line-height: 1.5;
-}
-.confirm-box .confirm-actions {
-  display: flex;
-  gap: 0.6rem;
-  justify-content: center;
-}
-.confirm-box button {
-  padding: 0.5rem 1.5rem;
-  border: none;
-  border-radius: 10px;
-  font-size: 0.85rem;
-  font-family: inherit;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background 0.2s;
-}
-.confirm-box .btn-cancel {
-  background: #f0eeeb;
-  color: #666;
-}
-.confirm-box .btn-cancel:hover {
-  background: #e5e3e0;
-}
-.confirm-box .btn-confirm {
-  background: #e53935;
-  color: #fff;
-}
-.confirm-box .btn-confirm:hover {
-  background: #c62828;
+.toast-icon {
+  display: inline-flex;
+  color: #8ee2af;
 }
 
-/* Responsive — tablet */
-@media (max-width: 900px) {
-  .grid { grid-template-columns: repeat(3, 1fr); gap: 0.8rem; }
+.toast.error .toast-icon {
+  color: #ff9b9b;
 }
 
-/* Responsive — mobile portrait */
-@media (max-width: 700px) {
-  body { padding: 0.6rem 0.4rem 1.5rem; }
+.toast-icon svg {
+  width: 16px;
+  height: 16px;
+}
 
-  .header { margin-bottom: 0.5rem; padding: 0 0.2rem; }
-  .header h1 { font-size: 1.1rem; }
-  .header .subtitle { font-size: 0.7rem; margin-top: 0.2rem; }
-  .header .count { font-size: 0.7rem; margin-top: 0.2rem; }
-
-  .grid { grid-template-columns: repeat(2, 1fr); gap: 3px; }
-
-  .card { border-radius: 6px; box-shadow: none; }
-  .card:hover { transform: none; box-shadow: none; }
-
-  .card .thumb-wrap { padding-bottom: 100%; }
-  .card .thumb-wrap img { object-fit: cover; }
-  .card:hover .thumb-wrap img { transform: none; }
-
-  /* Overlay copy button on image */
-  .card .card-body {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 0.35rem 0.4rem;
-    background: linear-gradient(transparent, rgba(0,0,0,0.4));
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-radius: 0 0 6px 6px;
+/* Responsive */
+@media (max-width: 950px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.78rem;
   }
-  .card .filename { display: none; }
-  .card .copy-btn {
-    width: 30px; height: 30px;
-    font-size: 0.8rem;
-    border-radius: 7px;
-    background: rgba(255,255,255,0.8);
-    color: #444;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+}
+
+@media (max-width: 680px) {
+  body {
+    padding: 1rem 0.65rem 2rem;
   }
-  .card .copy-btn:hover { background: rgba(255,255,255,0.95); }
-  .card .copy-btn:active { transform: scale(0.92); }
+
+  .site-header {
+    gap: 0.7rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .brand-row {
+    gap: 0.58rem;
+  }
+
+  .brand-mark {
+    width: 37px;
+    height: 37px;
+    flex-basis: 37px;
+    border-radius: 11px;
+  }
+
+  .brand-mark svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .header-title h1 {
+    font-size: 1.12rem;
+  }
+
+  .domain-tag {
+    display: none;
+  }
+
+  .subtitle {
+    margin-top: 0.2rem;
+    font-size: 0.69rem;
+    line-height: 1.4;
+  }
+
+  .count-chip {
+    min-height: 30px;
+    padding: 0.35rem 0.52rem;
+    font-size: 0.66rem;
+  }
+
+  .count-chip svg {
+    display: none;
+  }
 
   .upload-area {
-    margin-bottom: 0.6rem;
-    padding: 0.7rem 0.8rem;
-    border-radius: 10px;
-    border-width: 1.5px;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.68rem;
+    margin-bottom: 0.65rem;
+    padding: 0.72rem 0.76rem;
+    border-radius: 13px;
   }
-  .upload-area .upload-icon { font-size: 1.1rem; margin-bottom: 0.15rem; }
-  .upload-area .upload-text { font-size: 0.78rem; }
-  .upload-area .upload-hint { font-size: 0.65rem; margin-top: 0.15rem; }
 
-  .upload-progress { margin-bottom: 0.4rem; }
-  .upload-progress .progress-item {
-    font-size: 0.7rem;
-    padding: 0.2rem 0.4rem;
+  .upload-illustration {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+
+  .upload-illustration svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .upload-title {
+    font-size: 0.78rem;
+  }
+
+  .upload-hint {
+    font-size: 0.63rem;
+  }
+
+  .upload-cta {
+    display: none;
+  }
+
+  .progress-item {
+    min-height: 34px;
+    padding: 0.36rem 0.5rem;
+    font-size: 0.68rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.44rem;
+  }
+
+  .card {
+    border-radius: 9px;
+  }
+
+  .preview-button {
+    border-radius: 8px 8px 0 0;
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow-sm);
+    transform: none;
+  }
+
+  .card:hover .thumb-wrap img {
+    transform: none;
+  }
+
+  .view-chip {
+    display: none;
+  }
+
+  .card-footer {
+    min-height: 49px;
+    gap: 0.25rem;
+    padding: 0.39rem 0.4rem 0.4rem 0.48rem;
+  }
+
+  .filename {
+    font-size: 0.64rem;
+  }
+
+  .file-time {
+    margin-top: 0.08rem;
+    font-size: 0.58rem;
+  }
+
+  .card-actions {
+    gap: 0.2rem;
+  }
+
+  .icon-action {
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+  }
+
+  .icon-action svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .lightbox {
+    padding: 0.65rem;
+  }
+
+  .lightbox-panel {
+    max-height: calc(100vh - 1.3rem);
+  }
+
+  .lightbox-close {
+    top: 0.72rem;
+    right: 0.72rem;
+    width: 37px;
+    height: 37px;
+    border-radius: 10px;
+  }
+
+  .lightbox-image-wrap {
+    border-radius: 11px;
+  }
+
+  .lightbox-image-wrap img {
+    max-height: calc(100vh - 220px);
+  }
+
+  .lightbox-meta {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.62rem;
+    padding-top: 0.65rem;
+  }
+
+  .lightbox-filename {
+    font-size: 0.74rem;
+  }
+
+  .lightbox-time {
+    font-size: 0.65rem;
+  }
+
+  .lb-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
     gap: 0.4rem;
   }
 
-  .lightbox { padding: 0.3rem; }
-  .lightbox img {
-    max-width: 100vw;
-    max-height: 65vh;
-    border-radius: 4px;
-  }
-  .lightbox .close-btn {
-    top: 0.4rem;
-    right: 0.5rem;
-    font-size: 1.6rem;
-    color: rgba(255,255,255,0.8);
-  }
-  .lightbox .lb-actions {
-    gap: 0.5rem;
-    margin-top: 0.6rem;
-    width: 100%;
-    max-width: 320px;
-  }
-  .lightbox .lb-actions button {
-    flex: 1;
-    padding: 0.6rem 0.8rem;
-    font-size: 0.85rem;
-    border-radius: 10px;
-    min-height: 44px;
-  }
-  .lightbox .lb-close-text {
-    display: none;
-  }
-  .lightbox .lb-time {
+  .action-button {
+    min-height: 42px;
+    padding: 0.48rem 0.5rem;
     font-size: 0.7rem;
-    margin-top: 0.4rem;
   }
 
-  /* Mobile close hint */
-  .lightbox .lb-actions .lb-close-text {
-    display: flex;
-    flex: none;
-    width: 44px;
-    height: 44px;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255,255,255,0.4);
-    font-size: 0;
-    cursor: pointer;
-    border-radius: 10px;
-    transition: background 0.2s;
+  .action-button.danger {
+    width: 42px;
+    padding: 0;
   }
-  .lightbox .lb-actions .lb-close-text::before {
-    content: '✕';
-    font-size: 1.2rem;
+
+  .action-button.danger .button-label {
+    display: none;
   }
-  .lightbox .lb-actions .lb-close-text:active {
-    background: rgba(255,255,255,0.1);
+
+  .state {
+    min-height: 190px;
   }
 
   .toast {
     bottom: 1rem;
-    font-size: 0.78rem;
-    padding: 0.45rem 1rem;
-    border-radius: 8px;
-  }
-
-  .confirm-box {
-    padding: 1.2rem 1.2rem 1rem;
-    border-radius: 14px;
-  }
-  .confirm-box p { font-size: 0.85rem; }
-  .confirm-box button {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.85rem;
-    min-height: 44px;
-  }
-
-  .loading, .error, .empty {
-    padding: 2rem 0;
-    font-size: 0.8rem;
+    font-size: 0.72rem;
   }
 }
 
-/* Very small screens */
-@media (max-width: 380px) {
-  body { padding: 0.4rem 0.3rem 1rem; }
-  .grid { gap: 2px; }
-  .header h1 { font-size: 1rem; }
-  .card .copy-btn { width: 28px; height: 28px; font-size: 0.75rem; }
-  .upload-area { padding: 0.5rem 0.6rem; }
+@media (max-width: 370px) {
+  body {
+    padding-right: 0.4rem;
+    padding-left: 0.4rem;
+  }
+
+  .grid {
+    gap: 0.3rem;
+  }
+
+  .card-footer {
+    padding-right: 0.3rem;
+    padding-left: 0.35rem;
+  }
+
+  .icon-action {
+    width: 26px;
+    height: 26px;
+  }
+
+  .file-time {
+    display: none;
+  }
 }
 </style>
 </head>
+
 <body>
+<main class="app-shell">
+  <header class="site-header">
+    <div class="header-main">
+      <div class="brand-row">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3.5" y="4" width="17" height="16" rx="3"></rect>
+            <circle cx="8.4" cy="9.1" r="1.45"></circle>
+            <path d="m4.8 17 4.55-4.55a1.5 1.5 0 0 1 2.12 0L14 15l1.55-1.55a1.5 1.5 0 0 1 2.12 0L20 16.8"></path>
+          </svg>
+        </span>
 
-<div class="header">
-  <h1>📦 图床</h1>
-  <p class="subtitle">点击图片查看大图 · 点击复制按钮获取直链 · 素材来源于网络</p>
-  <p class="count" id="count">加载中...</p>
-</div>
+        <div class="header-title-wrap">
+          <div class="header-title">
+            <h1>图床</h1>
+            <span class="domain-tag">xiaosh.xyz</span>
+          </div>
+          <p class="subtitle">点击图片预览大图，支持复制直链或 Markdown 格式</p>
+        </div>
+      </div>
+    </div>
 
-<!-- Upload Area -->
-<div class="upload-area" id="uploadArea">
-  <div class="upload-icon">📁</div>
-  <div class="upload-text">点击上传图片</div>
-  <div class="upload-hint">支持 PNG / JPG / GIF / WebP，可多选</div>
-</div>
-<input type="file" id="fileInput" multiple accept="image/*" style="display:none">
+    <div class="count-chip" aria-live="polite">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="3.5" y="4" width="17" height="16" rx="3"></rect>
+        <circle cx="8.5" cy="9" r="1.4"></circle>
+        <path d="m5 17 4.2-4.2a1.5 1.5 0 0 1 2.1 0l2.2 2.2 1.4-1.4a1.5 1.5 0 0 1 2.1 0l2 2"></path>
+      </svg>
+      <span id="count">加载中...</span>
+    </div>
+  </header>
 
-<!-- Upload Progress -->
-<div class="upload-progress" id="uploadProgress"></div>
+  <section
+    class="upload-area"
+    id="uploadArea"
+    role="button"
+    tabindex="0"
+    aria-label="选择并上传图片"
+    aria-describedby="uploadHint"
+  >
+    <div class="upload-illustration" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17.5 18.5H7.1a4.6 4.6 0 1 1 .73-9.14A5.8 5.8 0 0 1 19 11.25a3.65 3.65 0 0 1-1.5 7.25Z"></path>
+        <path d="M12 15.5V7.8"></path>
+        <path d="m9.2 10.6 2.8-2.8 2.8 2.8"></path>
+      </svg>
+    </div>
 
-<!-- Image Grid -->
-<div class="grid" id="grid">
-  <div class="loading">加载中...</div>
-</div>
+    <div class="upload-copy">
+      <p class="upload-title">上传图片</p>
+      <p class="upload-hint" id="uploadHint">支持 PNG、JPG、GIF、WebP，可一次选择多张或拖入文件</p>
+    </div>
+
+    <span class="upload-cta">
+      选择文件
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h13"></path>
+        <path d="m13 6 6 6-6 6"></path>
+      </svg>
+    </span>
+  </section>
+
+  <input type="file" id="fileInput" multiple accept="image/png,image/jpeg,image/gif,image/webp" hidden>
+
+  <section class="upload-progress" id="uploadProgress" aria-live="polite"></section>
+
+  <section class="grid" id="grid" aria-live="polite" aria-label="图片列表"></section>
+</main>
 
 <!-- Lightbox -->
-<div class="lightbox" id="lightbox">
-  <button class="close-btn" id="lbClose">&times;</button>
-  <img id="lbImg" src="" alt="">
-  <div class="lb-time" id="lbTime"></div>
-  <div class="lb-actions">
-    <button class="lb-copy" id="lbCopy">📋 复制链接</button>
-    <button class="lb-delete" id="lbDelete">🗑️ 删除</button>
-    <span class="lb-close-text" id="lbCloseText">ESC 关闭</span>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="图片预览">
+  <button class="lightbox-close" id="lbClose" type="button" aria-label="关闭预览">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M6 6l12 12M18 6 6 18"></path>
+    </svg>
+  </button>
+
+  <div class="lightbox-panel">
+    <div class="lightbox-image-wrap">
+      <img id="lbImg" src="" alt="">
+    </div>
+
+    <div class="lightbox-meta">
+      <div class="lightbox-file-info">
+        <p class="lightbox-filename" id="lbFilename"></p>
+        <p class="lightbox-time" id="lbTime"></p>
+      </div>
+
+      <div class="lb-actions">
+        <button class="action-button" id="lbCopyLink" type="button" data-icon="link">
+          <span class="button-icon" aria-hidden="true"></span>
+          <span class="button-label">复制直链</span>
+        </button>
+
+        <button class="action-button markdown" id="lbCopyMarkdown" type="button" data-icon="markdown">
+          <span class="button-icon" aria-hidden="true"></span>
+          <span class="button-label">复制 Markdown</span>
+        </button>
+
+        <button class="action-button danger" id="lbDelete" type="button" data-icon="trash" aria-label="删除图片">
+          <span class="button-icon" aria-hidden="true"></span>
+          <span class="button-label">删除</span>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- Confirm Dialog -->
-<div class="confirm-overlay" id="confirmOverlay">
+<!-- Confirm dialog -->
+<div class="confirm-overlay" id="confirmOverlay" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
   <div class="confirm-box">
-    <p id="confirmMsg">确定要删除这张图片吗？</p>
+    <div class="confirm-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 8v4"></path>
+        <path d="M12 16h.01"></path>
+        <path d="m10.2 4.2-7 12.15A2 2 0 0 0 4.94 19h14.12a2 2 0 0 0 1.73-3L13.8 4.2a2.08 2.08 0 0 0-3.6 0Z"></path>
+      </svg>
+    </div>
+
+    <h2 id="confirmTitle">删除这张图片？</h2>
+    <p id="confirmMsg">删除后无法恢复，确定要继续吗？</p>
+
     <div class="confirm-actions">
-      <button class="btn-cancel" id="confirmCancel">取消</button>
-      <button class="btn-confirm" id="confirmOk">删除</button>
+      <button class="btn-cancel" id="confirmCancel" type="button">取消</button>
+      <button class="btn-confirm" id="confirmOk" type="button">确认删除</button>
     </div>
   </div>
 </div>
 
 <!-- Toast -->
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <span class="toast-icon" id="toastIcon" aria-hidden="true"></span>
+  <span id="toastText"></span>
+</div>
 
 <script>
-(function() {
-  const grid = document.getElementById('grid');
-  const count = document.getElementById('count');
-  const lightbox = document.getElementById('lightbox');
-  const lbImg = document.getElementById('lbImg');
-  const lbCopy = document.getElementById('lbCopy');
-  const lbDelete = document.getElementById('lbDelete');
-  const lbClose = document.getElementById('lbClose');
-  const lbCloseText = document.getElementById('lbCloseText');
-  const lbTime = document.getElementById('lbTime');
-  const toast = document.getElementById('toast');
-  const uploadArea = document.getElementById('uploadArea');
-  const fileInput = document.getElementById('fileInput');
-  const uploadProgress = document.getElementById('uploadProgress');
-  const confirmOverlay = document.getElementById('confirmOverlay');
-  const confirmMsg = document.getElementById('confirmMsg');
-  const confirmOk = document.getElementById('confirmOk');
-  const confirmCancel = document.getElementById('confirmCancel');
+(function () {
+  const ICONS = {
+    image: `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3.5" y="4" width="17" height="16" rx="3"></rect>
+        <circle cx="8.4" cy="9.1" r="1.45"></circle>
+        <path d="m4.8 17 4.55-4.55a1.5 1.5 0 0 1 2.12 0L14 15l1.55-1.55a1.5 1.5 0 0 1 2.12 0L20 16.8"></path>
+      </svg>`,
+    link: `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.3 13.7a4.5 4.5 0 0 0 6.36.04l2.12-2.12a4.5 4.5 0 0 0-6.36-6.36l-1.22 1.21"></path>
+        <path d="M13.7 10.3a4.5 4.5 0 0 0-6.36-.04l-2.12 2.12a4.5 4.5 0 0 0 6.36 6.36l1.21-1.21"></path>
+      </svg>`,
+    markdown: `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3.5" y="4.5" width="17" height="15" rx="2.5"></rect>
+        <path d="M7 16V9l3 4 3-4v7"></path>
+        <path d="M15.5 15.5h2.5"></path>
+      </svg>`,
+    check: `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m5 12.5 4.25 4.25L19 7"></path>
+      </svg>`,
+    error: `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="8.5"></circle>
+        <path d="m9 9 6 6m0-6-6 6"></path>
+      </svg>`,
+    trash: `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4.5 7.5h15"></path>
+        <path d="M9.5 4.5h5"></path>
+        <path d="m7 7.5.7 11.2a1.5 1.5 0 0 0 1.5 1.3h5.6a1.5 1.5 0 0 0 1.5-1.3L17 7.5"></path>
+        <path d="M10 11v5M14 11v5"></path>
+      </svg>`,
+    zoom: `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="10.8" cy="10.8" r="5.8"></circle>
+        <path d="m15.2 15.2 4.3 4.3M10.8 8v5.6M8 10.8h5.6"></path>
+      </svg>`
+  };
+
+  const grid = document.getElementById("grid");
+  const count = document.getElementById("count");
+  const lightbox = document.getElementById("lightbox");
+  const lbImg = document.getElementById("lbImg");
+  const lbFilename = document.getElementById("lbFilename");
+  const lbTime = document.getElementById("lbTime");
+  const lbClose = document.getElementById("lbClose");
+  const lbCopyLink = document.getElementById("lbCopyLink");
+  const lbCopyMarkdown = document.getElementById("lbCopyMarkdown");
+  const lbDelete = document.getElementById("lbDelete");
+
+  const uploadArea = document.getElementById("uploadArea");
+  const fileInput = document.getElementById("fileInput");
+  const uploadProgress = document.getElementById("uploadProgress");
+
+  const confirmOverlay = document.getElementById("confirmOverlay");
+  const confirmMsg = document.getElementById("confirmMsg");
+  const confirmOk = document.getElementById("confirmOk");
+  const confirmCancel = document.getElementById("confirmCancel");
+
+  const toast = document.getElementById("toast");
+  const toastIcon = document.getElementById("toastIcon");
+  const toastText = document.getElementById("toastText");
 
   const base = window.location.origin;
 
-  let currentFilename = '';
-  let currentUploadTime = '';
+  let currentFilename = "";
+  let currentUploadTime = "";
   let confirmCallback = null;
-
-  // ===== Time formatting =====
-  function formatTime(iso) {
-    if (!iso) return '';
-    const d = new Date(iso);
-    const pad = n => String(n).padStart(2, '0');
-    const now = new Date();
-    const month = pad(d.getMonth() + 1);
-    const day = pad(d.getDate());
-    const hour = pad(d.getHours());
-    const min = pad(d.getMinutes());
-    if (d.getFullYear() === now.getFullYear()) {
-      return `${month}-${day} ${hour}:${min}`;
-    }
-    return `${d.getFullYear()}-${month}-${day}`;
-  }
-
-  // ===== Toast =====
+  let lastFocusedElement = null;
   let toastTimer = null;
-  function showToast(msg) {
-    toast.textContent = msg;
-    toast.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+  let dragDepth = 0;
+
+  function icon(name) {
+    return ICONS[name] || "";
   }
 
-  // ===== Copy =====
-  function copyUrl(url) {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(url).then(() => showToast('✅ 已复制链接')).catch(() => fallbackCopy(url));
+  function imageUrl(fileName) {
+    const safeName = encodeURIComponent(fileName).replace(/[!'()*]/g, function (char) {
+      return "%" + char.charCodeAt(0).toString(16).toUpperCase();
+    });
+
+    return base + "/image/" + safeName;
+  }
+
+  function markdownAlt(fileName) {
+    return fileName
+      .replace(/\.[^/.]+$/, "")
+      .replace(/\\/g, "\\\\")
+      .replace(/\[/g, "\\[")
+      .replace(/\]/g, "\\]")
+      .replace(/[\r\n]+/g, " ");
+  }
+
+  function markdownText(fileName) {
+    return `![${markdownAlt(fileName)}](${imageUrl(fileName)})`;
+  }
+
+  function formatTime(iso) {
+    if (!iso) return "";
+
+    const date = new Date(iso);
+    if (Number.isNaN(date.getTime())) return "";
+
+    const pad = function (value) {
+      return String(value).padStart(2, "0");
+    };
+
+    const now = new Date();
+    const month = pad(date.getMonth() + 1);
+    const day = pad(date.getDate());
+    const hour = pad(date.getHours());
+    const minute = pad(date.getMinutes());
+
+    if (date.getFullYear() === now.getFullYear()) {
+      return `${month}-${day} ${hour}:${minute}`;
+    }
+
+    return `${date.getFullYear()}-${month}-${day}`;
+  }
+
+  function showToast(message, type) {
+    const toastType = type || "success";
+    toast.classList.toggle("error", toastType === "error");
+    toastIcon.innerHTML = icon(toastType === "error" ? "error" : "check");
+    toastText.textContent = message;
+
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(function () {
+      toast.classList.remove("show");
+    }, 2200);
+  }
+
+  async function copyText(text) {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    } catch (error) {
+      // Clipboard API 不可用时使用兼容方案
+    }
+
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.top = "0";
+    textarea.style.left = "0";
+    textarea.style.opacity = "0";
+    textarea.style.pointerEvents = "none";
+
+    document.body.appendChild(textarea);
+    textarea.select();
+    textarea.setSelectionRange(0, textarea.value.length);
+
+    let copied = false;
+    try {
+      copied = document.execCommand("copy");
+    } catch (error) {
+      copied = false;
+    }
+
+    document.body.removeChild(textarea);
+    return copied;
+  }
+
+  function setCopyFeedback(button, label) {
+    if (!button) return;
+
+    clearTimeout(button.feedbackTimer);
+
+    const iconHolder = button.querySelector(".button-icon");
+    const labelHolder = button.querySelector(".button-label");
+    const originalIcon = button.dataset.icon || "link";
+    const originalLabel = button.dataset.defaultLabel || (labelHolder ? labelHolder.textContent : "");
+
+    if (labelHolder && !button.dataset.defaultLabel) {
+      button.dataset.defaultLabel = originalLabel;
+    }
+
+    button.classList.add("is-copied");
+
+    if (iconHolder) {
+      iconHolder.innerHTML = icon("check");
+    }
+
+    if (labelHolder) {
+      labelHolder.textContent = "已复制";
+    }
+
+    button.feedbackTimer = setTimeout(function () {
+      button.classList.remove("is-copied");
+
+      if (iconHolder) {
+        iconHolder.innerHTML = icon(originalIcon);
+      }
+
+      if (labelHolder) {
+        labelHolder.textContent = originalLabel;
+      }
+    }, 1600);
+  }
+
+  async function copyWithFeedback(text, button, successMessage) {
+    const copied = await copyText(text);
+
+    if (copied) {
+      setCopyFeedback(button);
+      showToast(successMessage || "已复制");
+      return;
+    }
+
+    showToast("复制失败，请检查浏览器权限", "error");
+  }
+
+  function createState(type, title, description) {
+    const state = document.createElement("div");
+    state.className = "state" + (type === "error" ? " error" : "");
+
+    const stateIcon = document.createElement("div");
+    stateIcon.className = "state-icon";
+
+    if (type === "loading") {
+      const spinner = document.createElement("span");
+      spinner.className = "spinner";
+      stateIcon.appendChild(spinner);
     } else {
-      fallbackCopy(url);
+      stateIcon.innerHTML = icon(type === "error" ? "error" : "image");
+    }
+
+    const stateTitle = document.createElement("p");
+    stateTitle.className = "state-title";
+    stateTitle.textContent = title;
+
+    const stateDesc = document.createElement("p");
+    stateDesc.className = "state-desc";
+    stateDesc.textContent = description;
+
+    state.appendChild(stateIcon);
+    state.appendChild(stateTitle);
+    state.appendChild(stateDesc);
+
+    return state;
+  }
+
+  function renderGridState(type, title, description) {
+    grid.replaceChildren(createState(type, title, description));
+  }
+
+  function createIconButton(iconName, tooltip) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "icon-action";
+    button.dataset.icon = iconName;
+    button.dataset.tooltip = tooltip;
+    button.setAttribute("aria-label", tooltip);
+    button.innerHTML = `<span class="button-icon" aria-hidden="true">${icon(iconName)}</span>`;
+    return button;
+  }
+
+  function openLightbox(fileName, uploaded) {
+    currentFilename = fileName;
+    currentUploadTime = uploaded || "";
+
+    lbImg.src = imageUrl(fileName);
+    lbImg.alt = fileName;
+    lbFilename.textContent = fileName;
+
+    const time = formatTime(currentUploadTime);
+    lbTime.textContent = time ? `上传于 ${time}` : "";
+
+    [lbCopyLink, lbCopyMarkdown, lbDelete].forEach(function (button) {
+      const iconHolder = button.querySelector(".button-icon");
+      const labelHolder = button.querySelector(".button-label");
+
+      clearTimeout(button.feedbackTimer);
+      button.classList.remove("is-copied");
+
+      if (iconHolder) {
+        iconHolder.innerHTML = icon(button.dataset.icon);
+      }
+
+      if (labelHolder && button.dataset.defaultLabel) {
+        labelHolder.textContent = button.dataset.defaultLabel;
+      }
+    });
+
+    lightbox.classList.add("active");
+    document.body.style.overflow = "hidden";
+    lbClose.focus();
+  }
+
+  function closeLightbox() {
+    const imageSrc = lbImg.src;
+
+    lightbox.classList.remove("active");
+    document.body.style.overflow = "";
+    currentFilename = "";
+    currentUploadTime = "";
+
+    setTimeout(function () {
+      if (!lightbox.classList.contains("active") && lbImg.src === imageSrc) {
+        lbImg.removeAttribute("src");
+        lbImg.alt = "";
+      }
+    }, 220);
+  }
+
+  function createCard(file) {
+    const fileName = typeof file === "string" ? file : String(file.name || "");
+    const uploaded = typeof file === "object" && file
+      ? (file.uploaded || file.createdAt || file.created_at || "")
+      : "";
+
+    const card = document.createElement("article");
+    card.className = "card";
+
+    const previewButton = document.createElement("button");
+    previewButton.type = "button";
+    previewButton.className = "preview-button";
+    previewButton.setAttribute("aria-label", `查看图片：${fileName}`);
+
+    const thumbWrap = document.createElement("div");
+    thumbWrap.className = "thumb-wrap";
+
+    const image = document.createElement("img");
+    image.src = imageUrl(fileName);
+    image.alt = fileName;
+    image.loading = "lazy";
+    image.decoding = "async";
+
+    const viewChip = document.createElement("span");
+    viewChip.className = "view-chip";
+    viewChip.setAttribute("aria-hidden", "true");
+    viewChip.innerHTML = `${icon("zoom")}<span>预览</span>`;
+
+    thumbWrap.appendChild(image);
+    thumbWrap.appendChild(viewChip);
+    previewButton.appendChild(thumbWrap);
+
+    previewButton.addEventListener("click", function () {
+      openLightbox(fileName, uploaded);
+    });
+
+    const footer = document.createElement("footer");
+    footer.className = "card-footer";
+
+    const meta = document.createElement("div");
+    meta.className = "file-meta";
+
+    const filename = document.createElement("p");
+    filename.className = "filename";
+    filename.title = fileName;
+    filename.textContent = fileName;
+
+    const fileTime = document.createElement("p");
+    fileTime.className = "file-time";
+    fileTime.textContent = uploaded ? `上传于 ${formatTime(uploaded) || "未知时间"}` : "图片文件";
+
+    meta.appendChild(filename);
+    meta.appendChild(fileTime);
+
+    const actions = document.createElement("div");
+    actions.className = "card-actions";
+
+    const copyLinkButton = createIconButton("link", "复制直链");
+    const copyMarkdownButton = createIconButton("markdown", "复制 Markdown");
+
+    copyLinkButton.addEventListener("click", function () {
+      copyWithFeedback(imageUrl(fileName), copyLinkButton, "直链已复制");
+    });
+
+    copyMarkdownButton.addEventListener("click", function () {
+      copyWithFeedback(markdownText(fileName), copyMarkdownButton, "Markdown 已复制");
+    });
+
+    actions.appendChild(copyLinkButton);
+    actions.appendChild(copyMarkdownButton);
+
+    footer.appendChild(meta);
+    footer.appendChild(actions);
+
+    card.appendChild(previewButton);
+    card.appendChild(footer);
+
+    return card;
+  }
+
+  async function loadImages() {
+    renderGridState("loading", "正在加载图片", "请稍候…");
+    count.textContent = "加载中...";
+
+    try {
+      const response = await fetch("/api/images");
+
+      if (!response.ok) {
+        throw new Error("Failed to load images");
+      }
+
+      const payload = await response.json();
+      const files = Array.isArray(payload) ? payload : (Array.isArray(payload.files) ? payload.files : []);
+
+      if (files.length === 0) {
+        renderGridState("empty", "还没有图片", "从上方上传你的第一张图片吧");
+        count.textContent = "共 0 张图片";
+        return;
+      }
+
+      const fragment = document.createDocumentFragment();
+      let validCount = 0;
+
+      files.forEach(function (file) {
+        const name = typeof file === "string" ? file : file && file.name;
+
+        if (!name) return;
+
+        fragment.appendChild(createCard(file));
+        validCount++;
+      });
+
+      if (validCount === 0) {
+        renderGridState("empty", "还没有可显示的图片", "请上传 PNG、JPG、GIF 或 WebP 图片");
+        count.textContent = "共 0 张图片";
+        return;
+      }
+
+      grid.replaceChildren(fragment);
+      count.textContent = `共 ${validCount} 张图片`;
+    } catch (error) {
+      console.error(error);
+      renderGridState("error", "图片加载失败", "请刷新页面后重试");
+      count.textContent = "加载失败";
     }
   }
-  function fallbackCopy(url) {
-    const ta = document.createElement('textarea');
-    ta.value = url;
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    try { document.execCommand('copy'); showToast('✅ 已复制链接'); } catch(e) { showToast('❌ 复制失败'); }
-    document.body.removeChild(ta);
+
+  function createProgressItem(file) {
+    const item = document.createElement("div");
+    item.className = "progress-item";
+
+    const fileName = document.createElement("span");
+    fileName.className = "progress-file";
+    fileName.textContent = file.name;
+
+    const status = document.createElement("span");
+    status.className = "progress-status";
+    status.textContent = "上传中";
+
+    item.appendChild(fileName);
+    item.appendChild(status);
+
+    return { item, status };
   }
 
-  // ===== Confirm Dialog =====
-  function showConfirm(msg, callback) {
-    confirmMsg.textContent = msg;
-    confirmCallback = callback;
-    confirmOverlay.classList.add('active');
-  }
-  function hideConfirm() {
-    confirmOverlay.classList.remove('active');
-    confirmCallback = null;
-  }
-  confirmCancel.addEventListener('click', hideConfirm);
-  confirmOk.addEventListener('click', function() {
-    if (confirmCallback) confirmCallback();
-    hideConfirm();
-  });
-  confirmOverlay.addEventListener('click', function(e) {
-    if (e.target === confirmOverlay) hideConfirm();
-  });
-
-  // ===== Load Images =====
-  function loadImages() {
-    grid.innerHTML = '<div class="loading">加载中...</div>';
-    count.textContent = '加载中...';
-
-    fetch('/api/images')
-      .then(r => {
-        if (!r.ok) throw new Error('Failed to load');
-        return r.json();
-      })
-      .then(files => {
-        if (!files || files.length === 0) {
-          grid.innerHTML = '<div class="empty">暂无图片，点击上方区域上传</div>';
-          count.textContent = '共 0 张图片';
-          return;
-        }
-
-        count.textContent = `共 ${files.length} 张图片`;
-        grid.innerHTML = '';
-
-        files.forEach(f => {
-          const fileName = f.name || f;
-          const url = base + '/image/' + encodeURIComponent(fileName);
-
-          const card = document.createElement('div');
-          card.className = 'card';
-
-          const thumbWrap = document.createElement('div');
-          thumbWrap.className = 'thumb-wrap';
-
-          const img = document.createElement('img');
-          img.src = url;
-          img.alt = fileName;
-          img.loading = 'lazy';
-          thumbWrap.appendChild(img);
-
-          const body = document.createElement('div');
-          body.className = 'card-body';
-
-          const info = document.createElement('div');
-          info.className = 'card-info';
-
-          const fn = document.createElement('span');
-          fn.className = 'filename';
-          fn.title = fileName;
-          fn.textContent = fileName;
-
-          info.appendChild(fn);
-
-          const btn = document.createElement('button');
-          btn.className = 'copy-btn';
-          btn.textContent = '📋';
-          btn.title = '复制链接';
-          btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            copyUrl(url);
-            this.classList.add('copied');
-            setTimeout(() => this.classList.remove('copied'), 1200);
-          });
-
-          body.appendChild(info);
-          body.appendChild(btn);
-
-          card.addEventListener('click', function() {
-            currentFilename = fileName;
-            currentUploadTime = f.uploaded || '';
-            lbImg.src = url;
-            lbImg.alt = fileName;
-            lbTime.textContent = formatTime(currentUploadTime);
-            lbCopy.textContent = '📋 复制链接';
-            lbCopy.classList.remove('copied');
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden';
-          });
-
-          card.appendChild(thumbWrap);
-          card.appendChild(body);
-          grid.appendChild(card);
-        });
-      })
-      .catch(err => {
-        grid.innerHTML = '<div class="error">❌ 加载失败，请刷新重试</div>';
-        count.textContent = '加载失败';
-        console.error(err);
-      });
+  function updateProgressStatus(statusElement, type, message) {
+    statusElement.className = `progress-status ${type}`;
+    statusElement.innerHTML = `${icon(type === "done" ? "check" : "error")}<span>${message}</span>`;
   }
 
-  // ===== Upload =====
-  function uploadFiles(files) {
+  function isSupportedImage(file) {
+    const type = (file.type || "").toLowerCase();
+    const name = (file.name || "").toLowerCase();
+
+    return (
+      ["image/png", "image/jpeg", "image/gif", "image/webp"].includes(type) ||
+      /\.(png|jpe?g|gif|webp)$/.test(name)
+    );
+  }
+
+  async function uploadSingleFile(file, statusElement) {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await fetch("/api/upload", {
+      method: "POST",
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error("Upload failed");
+    }
+
+    updateProgressStatus(statusElement, "done", "已完成");
+  }
+
+  async function uploadFiles(fileList) {
+    const files = Array.from(fileList).filter(isSupportedImage);
+    const ignoredCount = fileList.length - files.length;
+
+    if (ignoredCount > 0) {
+      showToast(`已忽略 ${ignoredCount} 个不支持的文件`, "error");
+    }
+
     if (files.length === 0) return;
 
-    uploadProgress.innerHTML = '';
-    uploadProgress.classList.add('active');
-    uploadArea.classList.add('uploading');
+    uploadProgress.innerHTML = "";
+    uploadProgress.classList.add("active");
+    uploadArea.classList.add("is-uploading");
+    uploadArea.setAttribute("aria-busy", "true");
 
-    let completed = 0;
-    const total = files.length;
+    const tasks = files.map(function (file) {
+      const progress = createProgressItem(file);
+      uploadProgress.appendChild(progress.item);
 
-    Array.from(files).forEach(file => {
-      const item = document.createElement('div');
-      item.className = 'progress-item';
-      item.innerHTML = `<span class="name">${file.name}</span><span class="status">上传中...</span>`;
-      uploadProgress.appendChild(item);
-      const statusEl = item.querySelector('.status');
-
-      const formData = new FormData();
-      formData.append('file', file);
-
-      fetch('/api/upload', { method: 'POST', body: formData })
-        .then(r => {
-          if (!r.ok) throw new Error('Upload failed');
-          return r.json();
+      return uploadSingleFile(file, progress.status)
+        .then(function () {
+          return true;
         })
-        .then(data => {
-          statusEl.textContent = '✅';
-          statusEl.className = 'status done';
-          completed++;
-          if (completed === total) {
-            uploadArea.classList.remove('uploading');
-            setTimeout(() => {
-              uploadProgress.classList.remove('active');
-              uploadProgress.innerHTML = '';
-            }, 1500);
-            loadImages();
-          }
-        })
-        .catch(err => {
-          statusEl.textContent = '❌';
-          statusEl.className = 'status error';
-          completed++;
-          if (completed === total) {
-            uploadArea.classList.remove('uploading');
-          }
+        .catch(function (error) {
+          console.error(error);
+          updateProgressStatus(progress.status, "error", "失败");
+          return false;
         });
+    });
+
+    const results = await Promise.all(tasks);
+    const successCount = results.filter(Boolean).length;
+
+    uploadArea.classList.remove("is-uploading");
+    uploadArea.removeAttribute("aria-busy");
+
+    if (successCount > 0) {
+      await loadImages();
+      showToast(successCount === files.length ? "图片上传完成" : `已上传 ${successCount} 张图片`);
+    } else {
+      showToast("上传失败，请稍后重试", "error");
+    }
+
+    setTimeout(function () {
+      uploadProgress.classList.remove("active");
+      uploadProgress.innerHTML = "";
+    }, 1800);
+  }
+
+  function showConfirm(message, callback) {
+    lastFocusedElement = document.activeElement;
+    confirmMsg.textContent = message;
+    confirmCallback = callback;
+    confirmOverlay.classList.add("active");
+
+    requestAnimationFrame(function () {
+      confirmOk.focus();
     });
   }
 
-  uploadArea.addEventListener('click', function() {
-    fileInput.click();
-  });
+  function hideConfirm() {
+    confirmOverlay.classList.remove("active");
+    confirmCallback = null;
 
-  fileInput.addEventListener('change', function() {
-    if (this.files.length > 0) {
-      uploadFiles(this.files);
-      this.value = '';
+    if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+      lastFocusedElement.focus();
     }
-  });
 
-  // Drag & Drop
-  uploadArea.addEventListener('dragover', function(e) {
-    e.preventDefault();
-    this.classList.add('dragover');
-  });
-  uploadArea.addEventListener('dragleave', function(e) {
-    e.preventDefault();
-    this.classList.remove('dragover');
-  });
-  uploadArea.addEventListener('drop', function(e) {
-    e.preventDefault();
-    this.classList.remove('dragover');
-    if (e.dataTransfer.files.length > 0) {
-      uploadFiles(e.dataTransfer.files);
-    }
-  });
-
-  // ===== Lightbox =====
-  function closeLightbox() {
-    lightbox.classList.remove('active');
-    document.body.style.overflow = '';
-    setTimeout(() => { lbImg.src = ''; }, 200);
+    lastFocusedElement = null;
   }
 
-  lbClose.addEventListener('click', closeLightbox);
-  lbCloseText.addEventListener('click', closeLightbox);
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+  async function deleteImage(fileName) {
+    try {
+      const response = await fetch("/api/images?name=" + encodeURIComponent(fileName), {
+        method: "DELETE"
+      });
+
+      if (!response.ok) {
+        throw new Error("Delete failed");
+      }
+
+      if (currentFilename === fileName) {
+        closeLightbox();
+      }
+
+      await loadImages();
+      showToast("图片已删除");
+    } catch (error) {
+      console.error(error);
+      showToast("删除失败，请稍后重试", "error");
+    }
+  }
+
+  // 初始化操作按钮图标
+  [lbCopyLink, lbCopyMarkdown, lbDelete].forEach(function (button) {
+    const iconHolder = button.querySelector(".button-icon");
+    const labelHolder = button.querySelector(".button-label");
+
+    if (iconHolder) {
+      iconHolder.innerHTML = icon(button.dataset.icon);
+    }
+
+    if (labelHolder) {
+      button.dataset.defaultLabel = labelHolder.textContent;
+    }
+  });
+
+  // Upload area events
+  uploadArea.addEventListener("click", function () {
+    if (!uploadArea.classList.contains("is-uploading")) {
+      fileInput.click();
+    }
+  });
+
+  uploadArea.addEventListener("keydown", function (event) {
+    if ((event.key === "Enter" || event.key === " ") && !uploadArea.classList.contains("is-uploading")) {
+      event.preventDefault();
+      fileInput.click();
+    }
+  });
+
+  fileInput.addEventListener("change", function () {
+    if (this.files.length > 0) {
+      uploadFiles(this.files);
+      this.value = "";
+    }
+  });
+
+  uploadArea.addEventListener("dragenter", function (event) {
+    event.preventDefault();
+    dragDepth++;
+    uploadArea.classList.add("dragover");
+  });
+
+  uploadArea.addEventListener("dragover", function (event) {
+    event.preventDefault();
+  });
+
+  uploadArea.addEventListener("dragleave", function (event) {
+    event.preventDefault();
+    dragDepth--;
+
+    if (dragDepth <= 0) {
+      dragDepth = 0;
+      uploadArea.classList.remove("dragover");
+    }
+  });
+
+  uploadArea.addEventListener("drop", function (event) {
+    event.preventDefault();
+    dragDepth = 0;
+    uploadArea.classList.remove("dragover");
+
+    if (!uploadArea.classList.contains("is-uploading") && event.dataTransfer.files.length > 0) {
+      uploadFiles(event.dataTransfer.files);
+    }
+  });
+
+  // Lightbox events
+  lbClose.addEventListener("click", closeLightbox);
+
+  lightbox.addEventListener("click", function (event) {
+    if (event.target === lightbox) {
       closeLightbox();
     }
   });
-  lightbox.addEventListener('click', function(e) {
-    if (e.target === lightbox) closeLightbox();
-  });
 
-  lbCopy.addEventListener('click', function() {
+  lbCopyLink.addEventListener("click", function () {
     if (currentFilename) {
-      const url = base + '/image/' + encodeURIComponent(currentFilename);
-      copyUrl(url);
-      this.textContent = '✅ 已复制';
-      this.classList.add('copied');
-      setTimeout(() => { this.textContent = '📋 复制链接'; this.classList.remove('copied'); }, 2000);
+      copyWithFeedback(imageUrl(currentFilename), lbCopyLink, "直链已复制");
     }
   });
 
-  lbDelete.addEventListener('click', function() {
+  lbCopyMarkdown.addEventListener("click", function () {
+    if (currentFilename) {
+      copyWithFeedback(markdownText(currentFilename), lbCopyMarkdown, "Markdown 已复制");
+    }
+  });
+
+  lbDelete.addEventListener("click", function () {
     if (!currentFilename) return;
-    showConfirm('确定要删除这张图片吗？', function() {
-      fetch('/api/images?name=' + encodeURIComponent(currentFilename), { method: 'DELETE' })
-        .then(r => {
-          if (!r.ok) throw new Error('Delete failed');
-          showToast('🗑️ 已删除');
-          closeLightbox();
-          loadImages();
-        })
-        .catch(err => {
-          showToast('❌ 删除失败');
-        });
+
+    const filenameToDelete = currentFilename;
+    showConfirm("删除后无法恢复，确定要删除这张图片吗？", function () {
+      deleteImage(filenameToDelete);
     });
   });
 
-  // ===== Init =====
+  // Confirm dialog events
+  confirmCancel.addEventListener("click", hideConfirm);
+
+  confirmOk.addEventListener("click", function () {
+    const callback = confirmCallback;
+    hideConfirm();
+
+    if (callback) {
+      callback();
+    }
+  });
+
+  confirmOverlay.addEventListener("click", function (event) {
+    if (event.target === confirmOverlay) {
+      hideConfirm();
+    }
+  });
+
+  // Keyboard events
+  document.addEventListener("keydown", function (event) {
+    if (event.key !== "Escape") return;
+
+    if (confirmOverlay.classList.contains("active")) {
+      hideConfirm();
+      return;
+    }
+
+    if (lightbox.classList.contains("active")) {
+      closeLightbox();
+    }
+  });
+
   loadImages();
 })();
 </script>
