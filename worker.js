@@ -101,6 +101,53 @@ export default {
       }
     }
 
+    // ===== API: Rename image =====
+    if (path === '/api/images/rename' && method === 'POST') {
+      try {
+        const { oldName, newName } = await request.json();
+        if (!oldName || !newName) {
+          return new Response(JSON.stringify({ error: 'Missing oldName or newName' }), {
+            status: 400, headers: { ...cors, 'Content-Type': 'application/json' },
+          });
+        }
+        if (newName.includes('/') || newName.includes('\\')) {
+          return new Response(JSON.stringify({ error: 'Invalid name' }), {
+            status: 400, headers: { ...cors, 'Content-Type': 'application/json' },
+          });
+        }
+
+        const object = await env.IMAGE_BUCKET.get(oldName);
+        if (!object) {
+          return new Response(JSON.stringify({ error: 'Image not found' }), {
+            status: 404, headers: { ...cors, 'Content-Type': 'application/json' },
+          });
+        }
+
+        // Check new name doesn't already exist
+        const existing = await env.IMAGE_BUCKET.get(newName);
+        if (existing) {
+          return new Response(JSON.stringify({ error: 'Name already exists' }), {
+            status: 409, headers: { ...cors, 'Content-Type': 'application/json' },
+          });
+        }
+
+        // Copy to new key, preserving metadata
+        await env.IMAGE_BUCKET.put(newName, await object.arrayBuffer(), {
+          httpMetadata: object.httpMetadata,
+        });
+        await env.IMAGE_BUCKET.delete(oldName);
+
+        return new Response(JSON.stringify({ success: true, name: newName }), {
+          headers: { ...cors, 'Content-Type': 'application/json' },
+        });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), {
+          status: 500,
+          headers: { ...cors, 'Content-Type': 'application/json' },
+        });
+      }
+    }
+
     // ===== Serve images from R2 =====
     if (path.startsWith('/image/') && method === 'GET') {
       const key = decodeURIComponent(path.slice(7));

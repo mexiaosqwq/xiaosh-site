@@ -870,6 +870,132 @@ button:focus-visible,
   background: #bd3030;
 }
 
+/* Rename dialog */
+.rename-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  background: rgba(22, 21, 28, 0.48);
+  backdrop-filter: blur(4px);
+  transition: opacity 0.18s ease, visibility 0.18s ease;
+}
+
+.rename-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.rename-box {
+  width: min(420px, 100%);
+  padding: 1.5rem 1.4rem 1.3rem;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 17px;
+  text-align: center;
+  background: #fff;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.2);
+  transform: translateY(8px) scale(0.98);
+  transition: transform 0.18s ease;
+}
+
+.rename-overlay.active .rename-box {
+  transform: translateY(0) scale(1);
+}
+
+.rename-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  margin: 0 auto 0.68rem;
+  border-radius: 13px;
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.rename-icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.rename-box h2 {
+  color: var(--text);
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
+.rename-field {
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.rename-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--text-soft);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.rename-field input {
+  width: 100%;
+  padding: 0.64rem 0.72rem;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 10px;
+  color: var(--text);
+  background: var(--surface-muted);
+  font-size: 0.88rem;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.rename-field input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(109, 74, 255, 0.15);
+  background: #fff;
+}
+
+.rename-field input::selection {
+  background: rgba(109, 74, 255, 0.2);
+}
+
+.rename-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.55rem;
+  margin-top: 1.15rem;
+}
+
+.rename-actions button {
+  min-width: 102px;
+  min-height: 38px;
+  padding: 0.52rem 0.9rem;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.rename-actions button:active {
+  transform: scale(0.97);
+}
+
+.rename-actions .btn-confirm {
+  color: #fff;
+  background: var(--primary);
+}
+
+.rename-actions .btn-confirm:hover {
+  background: var(--primary-hover);
+}
+
 /* Toast */
 .toast {
   position: fixed;
@@ -1105,7 +1231,7 @@ button:focus-visible,
 
   .lb-actions {
     display: grid;
-    grid-template-columns: 1fr 1fr auto;
+    grid-template-columns: 1fr 1fr;
     gap: 0.4rem;
   }
 
@@ -1116,8 +1242,7 @@ button:focus-visible,
   }
 
   .action-button.danger {
-    width: 42px;
-    padding: 0;
+    padding: 0.48rem 0.5rem;
   }
 
   .action-button.danger .button-label {
@@ -1261,6 +1386,11 @@ button:focus-visible,
           <span class="button-label">复制 Markdown</span>
         </button>
 
+        <button class="action-button" id="lbRename" type="button" data-icon="edit" aria-label="重命名">
+          <span class="button-icon" aria-hidden="true"></span>
+          <span class="button-label">重命名</span>
+        </button>
+
         <button class="action-button danger" id="lbDelete" type="button" data-icon="trash" aria-label="删除图片">
           <span class="button-icon" aria-hidden="true"></span>
           <span class="button-label">删除</span>
@@ -1288,6 +1418,30 @@ button:focus-visible,
       <button class="btn-cancel" id="confirmCancel" type="button">取消</button>
       <button class="btn-confirm" id="confirmOk" type="button">确认删除</button>
     </div>
+  </div>
+</div>
+
+<!-- Rename dialog -->
+<div class="rename-overlay" id="renameOverlay" role="dialog" aria-modal="true" aria-labelledby="renameTitle">
+  <div class="rename-box">
+    <div class="rename-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 3a2.85 2.85 0 0 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+        <path d="m15 5 4 4"></path>
+      </svg>
+    </div>
+
+    <h2 id="renameTitle">重命名图片</h2>
+    <form id="renameForm">
+      <div class="rename-field">
+        <label for="renameInput" class="rename-label">文件名</label>
+        <input type="text" id="renameInput" autocomplete="off" spellcheck="false" dir="ltr">
+      </div>
+      <div class="rename-actions">
+        <button class="btn-cancel" id="renameCancel" type="button">取消</button>
+        <button class="btn-confirm" id="renameOk" type="submit">确认</button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -1337,6 +1491,11 @@ button:focus-visible,
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="10.8" cy="10.8" r="5.8"></circle>
         <path d="m15.2 15.2 4.3 4.3M10.8 8v5.6M8 10.8h5.6"></path>
+      </svg>`,
+    edit: `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 3a2.85 2.85 0 0 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+        <path d="m15 5 4 4"></path>
       </svg>`
   };
 
@@ -1350,6 +1509,7 @@ button:focus-visible,
   const lbCopyLink = document.getElementById("lbCopyLink");
   const lbCopyMarkdown = document.getElementById("lbCopyMarkdown");
   const lbDelete = document.getElementById("lbDelete");
+  const lbRename = document.getElementById("lbRename");
 
   const uploadArea = document.getElementById("uploadArea");
   const fileInput = document.getElementById("fileInput");
@@ -1359,6 +1519,12 @@ button:focus-visible,
   const confirmMsg = document.getElementById("confirmMsg");
   const confirmOk = document.getElementById("confirmOk");
   const confirmCancel = document.getElementById("confirmCancel");
+
+  const renameOverlay = document.getElementById("renameOverlay");
+  const renameInput = document.getElementById("renameInput");
+  const renameForm = document.getElementById("renameForm");
+  const renameCancel = document.getElementById("renameCancel");
+  const renameOk = document.getElementById("renameOk");
 
   const toast = document.getElementById("toast");
   const toastIcon = document.getElementById("toastIcon");
@@ -1574,7 +1740,7 @@ button:focus-visible,
     const time = formatTime(currentUploadTime);
     lbTime.textContent = time ? `上传于 ${time}` : "";
 
-    [lbCopyLink, lbCopyMarkdown, lbDelete].forEach(function (button) {
+    [lbCopyLink, lbCopyMarkdown, lbRename, lbDelete].forEach(function (button) {
       const iconHolder = button.querySelector(".button-icon");
       const labelHolder = button.querySelector(".button-label");
 
@@ -1880,8 +2046,48 @@ button:focus-visible,
     }
   }
 
+  async function renameImage(oldName, newName) {
+    const response = await fetch("/api/images/rename", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ oldName, newName })
+    });
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      throw new Error(data.error || "Rename failed");
+    }
+
+    return response.json();
+  }
+
+  function showRenameDialog(fileName) {
+    lastFocusedElement = document.activeElement;
+    renameInput.value = fileName;
+    renameOverlay.classList.add("active");
+
+    requestAnimationFrame(function () {
+      renameInput.focus();
+      // 选中文件名（不含扩展名）
+      const dot = fileName.lastIndexOf(".");
+      if (dot > 0) {
+        renameInput.setSelectionRange(0, dot);
+      } else {
+        renameInput.select();
+      }
+    });
+  }
+
+  function hideRename() {
+    renameOverlay.classList.remove("active");
+    if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+      lastFocusedElement.focus();
+    }
+    lastFocusedElement = null;
+  }
+
   // 初始化操作按钮图标
-  [lbCopyLink, lbCopyMarkdown, lbDelete].forEach(function (button) {
+  [lbCopyLink, lbCopyMarkdown, lbRename, lbDelete].forEach(function (button) {
     const iconHolder = button.querySelector(".button-icon");
     const labelHolder = button.querySelector(".button-label");
 
@@ -1966,6 +2172,11 @@ button:focus-visible,
     }
   });
 
+  lbRename.addEventListener("click", function () {
+    if (!currentFilename) return;
+    showRenameDialog(currentFilename);
+  });
+
   lbDelete.addEventListener("click", function () {
     if (!currentFilename) return;
 
@@ -1993,9 +2204,66 @@ button:focus-visible,
     }
   });
 
+  // Rename dialog events
+  renameCancel.addEventListener("click", hideRename);
+
+  renameForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    const oldName = currentFilename;
+    const newName = renameInput.value.trim();
+
+    if (!newName) {
+      showToast("文件名不能为空", "error");
+      return;
+    }
+
+    if (newName === oldName) {
+      hideRename();
+      return;
+    }
+
+    if (newName.includes("/") || newName.includes("\\")) {
+      showToast("文件名不能包含斜杠", "error");
+      return;
+    }
+
+    // 如果新名称没有扩展名，自动补上原扩展名
+    const finalName = newName.includes(".") ? newName : newName + oldName.slice(oldName.lastIndexOf("."));
+
+    renameOk.disabled = true;
+    renameOk.textContent = "处理中…";
+
+    try {
+      await renameImage(oldName, finalName);
+      hideRename();
+      showToast("已重命名");
+      currentFilename = finalName;
+      lbFilename.textContent = finalName;
+      lbImg.alt = finalName;
+      await loadImages();
+    } catch (error) {
+      console.error(error);
+      showToast(error.message === "Name already exists" ? "该名称已存在" : "重命名失败，请稍后重试", "error");
+    } finally {
+      renameOk.disabled = false;
+      renameOk.textContent = "确认";
+    }
+  });
+
+  renameOverlay.addEventListener("click", function (event) {
+    if (event.target === renameOverlay) {
+      hideRename();
+    }
+  });
+
   // Keyboard events
   document.addEventListener("keydown", function (event) {
     if (event.key !== "Escape") return;
+
+    if (renameOverlay.classList.contains("active")) {
+      hideRename();
+      return;
+    }
 
     if (confirmOverlay.classList.contains("active")) {
       hideConfirm();
