@@ -12,7 +12,7 @@ xiaosh.xyz 个人网站，基于 Cloudflare Workers + 静态资源托管。Worke
 请求 → Worker (worker.js) → env.ASSETS → public/index.html 或 public/2048.html
 ```
 
-- **worker.js**: 3 行路由，根据 hostname 选择页面（`2048.*` → 2048 游戏，其余 → 主页）
+- **worker.js**: 将请求直接传递给 `env.ASSETS`，按路径返回 `public/` 下的静态文件
 - **public/**: 所有静态页面，Worker 不内嵌 HTML
 - **wrangler.toml**: `[assets]` 配置使 `public/` 目录作为静态资源被 Worker 的 `env.ASSETS` 访问；`[observability]` 已启用
 - **Worker 名称**: `proud-sun-003e`（Cloudflare Dashboard 中的名称，wrangler.toml 的 `name` 必须与之匹配）
@@ -33,6 +33,6 @@ xiaosh.xyz 个人网站，基于 Cloudflare Workers + 静态资源托管。Worke
 
 ## 添加新页面
 
-1. 在 `public/` 下创建 HTML 文件
-2. 在 `worker.js` 添加路由规则
+1. 在 `public/` 下创建 HTML 文件（如 `public/xxx/index.html`）
+2. 访问 `https://xiaosh.xyz/xxx/` 即可直接访问
 3. `git push` 即可上线
