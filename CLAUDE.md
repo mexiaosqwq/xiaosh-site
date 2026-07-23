@@ -9,7 +9,7 @@ xiaosh.xyz 个人网站，基于 Cloudflare Workers + 静态资源托管。Worke
 ## 架构
 
 ```
-请求 → Worker (worker.js) → env.ASSETS → public/index.html 或 public/2048.html
+请求 → Worker (worker.js) → env.ASSETS → public/ 下对应路径的静态文件
 ```
 
 - **worker.js**: 将请求直接传递给 `env.ASSETS`，按路径返回 `public/` 下的静态文件
@@ -28,7 +28,6 @@ xiaosh.xyz 个人网站，基于 Cloudflare Workers + 静态资源托管。Worke
 ## 域名
 
 - `xiaosh.xyz` / `www.xiaosh.xyz` → 主页
-- `2048.xiaosh.xyz` → 2048 游戏
 - 自定义域名在 Cloudflare Dashboard → Worker → 域和路由 中管理
 
 ## 添加新页面
