@@ -384,105 +384,153 @@ body {
   background: #c62828;
 }
 
-/* Responsive */
+/* Responsive — tablet */
 @media (max-width: 900px) {
   .grid { grid-template-columns: repeat(3, 1fr); gap: 0.8rem; }
 }
 
+/* Responsive — mobile portrait */
 @media (max-width: 700px) {
-  body { padding: 1.2rem 0.6rem 2rem; }
+  body { padding: 0.6rem 0.4rem 1.5rem; }
 
-  .header h1 { font-size: 1.3rem; }
-  .header .subtitle { font-size: 0.78rem; }
-  .header .count { font-size: 0.75rem; }
+  .header { margin-bottom: 0.5rem; padding: 0 0.2rem; }
+  .header h1 { font-size: 1.1rem; }
+  .header .subtitle { font-size: 0.7rem; margin-top: 0.2rem; }
+  .header .count { font-size: 0.7rem; margin-top: 0.2rem; }
 
-  .grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 3px; }
 
-  .card { border-radius: 10px; }
-  .card .card-body { padding: 0.35rem 0.45rem 0.4rem; }
-  .card .filename { font-size: 0.6rem; }
-  .card .copy-btn {
-    width: 36px; height: 36px;
-    font-size: 1rem;
-    border-radius: 9px;
+  .card { border-radius: 6px; box-shadow: none; }
+  .card:hover { transform: none; box-shadow: none; }
+
+  .card .thumb-wrap { padding-bottom: 100%; }
+  .card .thumb-wrap img { object-fit: cover; }
+  .card:hover .thumb-wrap img { transform: none; }
+
+  /* Overlay copy button on image */
+  .card .card-body {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.3rem;
+    background: linear-gradient(transparent, rgba(0,0,0,0.35));
+    display: flex;
+    justify-content: flex-end;
+    border-radius: 0 0 6px 6px;
   }
+  .card .filename { display: none; }
+  .card .copy-btn {
+    width: 32px; height: 32px;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.85);
+    color: #444;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .card .copy-btn:hover { background: rgba(255,255,255,0.95); }
+  .card .copy-btn:active { transform: scale(0.92); }
 
   .upload-area {
-    padding: 1.2rem 1rem;
-    border-radius: 12px;
+    margin-bottom: 0.6rem;
+    padding: 0.7rem 0.8rem;
+    border-radius: 10px;
+    border-width: 1.5px;
   }
-  .upload-area .upload-icon { font-size: 1.5rem; }
-  .upload-area .upload-text { font-size: 0.85rem; }
-  .upload-area .upload-hint { font-size: 0.72rem; }
+  .upload-area .upload-icon { font-size: 1.1rem; margin-bottom: 0.15rem; }
+  .upload-area .upload-text { font-size: 0.78rem; }
+  .upload-area .upload-hint { font-size: 0.65rem; margin-top: 0.15rem; }
 
+  .upload-progress { margin-bottom: 0.4rem; }
   .upload-progress .progress-item {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+    gap: 0.4rem;
   }
 
-  .lightbox { padding: 0.5rem; }
+  .lightbox { padding: 0.3rem; }
   .lightbox img {
-    max-width: 98vw;
-    max-height: 60vh;
+    max-width: 100vw;
+    max-height: 65vh;
+    border-radius: 4px;
   }
   .lightbox .close-btn {
-    top: 0.6rem;
-    right: 0.8rem;
-    font-size: 1.8rem;
+    top: 0.4rem;
+    right: 0.5rem;
+    font-size: 1.6rem;
+    color: rgba(255,255,255,0.8);
   }
   .lightbox .lb-actions {
     gap: 0.5rem;
-    margin-top: 0.8rem;
+    margin-top: 0.6rem;
+    width: 100%;
+    max-width: 320px;
   }
   .lightbox .lb-actions button {
-    padding: 0.65rem 1.2rem;
-    font-size: 0.9rem;
-    border-radius: 12px;
+    flex: 1;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+    border-radius: 10px;
     min-height: 44px;
   }
   .lightbox .lb-close-text {
     display: none;
   }
 
+  /* Mobile close hint */
+  .lightbox .lb-actions .lb-close-text {
+    display: flex;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.4);
+    font-size: 0;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background 0.2s;
+  }
+  .lightbox .lb-actions .lb-close-text::before {
+    content: '✕';
+    font-size: 1.2rem;
+  }
+  .lightbox .lb-actions .lb-close-text:active {
+    background: rgba(255,255,255,0.1);
+  }
+
   .toast {
-    bottom: 1.5rem;
-    font-size: 0.8rem;
-    padding: 0.5rem 1.2rem;
+    bottom: 1rem;
+    font-size: 0.78rem;
+    padding: 0.45rem 1rem;
+    border-radius: 8px;
   }
 
   .confirm-box {
-    padding: 1.5rem 1.5rem 1.2rem;
+    padding: 1.2rem 1.2rem 1rem;
+    border-radius: 14px;
   }
-  .confirm-box p { font-size: 0.9rem; }
+  .confirm-box p { font-size: 0.85rem; }
   .confirm-box button {
-    padding: 0.6rem 1.5rem;
-    font-size: 0.9rem;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
     min-height: 44px;
   }
 
   .loading, .error, .empty {
-    padding: 2.5rem 0;
-    font-size: 0.85rem;
+    padding: 2rem 0;
+    font-size: 0.8rem;
   }
 }
 
-/* Mobile: show a mobile close hint instead of ESC */
-@media (max-width: 700px) {
-  .lightbox .lb-actions .lb-close-text {
-    display: flex;
-    color: rgba(255,255,255,0.4);
-    font-size: 0.78rem;
-    cursor: pointer;
-  }
-  .lightbox .lb-actions .lb-close-text::before {
-    content: '✕ 关闭';
-  }
-}
-
+/* Very small screens */
 @media (max-width: 380px) {
-  .grid { gap: 0.4rem; }
-  .card .copy-btn { width: 32px; height: 32px; font-size: 0.9rem; }
-  .upload-area { padding: 1rem 0.8rem; }
+  body { padding: 0.4rem 0.3rem 1rem; }
+  .grid { gap: 2px; }
+  .header h1 { font-size: 1rem; }
+  .card .copy-btn { width: 28px; height: 28px; font-size: 0.75rem; }
+  .upload-area { padding: 0.5rem 0.6rem; }
 }
 </style>
 </head>
