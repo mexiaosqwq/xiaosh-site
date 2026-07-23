@@ -2053,12 +2053,37 @@ button:focus-visible,
       body: JSON.stringify({ oldName, newName })
     });
 
+    const contentType = response.headers.get("content-type") || "";
+    const data = contentType.includes("application/json")
+      ? await response.json().catch(() => ({}))
+      : {};
+
     if (!response.ok) {
-      const data = await response.json().catch(() => ({}));
       throw new Error(data.error || "Rename failed");
     }
 
-    return response.json();
+    return data;
+  }
+
+  function getExtension(fileName) {
+    const match = fileName.match(/(\.[a-z0-9]+)$/i);
+    return match ? match[1].toLowerCase() : "";
+  }
+
+  function normalizeRename(oldName, inputName) {
+    const oldExt = getExtension(oldName);
+    const newExt = getExtension(inputName);
+    const supportedExtensions = [".png", ".jpg", ".jpeg", ".gif", ".webp"];
+    return supportedExtensions.includes(newExt) ? inputName : inputName + oldExt;
+  }
+
+  function validateFilename(fileName) {
+    if (!fileName) return "文件名不能为空";
+    if (fileName === "." || fileName === "..") return "文件名不能为 . 或 ..";
+    if (/[\/\\\0]/.test(fileName)) return "文件名不能包含斜杠或特殊字符";
+    if (/[<>:"|?*]/.test(fileName)) return "文件名包含不支持的字符";
+    if (fileName.length > 180) return "文件名过长";
+    return "";
   }
 
   function showRenameDialog(fileName) {
@@ -2209,41 +2234,49 @@ button:focus-visible,
 
   renameForm.addEventListener("submit", async function (event) {
     event.preventDefault();
+
     const oldName = currentFilename;
     const newName = renameInput.value.trim();
 
-    if (!newName) {
-      showToast("文件名不能为空", "error");
+    if (!oldName) {
+      showToast("未找到要重命名的图片", "error");
       return;
     }
 
-    if (newName === oldName) {
+    const validationError = validateFilename(newName);
+    if (validationError) {
+      showToast(validationError, "error");
+      return;
+    }
+
+    const finalName = normalizeRename(oldName, newName);
+
+    if (finalName === oldName) {
       hideRename();
       return;
     }
-
-    if (newName.includes("/") || newName.includes("\\")) {
-      showToast("文件名不能包含斜杠", "error");
-      return;
-    }
-
-    // 如果新名称没有扩展名，自动补上原扩展名
-    const finalName = newName.includes(".") ? newName : newName + oldName.slice(oldName.lastIndexOf("."));
 
     renameOk.disabled = true;
     renameOk.textContent = "处理中…";
 
     try {
       await renameImage(oldName, finalName);
-      hideRename();
-      showToast("已重命名");
+
       currentFilename = finalName;
       lbFilename.textContent = finalName;
       lbImg.alt = finalName;
+      lbImg.src = imageUrl(finalName);
+
+      hideRename();
       await loadImages();
+      showToast("已重命名");
     } catch (error) {
       console.error(error);
-      showToast(error.message === "Name already exists" ? "该名称已存在" : "重命名失败，请稍后重试", "error");
+      if (error.message === "Name already exists") {
+        showToast("该名称已存在", "error");
+      } else {
+        showToast("重命名失败，请稍后重试", "error");
+      }
     } finally {
       renameOk.disabled = false;
       renameOk.textContent = "确认";
