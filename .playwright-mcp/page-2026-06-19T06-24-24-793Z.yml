@@ -1,0 +1,524 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - link "Skip to content" [ref=e4] [cursor=pointer]:
+      - /url: "#start-of-content"
+    - banner [ref=e6]:
+      - heading "Navigation Menu" [level=2] [ref=e7]
+      - generic [ref=e8]:
+        - link "Homepage" [ref=e10] [cursor=pointer]:
+          - /url: /
+          - img [ref=e11]
+        - generic [ref=e13]:
+          - navigation "Global" [ref=e16]:
+            - list [ref=e17]:
+              - listitem [ref=e18]:
+                - button "Platform" [ref=e20] [cursor=pointer]:
+                  - text: Platform
+                  - img [ref=e21]
+              - listitem [ref=e23]:
+                - button "Solutions" [ref=e25] [cursor=pointer]:
+                  - text: Solutions
+                  - img [ref=e26]
+              - listitem [ref=e28]:
+                - button "Resources" [ref=e30] [cursor=pointer]:
+                  - text: Resources
+                  - img [ref=e31]
+              - listitem [ref=e33]:
+                - button "Open Source" [ref=e35] [cursor=pointer]:
+                  - text: Open Source
+                  - img [ref=e36]
+              - listitem [ref=e38]:
+                - button "Enterprise" [ref=e40] [cursor=pointer]:
+                  - text: Enterprise
+                  - img [ref=e41]
+              - listitem [ref=e43]:
+                - link "Pricing" [ref=e44] [cursor=pointer]:
+                  - /url: https://github.com/pricing
+                  - generic [ref=e45]: Pricing
+          - generic [ref=e46]:
+            - button "Search or jump to…" [ref=e49] [cursor=pointer]:
+              - img [ref=e51]
+            - link "Sign in" [ref=e54] [cursor=pointer]:
+              - /url: /login?return_to=https%3A%2F%2Fgithub.com%2Fmexiaosqwq%2FZh-ModTranslations
+            - link "Sign up" [ref=e55] [cursor=pointer]:
+              - /url: /signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=mexiaosqwq%2FZh-ModTranslations
+            - button "Appearance settings" [ref=e58] [cursor=pointer]:
+              - img
+  - main [ref=e62]:
+    - generic [ref=e63]:
+      - generic [ref=e64]:
+        - generic [ref=e66]:
+          - img [ref=e67]
+          - link "mexiaosqwq" [ref=e70] [cursor=pointer]:
+            - /url: /mexiaosqwq
+          - generic [ref=e71]: /
+          - strong [ref=e72]:
+            - link "Zh-ModTranslations" [ref=e73] [cursor=pointer]:
+              - /url: /mexiaosqwq/Zh-ModTranslations
+          - generic [ref=e74]: Public
+        - generic [ref=e75]:
+          - list:
+            - listitem [ref=e76]:
+              - link "You must be signed in to change notification settings" [ref=e77] [cursor=pointer]:
+                - /url: /login?return_to=%2Fmexiaosqwq%2FZh-ModTranslations
+                - img [ref=e78]
+                - text: Notifications
+            - listitem [ref=e80]:
+              - link "Fork 0" [ref=e81] [cursor=pointer]:
+                - /url: /login?return_to=%2Fmexiaosqwq%2FZh-ModTranslations
+                - img [ref=e82]
+                - text: Fork
+                - generic "0" [ref=e84]
+            - listitem [ref=e85]:
+              - link "You must be signed in to star a repository" [ref=e87] [cursor=pointer]:
+                - /url: /login?return_to=%2Fmexiaosqwq%2FZh-ModTranslations
+                - img [ref=e88]
+                - text: Star
+                - generic "2 users starred this repository" [ref=e90]: "2"
+      - navigation "Repository" [ref=e91]:
+        - list [ref=e92]:
+          - listitem [ref=e93]:
+            - link "Code" [ref=e94] [cursor=pointer]:
+              - /url: /mexiaosqwq/Zh-ModTranslations
+              - img [ref=e95]
+              - generic [ref=e97]: Code
+          - listitem [ref=e98]:
+            - link "Issues" [ref=e99] [cursor=pointer]:
+              - /url: /mexiaosqwq/Zh-ModTranslations/issues
+              - img [ref=e100]
+              - generic [ref=e103]: Issues
+          - listitem [ref=e104]:
+            - link "Pull requests" [ref=e105] [cursor=pointer]:
+              - /url: /mexiaosqwq/Zh-ModTranslations/pulls
+              - img [ref=e106]
+              - generic [ref=e108]: Pull requests
+          - listitem [ref=e109]:
+            - link "Actions" [ref=e110] [cursor=pointer]:
+              - /url: /mexiaosqwq/Zh-ModTranslations/actions
+              - img [ref=e111]
+              - generic [ref=e113]: Actions
+          - listitem [ref=e114]:
+            - link "Projects" [ref=e115] [cursor=pointer]:
+              - /url: /mexiaosqwq/Zh-ModTranslations/projects
+              - img [ref=e116]
+              - generic [ref=e118]: Projects
+          - listitem [ref=e119]:
+            - link "Security and quality" [ref=e120] [cursor=pointer]:
+              - /url: /mexiaosqwq/Zh-ModTranslations/security
+              - img [ref=e121]
+              - generic [ref=e123]: Security and quality
+          - listitem [ref=e124]:
+            - link "Insights" [ref=e125] [cursor=pointer]:
+              - /url: /mexiaosqwq/Zh-ModTranslations/pulse
+              - img [ref=e126]
+              - generic [ref=e128]: Insights
+    - generic [ref=e141]:
+      - heading "mexiaosqwq/Zh-ModTranslations" [level=1] [ref=e143]
+      - generic [ref=e144]:
+        - generic [ref=e147]:
+          - generic [ref=e148]:
+            - generic [ref=e149]:
+              - button "main branch" [ref=e151] [cursor=pointer]:
+                - generic [ref=e152]:
+                  - generic [ref=e154]:
+                    - img [ref=e156]
+                    - generic [ref=e159]: main
+                  - generic:
+                    - img
+              - generic [ref=e160]:
+                - link "2 Branches" [ref=e161] [cursor=pointer]:
+                  - /url: /mexiaosqwq/Zh-ModTranslations/branches
+                  - generic [ref=e162]:
+                    - generic:
+                      - img
+                    - generic [ref=e164]:
+                      - strong [ref=e165]: "2"
+                      - text: Branches
+                - link "1 Tag" [ref=e166] [cursor=pointer]:
+                  - /url: /mexiaosqwq/Zh-ModTranslations/tags
+                  - generic [ref=e167]:
+                    - generic:
+                      - img
+                    - generic [ref=e169]:
+                      - strong [ref=e170]: "1"
+                      - text: Tag
+            - generic [ref=e171]:
+              - generic [ref=e175]:
+                - img [ref=e177]
+                - combobox "Go to file" [ref=e179]
+              - button "Code" [ref=e180] [cursor=pointer]:
+                - generic [ref=e181]:
+                  - generic:
+                    - img
+                  - generic [ref=e182]: Code
+                  - generic:
+                    - img
+          - generic [ref=e183]:
+            - generic [ref=e184]:
+              - heading "Folders and files" [level=2] [ref=e185]
+              - table "Folders and files" [ref=e186]:
+                - rowgroup:
+                  - row "Name Last commit message Last commit date":
+                    - columnheader "Name"
+                    - columnheader "Last commit message":
+                      - generic "Last commit message"
+                    - columnheader "Last commit date":
+                      - generic "Last commit date"
+                - rowgroup [ref=e187]:
+                  - 'row "Latest commit author K老师 fix: MODS.md 分类数据修正 + CLAUDE.md 注释更新 + .gitignore 精简 Open commit details Commit 7458477 · May 9, 2026last month History 58 Commits" [ref=e188]':
+                    - 'cell "Latest commit author K老师 fix: MODS.md 分类数据修正 + CLAUDE.md 注释更新 + .gitignore 精简 Open commit details Commit 7458477 · May 9, 2026last month History 58 Commits" [ref=e189]':
+                      - generic [ref=e190]:
+                        - heading "Latest commit" [level=2] [ref=e191]
+                        - generic [ref=e192]:
+                          - generic [ref=e194]:
+                            - img "author" [ref=e195]
+                            - generic "K老师" [ref=e196]
+                          - generic [ref=e197]:
+                            - 'link "fix: MODS.md 分类数据修正 + CLAUDE.md 注释更新 + .gitignore 精简" [ref=e200] [cursor=pointer]':
+                              - /url: /mexiaosqwq/Zh-ModTranslations/commit/74584771b52c74a80c77387bdd817d48df6c537c
+                            - button "Open commit details" [ref=e201] [cursor=pointer]:
+                              - img [ref=e202]
+                        - generic [ref=e204]:
+                          - generic [ref=e206]:
+                            - link "Commit 7458477" [ref=e207] [cursor=pointer]:
+                              - /url: /mexiaosqwq/Zh-ModTranslations/commit/74584771b52c74a80c77387bdd817d48df6c537c
+                              - text: "7458477"
+                            - text: ·
+                            - generic "May 9, 2026, 8:36 PM GMT+8" [ref=e208]: May 9, 2026last month
+                          - generic [ref=e209]:
+                            - heading "History" [level=2] [ref=e210]
+                            - link "58 Commits" [ref=e211] [cursor=pointer]:
+                              - /url: /mexiaosqwq/Zh-ModTranslations/commits/main/
+                              - generic [ref=e212]:
+                                - generic:
+                                  - img
+                                - generic [ref=e213]: 58 Commits
+                  - 'row ".github/workflows, (Directory) docs: 更新模组数据、补充项目指南、优化 CI 审查配置 Apr 26, 20262 months ago" [ref=e214]':
+                    - cell ".github/workflows, (Directory)" [ref=e215]:
+                      - generic [ref=e216]:
+                        - img [ref=e217]
+                        - link ".github/workflows, (Directory)" [ref=e222] [cursor=pointer]:
+                          - /url: /mexiaosqwq/Zh-ModTranslations/tree/main/.github/workflows
+                          - text: .github/workflows
+                    - 'cell "docs: 更新模组数据、补充项目指南、优化 CI 审查配置" [ref=e223]':
+                      - 'link "docs: 更新模组数据、补充项目指南、优化 CI 审查配置" [ref=e226] [cursor=pointer]':
+                        - /url: /mexiaosqwq/Zh-ModTranslations/commit/f0d56a3e202eac4bd909464ee05696e2e6cdfb57
+                    - cell "Apr 26, 20262 months ago" [ref=e227]:
+                      - generic [ref=e228]: Apr 26, 20262 months ago
+                  - 'row "assets, (Directory) feat: 添加 Functionality 模组汉化 May 2, 2026last month" [ref=e229]':
+                    - cell "assets, (Directory)" [ref=e230]:
+                      - generic [ref=e231]:
+                        - img [ref=e232]
+                        - link "assets, (Directory)" [ref=e237] [cursor=pointer]:
+                          - /url: /mexiaosqwq/Zh-ModTranslations/tree/main/assets
+                          - text: assets
+                    - 'cell "feat: 添加 Functionality 模组汉化" [ref=e238]':
+                      - 'link "feat: 添加 Functionality 模组汉化" [ref=e241] [cursor=pointer]':
+                        - /url: /mexiaosqwq/Zh-ModTranslations/commit/3adf9f8624071e60681f6350a4a9600c1b6551b6
+                    - cell "May 2, 2026last month" [ref=e242]:
+                      - generic [ref=e243]: May 2, 2026last month
+                  - 'row ".gitignore, (File) fix: MODS.md 分类数据修正 + CLAUDE.md 注释更新 + .gitignore 精简 May 9, 2026last month" [ref=e244]':
+                    - cell ".gitignore, (File)" [ref=e245]:
+                      - generic [ref=e246]:
+                        - img [ref=e247]
+                        - link ".gitignore, (File)" [ref=e252] [cursor=pointer]:
+                          - /url: /mexiaosqwq/Zh-ModTranslations/blob/main/.gitignore
+                          - text: .gitignore
+                    - 'cell "fix: MODS.md 分类数据修正 + CLAUDE.md 注释更新 + .gitignore 精简" [ref=e253]':
+                      - 'link "fix: MODS.md 分类数据修正 + CLAUDE.md 注释更新 + .gitignore 精简" [ref=e256] [cursor=pointer]':
+                        - /url: /mexiaosqwq/Zh-ModTranslations/commit/74584771b52c74a80c77387bdd817d48df6c537c
+                    - cell "May 9, 2026last month" [ref=e257]:
+                      - generic [ref=e258]: May 9, 2026last month
+                  - 'row "CLAUDE.md, (File) fix: MODS.md 分类数据修正 + CLAUDE.md 注释更新 + .gitignore 精简 May 9, 2026last month" [ref=e259]':
+                    - cell "CLAUDE.md, (File)" [ref=e260]:
+                      - generic [ref=e261]:
+                        - img [ref=e262]
+                        - link "CLAUDE.md, (File)" [ref=e267] [cursor=pointer]:
+                          - /url: /mexiaosqwq/Zh-ModTranslations/blob/main/CLAUDE.md
+                          - text: CLAUDE.md
+                    - 'cell "fix: MODS.md 分类数据修正 + CLAUDE.md 注释更新 + .gitignore 精简" [ref=e268]':
+                      - 'link "fix: MODS.md 分类数据修正 + CLAUDE.md 注释更新 + .gitignore 精简" [ref=e271] [cursor=pointer]':
+                        - /url: /mexiaosqwq/Zh-ModTranslations/commit/74584771b52c74a80c77387bdd817d48df6c537c
+                    - cell "May 9, 2026last month" [ref=e272]:
+                      - generic [ref=e273]: May 9, 2026last month
+                  - row "LICENSE, (File) Initial commit Aug 15, 202510 months ago" [ref=e274]:
+                    - cell "LICENSE, (File)" [ref=e275]:
+                      - generic [ref=e276]:
+                        - img [ref=e277]
+                        - link "LICENSE, (File)" [ref=e282] [cursor=pointer]:
+                          - /url: /mexiaosqwq/Zh-ModTranslations/blob/main/LICENSE
+                          - text: LICENSE
+                    - cell "Initial commit" [ref=e283]:
+                      - link "Initial commit" [ref=e286] [cursor=pointer]:
+                        - /url: /mexiaosqwq/Zh-ModTranslations/commit/62437c1b3211d4a683365378e0c52af5a6df9e1b
+                    - cell "Aug 15, 202510 months ago" [ref=e287]:
+                      - generic [ref=e288]: Aug 15, 202510 months ago
+                  - 'row "MODS.md, (File) fix: MODS.md 分类数据修正 + CLAUDE.md 注释更新 + .gitignore 精简 May 9, 2026last month" [ref=e289]':
+                    - cell "MODS.md, (File)" [ref=e290]:
+                      - generic [ref=e291]:
+                        - img [ref=e292]
+                        - link "MODS.md, (File)" [ref=e297] [cursor=pointer]:
+                          - /url: /mexiaosqwq/Zh-ModTranslations/blob/main/MODS.md
+                          - text: MODS.md
+                    - 'cell "fix: MODS.md 分类数据修正 + CLAUDE.md 注释更新 + .gitignore 精简" [ref=e298]':
+                      - 'link "fix: MODS.md 分类数据修正 + CLAUDE.md 注释更新 + .gitignore 精简" [ref=e301] [cursor=pointer]':
+                        - /url: /mexiaosqwq/Zh-ModTranslations/commit/74584771b52c74a80c77387bdd817d48df6c537c
+                    - cell "May 9, 2026last month" [ref=e302]:
+                      - generic [ref=e303]: May 9, 2026last month
+                  - 'row "README.md, (File) docs: 更新 README.md — 修正模组数、版本、简化列表 May 9, 2026last month" [ref=e304]':
+                    - cell "README.md, (File)" [ref=e305]:
+                      - generic [ref=e306]:
+                        - img [ref=e307]
+                        - link "README.md, (File)" [ref=e312] [cursor=pointer]:
+                          - /url: /mexiaosqwq/Zh-ModTranslations/blob/main/README.md
+                          - text: README.md
+                    - 'cell "docs: 更新 README.md — 修正模组数、版本、简化列表" [ref=e313]':
+                      - 'link "docs: 更新 README.md — 修正模组数、版本、简化列表" [ref=e316] [cursor=pointer]':
+                        - /url: /mexiaosqwq/Zh-ModTranslations/commit/dec81401477d417564ed39485326c4a621569bdf
+                    - cell "May 9, 2026last month" [ref=e317]:
+                      - generic [ref=e318]: May 9, 2026last month
+                  - 'row "pack.mcmeta, (File) fix: 修复文档数据过时、pack_format 冲突、.gitignore 缺失 May 9, 2026last month" [ref=e319]':
+                    - cell "pack.mcmeta, (File)" [ref=e320]:
+                      - generic [ref=e321]:
+                        - img [ref=e322]
+                        - link "pack.mcmeta, (File)" [ref=e327] [cursor=pointer]:
+                          - /url: /mexiaosqwq/Zh-ModTranslations/blob/main/pack.mcmeta
+                          - text: pack.mcmeta
+                    - 'cell "fix: 修复文档数据过时、pack_format 冲突、.gitignore 缺失" [ref=e328]':
+                      - 'link "fix: 修复文档数据过时、pack_format 冲突、.gitignore 缺失" [ref=e331] [cursor=pointer]':
+                        - /url: /mexiaosqwq/Zh-ModTranslations/commit/c956460baeae512327c9978b2273d3f36cb45c90
+                    - cell "May 9, 2026last month" [ref=e332]:
+                      - generic [ref=e333]: May 9, 2026last month
+            - generic [ref=e335]:
+              - generic [ref=e336]:
+                - heading "Repository files navigation" [level=2] [ref=e337]
+                - navigation "Repository files" [ref=e338]:
+                  - list [ref=e339]:
+                    - listitem [ref=e340]:
+                      - link "README" [ref=e341] [cursor=pointer]:
+                        - /url: "#"
+                        - img [ref=e343]
+                        - generic [ref=e345]: README
+                    - listitem [ref=e346]:
+                      - link "CC0-1.0 license" [ref=e347] [cursor=pointer]:
+                        - /url: "#"
+                        - img [ref=e349]
+                        - generic [ref=e351]: CC0-1.0 license
+                - button "Outline" [ref=e352] [cursor=pointer]:
+                  - img [ref=e353]
+              - article [ref=e356]:
+                - generic [ref=e357]:
+                  - heading "🌐 小石模组汉化包" [level=1] [ref=e358]
+                  - 'link "Permalink: 🌐 小石模组汉化包" [ref=e359] [cursor=pointer]':
+                    - /url: "#-小石模组汉化包"
+                    - img [ref=e360]
+                - blockquote [ref=e362]:
+                  - paragraph [ref=e363]:
+                    - text: 🤖
+                    - strong [ref=e364]: AI 辅助维护
+                    - text: "| 持续更新"
+                - separator [ref=e365]
+                - generic [ref=e366]:
+                  - heading "📖 简介" [level=2] [ref=e367]
+                  - 'link "Permalink: 📖 简介" [ref=e368] [cursor=pointer]':
+                    - /url: "#-简介"
+                    - img [ref=e369]
+                - paragraph [ref=e371]:
+                  - text: 小石的个人
+                  - strong [ref=e372]: Minecraft 模组汉化集合包
+                  - text: ，支持多个模组的简体中文翻译。 所有翻译保持风格统一，持续更新，欢迎提出翻译改进建议。
+                - separator [ref=e373]
+                - generic [ref=e374]:
+                  - heading "📦 已汉化模组" [level=2] [ref=e375]
+                  - 'link "Permalink: 📦 已汉化模组" [ref=e376] [cursor=pointer]':
+                    - /url: "#-已汉化模组"
+                    - img [ref=e377]
+                - paragraph [ref=e379]:
+                  - text: 已汉化
+                  - strong [ref=e380]: 34 个模组
+                  - text: ，共
+                  - strong [ref=e381]: 2778 条
+                  - text: 翻译。
+                - blockquote [ref=e382]:
+                  - paragraph [ref=e383]:
+                    - text: 完整列表请查看
+                    - link "MODS.md" [ref=e384] [cursor=pointer]:
+                      - /url: /mexiaosqwq/Zh-ModTranslations/blob/main/MODS.md
+                      - code [ref=e385]: MODS.md
+                - separator [ref=e386]
+                - generic [ref=e387]:
+                  - heading "🛠️ 适配环境" [level=2] [ref=e388]
+                  - 'link "Permalink: 🛠️ 适配环境" [ref=e389] [cursor=pointer]':
+                    - /url: "#️-适配环境"
+                    - img [ref=e390]
+                - table [ref=e393]:
+                  - rowgroup [ref=e394]:
+                    - row "类型 版本" [ref=e395]:
+                      - columnheader "类型" [ref=e396]
+                      - columnheader "版本" [ref=e397]
+                  - rowgroup [ref=e398]:
+                    - row "Minecraft 1.21.1+" [ref=e399]:
+                      - cell "Minecraft" [ref=e400]:
+                        - strong [ref=e401]: Minecraft
+                      - cell "1.21.1+" [ref=e402]
+                    - row "模组加载器 NeoForge" [ref=e403]:
+                      - cell "模组加载器" [ref=e404]:
+                        - strong [ref=e405]: 模组加载器
+                      - cell "NeoForge" [ref=e406]
+                - separator [ref=e407]
+                - generic [ref=e408]:
+                  - heading "📥 安装方法" [level=2] [ref=e409]
+                  - 'link "Permalink: 📥 安装方法" [ref=e410] [cursor=pointer]':
+                    - /url: "#-安装方法"
+                    - img [ref=e411]
+                - list [ref=e413]:
+                  - listitem [ref=e414]:
+                    - text: 前往
+                    - link "Releases" [ref=e415] [cursor=pointer]:
+                      - /url: /mexiaosqwq/Zh-ModTranslations/releases
+                    - text: 页面下载最新版本，或点击
+                    - strong [ref=e416]:
+                      - code [ref=e417]: Code → Download ZIP
+                  - listitem [ref=e418]:
+                    - text: 将
+                    - code [ref=e419]: .zip
+                    - text: 文件放入游戏目录的
+                    - code [ref=e420]: resourcepacks
+                    - text: 文件夹
+                  - listitem [ref=e421]: 启动游戏 → 设置 → 资源包 → 启用本汉化包
+                - separator [ref=e422]
+                - generic [ref=e423]:
+                  - heading "📜 许可证" [level=2] [ref=e424]
+                  - 'link "Permalink: 📜 许可证" [ref=e425] [cursor=pointer]':
+                    - /url: "#-许可证"
+                    - img [ref=e426]
+                - paragraph [ref=e428]:
+                  - strong [ref=e429]:
+                    - link "CC0 1.0 Universal" [ref=e430] [cursor=pointer]:
+                      - /url: https://creativecommons.org/publicdomain/zero/1.0/
+                  - text: — 可自由使用，无需署名
+                - separator [ref=e431]
+                - generic [ref=e432]:
+                  - heading "🔄 更新日志" [level=2] [ref=e433]
+                  - 'link "Permalink: 🔄 更新日志" [ref=e434] [cursor=pointer]':
+                    - /url: "#-更新日志"
+                    - img [ref=e435]
+                - generic [ref=e437]:
+                  - heading "v3.1.0 (2026-05-02)" [level=3] [ref=e438]
+                  - 'link "Permalink: v3.1.0 (2026-05-02)" [ref=e439] [cursor=pointer]':
+                    - /url: "#v310-2026-05-02"
+                    - img [ref=e440]
+                - list [ref=e442]:
+                  - listitem [ref=e443]: "➕ 新增 12 个模组汉化（蟹农乐事、机械动力、机械动力：创想附加、Create: Design n' Decor、DnDesires、扩展乐事、农夫乐事、暖灶丰年、海洋乐事、Sable、樱途旅事、蔬菜乐事）"
+                  - listitem [ref=e444]: 🔧 术语对齐：Create石料/机械方块、FD canvas告示牌/食品名跟随根模组官方翻译
+                  - listitem [ref=e445]: 🧹 crate命名统一为"箱装"格式，食品名称通俗化处理
+        - generic [ref=e449]:
+          - generic [ref=e452]:
+            - heading "About" [level=2] [ref=e453]
+            - paragraph [ref=e454]: 小石的个人 Minecraft 模组汉化集合包，持续更新
+            - heading "Resources" [level=3] [ref=e455]
+            - link "Readme" [ref=e457] [cursor=pointer]:
+              - /url: "#readme-ov-file"
+              - img [ref=e458]
+              - text: Readme
+            - heading "License" [level=3] [ref=e460]
+            - link "CC0-1.0 license" [ref=e462] [cursor=pointer]:
+              - /url: "#CC0-1.0-1-ov-file"
+              - img [ref=e463]
+              - text: CC0-1.0 license
+            - link "Activity" [ref=e466] [cursor=pointer]:
+              - /url: /mexiaosqwq/Zh-ModTranslations/activity
+              - img [ref=e467]
+              - text: Activity
+            - heading "Stars" [level=3] [ref=e469]
+            - link "2 stars" [ref=e471] [cursor=pointer]:
+              - /url: /mexiaosqwq/Zh-ModTranslations/stargazers
+              - img [ref=e472]
+              - strong [ref=e474]: "2"
+              - text: stars
+            - heading "Watchers" [level=3] [ref=e475]
+            - link "0 watching" [ref=e477] [cursor=pointer]:
+              - /url: /mexiaosqwq/Zh-ModTranslations/watchers
+              - img [ref=e478]
+              - strong [ref=e480]: "0"
+              - text: watching
+            - heading "Forks" [level=3] [ref=e481]
+            - link "0 forks" [ref=e483] [cursor=pointer]:
+              - /url: /mexiaosqwq/Zh-ModTranslations/forks
+              - img [ref=e484]
+              - strong [ref=e486]: "0"
+              - text: forks
+            - link "Report repository" [ref=e488] [cursor=pointer]:
+              - /url: /contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fmexiaosqwq%2FZh-ModTranslations&report=mexiaosqwq+%28user%29
+          - generic [ref=e490]:
+            - heading "Releases" [level=2] [ref=e491]:
+              - link "Releases" [ref=e492] [cursor=pointer]:
+                - /url: /mexiaosqwq/Zh-ModTranslations/releases
+            - link "1 tags" [ref=e493] [cursor=pointer]:
+              - /url: /mexiaosqwq/Zh-ModTranslations/tags
+              - img [ref=e494]
+              - text: 1 tags
+          - generic [ref=e497]:
+            - heading "Packages" [level=2] [ref=e498]:
+              - link "Packages" [ref=e499] [cursor=pointer]:
+                - /url: /users/mexiaosqwq/packages?repo_name=Zh-ModTranslations
+            - generic [ref=e500]: No packages published
+          - generic [ref=e502]:
+            - heading "Contributors 2" [level=2] [ref=e503]:
+              - link "Contributors 2" [ref=e504] [cursor=pointer]:
+                - /url: /mexiaosqwq/Zh-ModTranslations/graphs/contributors
+                - text: Contributors
+                - generic "2" [ref=e505]
+            - list [ref=e506]:
+              - listitem [ref=e507]:
+                - link "@mexiaosqwq" [ref=e508] [cursor=pointer]:
+                  - /url: https://github.com/mexiaosqwq
+                  - img "@mexiaosqwq" [ref=e509]
+                - link "mexiaosqwq mexiaosh_qwq" [ref=e511] [cursor=pointer]:
+                  - /url: https://github.com/mexiaosqwq
+                  - strong [ref=e512]: mexiaosqwq
+                  - text: mexiaosh_qwq
+              - listitem [ref=e513]:
+                - link "@claude" [ref=e514] [cursor=pointer]:
+                  - /url: https://github.com/claude
+                  - img "@claude" [ref=e515]
+                - link "claude Claude" [ref=e517] [cursor=pointer]:
+                  - /url: https://github.com/claude
+                  - strong [ref=e518]: claude
+                  - text: Claude
+  - contentinfo [ref=e520]:
+    - heading "Footer" [level=2] [ref=e521]
+    - generic [ref=e522]:
+      - generic [ref=e523]:
+        - link "GitHub Homepage" [ref=e524] [cursor=pointer]:
+          - /url: https://github.com
+          - img [ref=e525]
+        - generic [ref=e527]: © 2026 GitHub, Inc.
+      - navigation "Footer" [ref=e528]:
+        - heading "Footer navigation" [level=3] [ref=e529]
+        - list "Footer navigation" [ref=e530]:
+          - listitem [ref=e531]:
+            - link "Terms" [ref=e532] [cursor=pointer]:
+              - /url: https://docs.github.com/site-policy/github-terms/github-terms-of-service
+          - listitem [ref=e533]:
+            - link "Privacy" [ref=e534] [cursor=pointer]:
+              - /url: https://docs.github.com/site-policy/privacy-policies/github-privacy-statement
+          - listitem [ref=e535]:
+            - link "Security" [ref=e536] [cursor=pointer]:
+              - /url: https://github.com/security
+          - listitem [ref=e537]:
+            - link "Status" [ref=e538] [cursor=pointer]:
+              - /url: https://www.githubstatus.com/
+          - listitem [ref=e539]:
+            - link "Community" [ref=e540] [cursor=pointer]:
+              - /url: https://github.community/
+          - listitem [ref=e541]:
+            - link "Docs" [ref=e542] [cursor=pointer]:
+              - /url: https://docs.github.com/
+          - listitem [ref=e543]:
+            - link "Contact" [ref=e544] [cursor=pointer]:
+              - /url: https://support.github.com?tags=dotcom-footer
+          - listitem [ref=e545]:
+            - button "Manage cookies" [ref=e547] [cursor=pointer]
+          - listitem [ref=e548]:
+            - button "Do not share my personal information" [ref=e550] [cursor=pointer]

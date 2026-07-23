@@ -1,0 +1,5 @@
+- generic [ref=e2]:
+  - heading "xiaosh.xyz" [level=1] [ref=e3]
+  - paragraph [ref=e4]: 网站搭建中...
+  - link "玩 2048" [ref=e6] [cursor=pointer]:
+    - /url: https://2048.xiaosh.xyz

@@ -1,0 +1,35 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - img "xiaosh.xyz avatar" [ref=e4]
+    - generic [ref=e5]: xiaosh.xyz
+    - generic [ref=e6]: 独立开发者
+    - generic [ref=e8]:
+      - link "GitHub · mexiaosqwq" [ref=e9] [cursor=pointer]:
+        - /url: https://github.com/mexiaosqwq
+        - img [ref=e10]
+        - text: GitHub · mexiaosqwq
+      - link "1078628894@qq.com" [ref=e12] [cursor=pointer]:
+        - /url: mailto:1078628894@qq.com
+        - img [ref=e13]
+        - text: 1078628894@qq.com
+  - generic [ref=e16]:
+    - generic [ref=e17]:
+      - img [ref=e18]
+      - text: Projects
+    - generic [ref=e23] [cursor=pointer]:
+      - img "mc-search-skill 截图" [ref=e24]
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - img [ref=e27]
+          - text: mc-search-skill
+        - generic [ref=e30]: AI Agent 优先的 Minecraft 聚合搜索 Skill，四平台并行，自动融合去重
+        - generic [ref=e31]: github.com/mexiaosqwq/mc-search-skill →
+    - generic [ref=e32] [cursor=pointer]:
+      - img "Zh-ModTranslations 截图" [ref=e33]
+      - generic [ref=e34]:
+        - generic [ref=e35]:
+          - img [ref=e36]
+          - text: Zh-ModTranslations
+        - generic [ref=e39]: 小石的个人 Minecraft 模组汉化集合包，覆盖 34+ 模组，持续更新
+        - generic [ref=e40]: github.com/mexiaosqwq/Zh-ModTranslations →
+    - generic [ref=e41]: © 2026 xiaosh.xyz

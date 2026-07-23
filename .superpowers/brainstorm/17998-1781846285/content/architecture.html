@@ -1,0 +1,100 @@
+<h2>方案 C：混合架构路由</h2>
+<p class="subtitle">一次搭建，后面加游戏、加页面都不用改 Worker 代码</p>
+
+<div class="mockup" style="margin-top: 1.5rem;">
+  <div class="mockup-header">请求流向图</div>
+  <div class="mockup-body" style="padding: 1.5rem; text-align: center;">
+
+    <!-- Internet -->
+    <div style="display: inline-block; background: #e0e7ff; border: 2px solid #6366f1; border-radius: 12px; padding: 0.6rem 2rem; font-weight: 600; color: #4338ca;">
+      🌐 Internet → xiaosh.xyz / *.xiaosh.xyz
+    </div>
+
+    <div style="margin: 0.8rem 0;">↓</div>
+
+    <!-- Cloudflare DNS -->
+    <div style="display: inline-block; background: #f0f0f0; border: 2px solid #999; border-radius: 12px; padding: 0.5rem 2rem; color: #555;">
+      Cloudflare DNS
+    </div>
+
+    <div style="margin: 0.8rem 0;">↓</div>
+
+    <!-- Worker -->
+    <div style="display: inline-block; background: #fef3c7; border: 2px solid #f59e0b; border-radius: 12px; padding: 0.6rem 2rem; font-weight: 600; color: #b45309;">
+      ⚡ Worker — 智能路由
+    </div>
+
+    <div style="margin: 1rem 0 0.8rem; border-top: 1px dashed #ccc;"></div>
+
+    <!-- 3 routes -->
+    <div style="display: flex; justify-content: space-around; gap: 1rem;">
+
+      <!-- Route 1 -->
+      <div style="flex: 1; border: 2px solid #22c55e; border-radius: 12px; padding: 1rem; background: #f0fdf4;">
+        <div style="font-size: 0.8rem; color: #16a34a; font-weight: 600; margin-bottom: 0.3rem;">路由 ① 主站</div>
+        <div style="font-weight: 600; font-size: 0.95rem;">xiaosh.xyz</div>
+        <div style="font-size: 0.8rem; color: #666; margin: 0.5rem 0;">→ public/index.html</div>
+        <div style="font-size: 0.75rem; color: #888; border-top: 1px solid #bbf7d0; padding-top: 0.4rem;">
+          博客 · 作品集 · 关于
+        </div>
+      </div>
+
+      <!-- Route 2 -->
+      <div style="flex: 1; border: 2px solid #3b82f6; border-radius: 12px; padding: 1rem; background: #eff6ff;">
+        <div style="font-size: 0.8rem; color: #2563eb; font-weight: 600; margin-bottom: 0.3rem;">路由 ② 游戏</div>
+        <div style="font-weight: 600; font-size: 0.95rem;">*.xiaosh.xyz</div>
+        <div style="font-size: 0.8rem; color: #666; margin: 0.5rem 0;">→ auto 子域名解析</div>
+        <div style="font-size: 0.75rem; color: #888; border-top: 1px solid #bfdbfe; padding-top: 0.4rem;">
+          snake · sudoku · 任意加
+        </div>
+      </div>
+
+      <!-- Route 3 -->
+      <div style="flex: 1; border: 2px solid #a855f7; border-radius: 12px; padding: 1rem; background: #faf5ff;">
+        <div style="font-size: 0.8rem; color: #7c3aed; font-weight: 600; margin-bottom: 0.3rem;">路由 ③ 扩展</div>
+        <div style="font-weight: 600; font-size: 0.95rem;">预留接口</div>
+        <div style="font-size: 0.8rem; color: #666; margin: 0.5rem 0;">→ 自定义 Handler</div>
+        <div style="font-size: 0.75rem; color: #888; border-top: 1px solid #e9d5ff; padding-top: 0.4rem;">
+          API 代理 · 中间件
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Directory Structure -->
+<div class="section" style="margin-top: 1.5rem;">
+  <h3>文件结构</h3>
+  <pre style="background: #f5f5f5; border-radius: 8px; padding: 1rem; font-size: 0.85rem; line-height: 1.7; color: #333; text-align: left; margin-top: 0.5rem;">
+public/
+├── index.html          ← 博客/作品集首页
+├── blog/
+│   └── *.html          ← 博客文章
+├── projects/
+│   └── *.html          ← 项目展示
+└── games/
+    ├── snake/
+    │   └── index.html  ← 贪吃蛇
+    └── sudoku/
+        └── index.html  ← 数独（任意加）
+
+worker.js               ← 路由核心（一次写好，不再改动）</pre>
+</div>
+
+<!-- Worker Logic -->
+<div class="section" style="margin-top: 1.5rem;">
+  <h3>Worker 路由逻辑（伪代码）</h3>
+  <div class="pros-cons">
+    <div class="pros"><h4>✅ 约定式路由</h4><ul>
+      <li>主域名 → 直接返回 public/index.html</li>
+      <li>子域名 snake → 自动找 public/games/snake/index.html</li>
+      <li>匹配不到的返回 404</li>
+      <li>加游戏 = 新建文件夹，不动代码</li>
+    </ul></div>
+    <div class="cons"><h4>🔌 预留扩展点</h4><ul>
+      <li>自定义路由表（需要特殊处理的路径）</li>
+      <li>API 代理转发</li>
+      <li>访问统计 / 中间件</li>
+    </ul></div>
+  </div>
+</div>

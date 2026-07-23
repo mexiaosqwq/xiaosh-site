@@ -1,0 +1,33 @@
+<h2>布局调整 — 选你偏好的方向</h2>
+<p class="subtitle">可以多选，然后我一次改到位</p>
+
+<div class="options" data-multiselect>
+  <div class="option" data-choice="sticky" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>桌面端：左侧名片吸顶</h3>
+      <p>滚动时左侧一直可见，适合以后内容变长</p>
+    </div>
+  </div>
+  <div class="option" data-choice="mobile-hide-img" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>移动端：隐藏项目截图</h3>
+      <p>省空间，移动端只用标题+描述就够了</p>
+    </div>
+  </div>
+  <div class="option" data-choice="mobile-stack" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>移动端：段落更紧凑</h3>
+      <p>缩小头像、减少间距，一屏能看到更多</p>
+    </div>
+  </div>
+  <div class="option" data-choice="center" onclick="toggleSelect(this)">
+    <div class="letter">D</div>
+    <div class="content">
+      <h3>始终居中 + 两边对齐</h3>
+      <p>调整 max-width 和 gap，视觉上更平衡</p>
+    </div>
+  </div>
+</div>

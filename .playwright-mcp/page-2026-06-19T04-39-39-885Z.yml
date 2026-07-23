@@ -1,0 +1,36 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]: K
+    - heading "xiaosh.xyz" [level=1] [ref=e5]
+    - paragraph [ref=e6]: K 老师的个人小站
+    - generic [ref=e7]: 网站正在建设中
+  - generic [ref=e9]:
+    - link "🎮 2048 游戏 自制的 2048 小游戏，带动画效果 →" [ref=e10] [cursor=pointer]:
+      - /url: https://2048.xiaosh.xyz
+      - generic [ref=e11]: 🎮
+      - generic [ref=e12]:
+        - generic [ref=e13]: 2048 游戏
+        - generic [ref=e14]: 自制的 2048 小游戏，带动画效果
+      - generic [ref=e15]: →
+    - link "💻 GitHub 我的开源项目 →" [ref=e16] [cursor=pointer]:
+      - /url: https://github.com/xiaosh
+      - generic [ref=e17]: 💻
+      - generic [ref=e18]:
+        - generic [ref=e19]: GitHub
+        - generic [ref=e20]: 我的开源项目
+      - generic [ref=e21]: →
+    - link "✉️ 联系我 i@xiaosh.xyz →" [ref=e22] [cursor=pointer]:
+      - /url: mailto:i@xiaosh.xyz
+      - generic [ref=e23]: ✉️
+      - generic [ref=e24]:
+        - generic [ref=e25]: 联系我
+        - generic [ref=e26]: i@xiaosh.xyz
+      - generic [ref=e27]: →
+  - generic [ref=e28]:
+    - link "GitHub" [ref=e29] [cursor=pointer]:
+      - /url: https://github.com/xiaosh
+    - link "2048" [ref=e30] [cursor=pointer]:
+      - /url: https://2048.xiaosh.xyz
+    - link "Email" [ref=e31] [cursor=pointer]:
+      - /url: mailto:i@xiaosh.xyz
+  - generic [ref=e32]: © 2026 xiaosh.xyz

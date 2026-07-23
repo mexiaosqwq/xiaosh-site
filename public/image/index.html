@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Host - xiaosh.xyz</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  background: #f5f3f0;
+  color: #2c2c2c;
+  min-height: 100vh;
+  padding: 2.5rem 1.5rem 4rem;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Header */
+.header {
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+}
+.header h1 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #1a1a1a;
+}
+.header .subtitle {
+  font-size: 0.85rem;
+  color: #999;
+  margin-top: 0.4rem;
+  line-height: 1.6;
+}
+.header .count {
+  font-size: 0.82rem;
+  color: #aaa;
+  margin-top: 0.5rem;
+}
+
+/* Grid */
+.grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+/* Card */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.card .thumb-wrap {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  overflow: hidden;
+  background: #f0eeeb;
+}
+.card .thumb-wrap img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.card:hover .thumb-wrap img {
+  transform: scale(1.05);
+}
+
+.card .card-body {
+  padding: 0.55rem 0.7rem 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.card .filename {
+  flex: 1;
+  font-size: 0.72rem;
+  color: #888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.card .copy-btn {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 8px;
+  background: #f0eeeb;
+  color: #666;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+}
+.card .copy-btn:hover {
+  background: #e5e3e0;
+  color: #333;
+}
+.card .copy-btn.copied {
+  background: #d4edda;
+  color: #155724;
+}
+
+/* Lightbox */
+.lightbox {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 2rem;
+}
+.lightbox.active {
+  display: flex;
+}
+
+.lightbox .close-btn {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.7);
+  font-size: 2rem;
+  cursor: pointer;
+  transition: color 0.2s;
+  line-height: 1;
+}
+.lightbox .close-btn:hover {
+  color: #fff;
+}
+
+.lightbox img {
+  max-width: 90vw;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+}
+
+.lightbox .lb-actions {
+  margin-top: 1.2rem;
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.lightbox .lb-actions button {
+  padding: 0.55rem 1.4rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.lightbox .lb-copy {
+  background: #fff;
+  color: #2c2c2c;
+}
+.lightbox .lb-copy:hover {
+  background: #f0eeeb;
+}
+.lightbox .lb-copy.copied {
+  background: #d4edda;
+  color: #155724;
+}
+
+.lightbox .lb-close-text {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.8rem;
+}
+.lightbox .lb-close-text:hover {
+  color: rgba(255,255,255,0.8);
+  cursor: pointer;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: #2c2c2c;
+  color: #fff;
+  padding: 0.6rem 1.4rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  opacity: 0;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  z-index: 2000;
+  pointer-events: none;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Loading & Error */
+.loading, .error {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem 0;
+  font-size: 0.95rem;
+  color: #999;
+}
+.error { color: #c0392b; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .grid { grid-template-columns: repeat(3, 1fr); gap: 0.8rem; }
+}
+@media (max-width: 600px) {
+  body { padding: 1.5rem 0.8rem 3rem; }
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
+  .header h1 { font-size: 1.3rem; }
+  .header .subtitle { font-size: 0.8rem; }
+  .card .card-body { padding: 0.4rem 0.5rem 0.45rem; }
+  .card .filename { font-size: 0.65rem; }
+  .card .copy-btn { width: 26px; height: 26px; font-size: 0.8rem; }
+  .lightbox { padding: 1rem; }
+  .lightbox img { max-width: 95vw; max-height: 70vh; }
+}
+
+@media (max-width: 400px) {
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📦 图床</h1>
+  <p class="subtitle">点击图片查看大图 · 点击复制按钮获取直链 · 素材来源于网络</p>
+  <p class="count" id="count">加载中...</p>
+</div>
+
+<div class="grid" id="grid">
+  <div class="loading">加载中...</div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="close-btn" id="lbClose">&times;</button>
+  <img id="lbImg" src="" alt="">
+  <div class="lb-actions">
+    <button class="lb-copy" id="lbCopy">📋 复制链接</button>
+    <span class="lb-close-text" id="lbCloseText">ESC 关闭</span>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+(function() {
+  const grid = document.getElementById('grid');
+  const count = document.getElementById('count');
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbCopy = document.getElementById('lbCopy');
+  const lbClose = document.getElementById('lbClose');
+  const lbCloseText = document.getElementById('lbCloseText');
+  const toast = document.getElementById('toast');
+
+  const base = window.location.origin;
+
+  let toastTimer = null;
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+  }
+
+  function copyUrl(url) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => {
+        showToast('✅ 已复制链接');
+      }).catch(() => {
+        fallbackCopy(url);
+      });
+    } else {
+      fallbackCopy(url);
+    }
+  }
+
+  function fallbackCopy(url) {
+    const ta = document.createElement('textarea');
+    ta.value = url;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      showToast('✅ 已复制链接');
+    } catch(e) {
+      showToast('❌ 复制失败');
+    }
+    document.body.removeChild(ta);
+  }
+
+  let currentUrl = '';
+
+  // Load images
+  fetch('images.json')
+    .then(r => {
+      if (!r.ok) throw new Error('Failed to load manifest');
+      return r.json();
+    })
+    .then(files => {
+      if (!files || files.length === 0) {
+        grid.innerHTML = '<div class="loading">暂无图片</div>';
+        count.textContent = '共 0 张图片';
+        return;
+      }
+
+      count.textContent = `共 ${files.length} 张图片`;
+      grid.innerHTML = '';
+
+      files.forEach(f => {
+        const url = `${base}/image/${encodeURIComponent(f)}`;
+
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        const thumbWrap = document.createElement('div');
+        thumbWrap.className = 'thumb-wrap';
+
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = f;
+        img.loading = 'lazy';
+
+        thumbWrap.appendChild(img);
+
+        const body = document.createElement('div');
+        body.className = 'card-body';
+
+        const fn = document.createElement('span');
+        fn.className = 'filename';
+        fn.title = f;
+        fn.textContent = f;
+
+        const btn = document.createElement('button');
+        btn.className = 'copy-btn';
+        btn.textContent = '📋';
+        btn.title = '复制链接';
+
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          copyUrl(url);
+          this.classList.add('copied');
+          setTimeout(() => this.classList.remove('copied'), 1200);
+        });
+
+        body.appendChild(fn);
+        body.appendChild(btn);
+
+        card.addEventListener('click', function() {
+          currentUrl = url;
+          lbImg.src = url;
+          lbImg.alt = f;
+          lbCopy.textContent = '📋 复制链接';
+          lbCopy.classList.remove('copied');
+          lightbox.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        });
+
+        card.appendChild(thumbWrap);
+        card.appendChild(body);
+        grid.appendChild(card);
+      });
+    })
+    .catch(err => {
+      grid.innerHTML = '<div class="error">❌ 加载失败，请刷新重试</div>';
+      count.textContent = '加载失败';
+      console.error(err);
+    });
+
+  // Lightbox controls
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+    lbImg.src = '';
+  }
+
+  lbClose.addEventListener('click', closeLightbox);
+  lbCloseText.addEventListener('click', closeLightbox);
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+      closeLightbox();
+    }
+  });
+
+  lightbox.addEventListener('click', function(e) {
+    if (e.target === lightbox) {
+      closeLightbox();
+    }
+  });
+
+  lbCopy.addEventListener('click', function() {
+    if (currentUrl) {
+      copyUrl(currentUrl);
+      this.textContent = '✅ 已复制';
+      this.classList.add('copied');
+      setTimeout(() => {
+        this.textContent = '📋 复制链接';
+        this.classList.remove('copied');
+      }, 2000);
+    }
+  });
+})();
+</script>
+</body>
+</html>

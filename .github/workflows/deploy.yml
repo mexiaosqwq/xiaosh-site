@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Generate image manifest
+        run: node -e "const fs=require('fs'),p='public/image';fs.writeFileSync(p+'/images.json',JSON.stringify(fs.readdirSync(p).filter(f=>/\.(png|jpg|jpeg|gif|webp)$/i.test(f)),null,2))"
       - uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}

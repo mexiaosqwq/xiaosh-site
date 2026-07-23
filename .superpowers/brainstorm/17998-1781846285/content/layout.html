@@ -1,0 +1,71 @@
+<h2>响应式布局方案</h2>
+<p class="subtitle">桌面端左简右详，移动端自动上下排列</p>
+
+<!-- Desktop view -->
+<div class="section">
+  <h3>🖥️ 桌面端（>768px）</h3>
+  <div style="display: flex; gap: 1.5rem; margin-top: 0.5rem;">
+    <!-- Left profile -->
+    <div style="flex: 0 0 200px; border: 2px solid #e5e4e2; border-radius: 12px; padding: 1.5rem; text-align: center;">
+      <div style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #a78bfa, #7c3aed); display: inline-flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 600; color: #fff; margin-bottom: 0.8rem;">K</div>
+      <div style="font-weight: 700; font-size: 1.2rem;">xiaosh.xyz</div>
+      <div style="font-size: 0.85rem; color: #8a8a8a; margin: 0.3rem 0 1rem;">独立开发者 / Minecraft 模组汉化</div>
+      <div style="border-top: 1px solid #e5e4e2; padding-top: 0.8rem; font-size: 0.8rem; color: #666;">
+        <div>🐙 GitHub</div>
+        <div style="margin-top: 0.3rem;">✉️ 1078628894@qq.com</div>
+      </div>
+    </div>
+    <!-- Right projects -->
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 0.6rem;">
+      <div style="border: 2px solid #e5e4e2; border-radius: 12px; padding: 1rem;">
+        <div style="font-weight: 600;">🔍 mc-search-skill</div>
+        <div style="font-size: 0.85rem; color: #8a8a8a; margin: 0.2rem 0;">AI Agent 优先的 Minecraft 聚合搜索 Skill</div>
+        <div style="font-size: 0.8rem; color: #a78bfa;">→ github.com/mexiaosqwq/mc-search-skill</div>
+      </div>
+      <div style="border: 2px solid #e5e4e2; border-radius: 12px; padding: 1rem;">
+        <div style="font-weight: 600;">📦 Zh-ModTranslations</div>
+        <div style="font-size: 0.85rem; color: #8a8a8a; margin: 0.2rem 0;">小石的个人 Minecraft 模组汉化集合包</div>
+        <div style="font-size: 0.8rem; color: #a78bfa;">→ github.com/mexiaosqwq/Zh-ModTranslations</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile view -->
+<div class="section" style="margin-top: 2rem;">
+  <h3>📱 移动端（<768px 自动堆叠）</h3>
+  <div style="max-width: 320px; margin: 0.5rem auto 0;">
+    <!-- Profile on top -->
+    <div style="border: 2px solid #e5e4e2; border-radius: 12px; padding: 1rem; text-align: center; margin-bottom: 0.6rem;">
+      <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #a78bfa, #7c3aed); display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 600; color: #fff; margin-bottom: 0.4rem;">K</div>
+      <div style="font-weight: 700;">xiaosh.xyz</div>
+      <div style="font-size: 0.8rem; color: #8a8a8a;">独立开发者 / Minecraft 模组汉化</div>
+      <div style="font-size: 0.75rem; color: #666; margin-top: 0.5rem;">🐙 GitHub  ·  ✉️ Email</div>
+    </div>
+    <!-- Projects below -->
+    <div style="border: 2px solid #e5e4e2; border-radius: 12px; padding: 0.8rem; margin-bottom: 0.5rem;">
+      <div style="font-weight: 600; font-size: 0.9rem;">🔍 mc-search-skill</div>
+      <div style="font-size: 0.8rem; color: #8a8a8a;">AI Agent 优先的 Minecraft 聚合搜索 Skill</div>
+    </div>
+    <div style="border: 2px solid #e5e4e2; border-radius: 12px; padding: 0.8rem;">
+      <div style="font-weight: 600; font-size: 0.9rem;">📦 Zh-ModTranslations</div>
+      <div style="font-size: 0.8rem; color: #8a8a8a;">小石的个人 Minecraft 模组汉化集合包</div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top: 1.5rem;">
+  <h3>技术实现</h3>
+  <div class="pros-cons">
+    <div class="pros"><h4>CSS Flexbox</h4><ul>
+      <li>桌面：flex-direction: row，左侧固定 200px</li>
+      <li>移动：flex-direction: column，自动堆叠</li>
+      <li>无需额外框架，纯 CSS 搞定</li>
+    </ul></div>
+    <div class="cons"><h4>断点</h4><ul>
+      <li>@media (max-width: 640px) 切换布局</li>
+      <li>移动端缩小头像、减小间距</li>
+      <li>项目卡片自动填满宽度</li>
+    </ul></div>
+  </div>
+</div>

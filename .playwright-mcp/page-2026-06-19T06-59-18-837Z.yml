@@ -1,0 +1,621 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - link "Skip to content" [ref=e4] [cursor=pointer]:
+      - /url: "#start-of-content"
+    - banner [ref=e6]:
+      - heading "Navigation Menu" [level=2] [ref=e7]
+      - generic [ref=e8]:
+        - link "Homepage" [ref=e10] [cursor=pointer]:
+          - /url: /
+          - img [ref=e11]
+        - generic [ref=e13]:
+          - navigation "Global" [ref=e16]:
+            - list [ref=e17]:
+              - listitem [ref=e18]:
+                - button "Platform" [ref=e20] [cursor=pointer]:
+                  - text: Platform
+                  - img [ref=e21]
+              - listitem [ref=e23]:
+                - button "Solutions" [ref=e25] [cursor=pointer]:
+                  - text: Solutions
+                  - img [ref=e26]
+              - listitem [ref=e28]:
+                - button "Resources" [ref=e30] [cursor=pointer]:
+                  - text: Resources
+                  - img [ref=e31]
+              - listitem [ref=e33]:
+                - button "Open Source" [ref=e35] [cursor=pointer]:
+                  - text: Open Source
+                  - img [ref=e36]
+              - listitem [ref=e38]:
+                - button "Enterprise" [ref=e40] [cursor=pointer]:
+                  - text: Enterprise
+                  - img [ref=e41]
+              - listitem [ref=e43]:
+                - link "Pricing" [ref=e44] [cursor=pointer]:
+                  - /url: https://github.com/pricing
+                  - generic [ref=e45]: Pricing
+          - generic [ref=e46]:
+            - button "Search or jump to…" [ref=e49] [cursor=pointer]:
+              - img [ref=e51]
+            - link "Sign in" [ref=e54] [cursor=pointer]:
+              - /url: /login?return_to=https%3A%2F%2Fgithub.com%2Fmexiaosqwq%2Fmc-search-skill
+            - link "Sign up" [ref=e55] [cursor=pointer]:
+              - /url: /signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=mexiaosqwq%2Fmc-search-skill
+            - button "Appearance settings" [ref=e58] [cursor=pointer]:
+              - img
+  - main [ref=e62]:
+    - generic [ref=e63]:
+      - generic [ref=e64]:
+        - generic [ref=e66]:
+          - img [ref=e67]
+          - link "mexiaosqwq" [ref=e70] [cursor=pointer]:
+            - /url: /mexiaosqwq
+          - generic [ref=e71]: /
+          - strong [ref=e72]:
+            - link "mc-search-skill" [ref=e73] [cursor=pointer]:
+              - /url: /mexiaosqwq/mc-search-skill
+          - generic [ref=e74]: Public
+        - generic [ref=e75]:
+          - list:
+            - listitem [ref=e76]:
+              - link "You must be signed in to change notification settings" [ref=e77] [cursor=pointer]:
+                - /url: /login?return_to=%2Fmexiaosqwq%2Fmc-search-skill
+                - img [ref=e78]
+                - text: Notifications
+            - listitem [ref=e80]:
+              - link "Fork 0" [ref=e81] [cursor=pointer]:
+                - /url: /login?return_to=%2Fmexiaosqwq%2Fmc-search-skill
+                - img [ref=e82]
+                - text: Fork
+                - generic "0" [ref=e84]
+            - listitem [ref=e85]:
+              - link "You must be signed in to star a repository" [ref=e87] [cursor=pointer]:
+                - /url: /login?return_to=%2Fmexiaosqwq%2Fmc-search-skill
+                - img [ref=e88]
+                - text: Star
+                - generic "2 users starred this repository" [ref=e90]: "2"
+      - navigation "Repository" [ref=e91]:
+        - list [ref=e92]:
+          - listitem [ref=e93]:
+            - link "Code" [ref=e94] [cursor=pointer]:
+              - /url: /mexiaosqwq/mc-search-skill
+              - img [ref=e95]
+              - generic [ref=e97]: Code
+          - listitem [ref=e98]:
+            - link "Issues" [ref=e99] [cursor=pointer]:
+              - /url: /mexiaosqwq/mc-search-skill/issues
+              - img [ref=e100]
+              - generic [ref=e103]: Issues
+          - listitem [ref=e104]:
+            - link "Pull requests" [ref=e105] [cursor=pointer]:
+              - /url: /mexiaosqwq/mc-search-skill/pulls
+              - img [ref=e106]
+              - generic [ref=e108]: Pull requests
+          - listitem [ref=e109]:
+            - link "Actions" [ref=e110] [cursor=pointer]:
+              - /url: /mexiaosqwq/mc-search-skill/actions
+              - img [ref=e111]
+              - generic [ref=e113]: Actions
+          - listitem [ref=e114]:
+            - link "Projects" [ref=e115] [cursor=pointer]:
+              - /url: /mexiaosqwq/mc-search-skill/projects
+              - img [ref=e116]
+              - generic [ref=e118]: Projects
+          - listitem [ref=e119]:
+            - link "Security and quality" [ref=e120] [cursor=pointer]:
+              - /url: /mexiaosqwq/mc-search-skill/security
+              - img [ref=e121]
+              - generic [ref=e123]: Security and quality
+          - listitem [ref=e124]:
+            - link "Insights" [ref=e125] [cursor=pointer]:
+              - /url: /mexiaosqwq/mc-search-skill/pulse
+              - img [ref=e126]
+              - generic [ref=e128]: Insights
+    - generic [ref=e141]:
+      - heading "mexiaosqwq/mc-search-skill" [level=1] [ref=e143]
+      - generic [ref=e144]:
+        - generic [ref=e147]:
+          - generic [ref=e148]:
+            - generic [ref=e149]:
+              - button "main branch" [ref=e151] [cursor=pointer]:
+                - generic [ref=e152]:
+                  - generic [ref=e154]:
+                    - img [ref=e156]
+                    - generic [ref=e159]: main
+                  - generic:
+                    - img
+              - generic [ref=e160]:
+                - link "1 Branch" [ref=e161] [cursor=pointer]:
+                  - /url: /mexiaosqwq/mc-search-skill/branches
+                  - generic [ref=e162]:
+                    - generic:
+                      - img
+                    - generic [ref=e164]:
+                      - strong [ref=e165]: "1"
+                      - text: Branch
+                - link "7 Tags" [ref=e166] [cursor=pointer]:
+                  - /url: /mexiaosqwq/mc-search-skill/tags
+                  - generic [ref=e167]:
+                    - generic:
+                      - img
+                    - generic [ref=e169]:
+                      - strong [ref=e170]: "7"
+                      - text: Tags
+            - generic [ref=e171]:
+              - generic [ref=e175]:
+                - img [ref=e177]
+                - combobox "Go to file" [ref=e179]
+              - button "Code" [ref=e180] [cursor=pointer]:
+                - generic [ref=e181]:
+                  - generic:
+                    - img
+                  - generic [ref=e182]: Code
+                  - generic:
+                    - img
+          - generic [ref=e183]:
+            - generic [ref=e184]:
+              - heading "Folders and files" [level=2] [ref=e185]
+              - table "Folders and files" [ref=e186]:
+                - rowgroup:
+                  - row "Name Last commit message Last commit date":
+                    - columnheader "Name"
+                    - columnheader "Last commit message":
+                      - generic "Last commit message"
+                    - columnheader "Last commit date":
+                      - generic "Last commit date"
+                - rowgroup [ref=e187]:
+                  - 'row "Latest commit actions-user claude commits by actions-user and commits by claude fix: core.py facade 移除死导出 Path（缓存已删，零消费者） Open commit details Commit 5025005 · Jun 13, 2026last week History 239 Commits" [ref=e188]':
+                    - 'cell "Latest commit actions-user claude commits by actions-user and commits by claude fix: core.py facade 移除死导出 Path（缓存已删，零消费者） Open commit details Commit 5025005 · Jun 13, 2026last week History 239 Commits" [ref=e189]':
+                      - generic [ref=e190]:
+                        - heading "Latest commit" [level=2] [ref=e191]
+                        - generic [ref=e192]:
+                          - generic [ref=e193]:
+                            - generic [ref=e195]:
+                              - img "actions-user" [ref=e196]
+                              - img "claude" [ref=e197]
+                            - link "commits by actions-user" [ref=e199] [cursor=pointer]:
+                              - /url: /mexiaosqwq/mc-search-skill/commits?author=actions-user
+                              - text: actions-user
+                            - generic [ref=e200]: and
+                            - link "commits by claude" [ref=e202] [cursor=pointer]:
+                              - /url: /mexiaosqwq/mc-search-skill/commits?author=claude
+                              - text: claude
+                          - generic [ref=e203]:
+                            - 'link "fix: core.py facade 移除死导出 Path（缓存已删，零消费者）" [ref=e206] [cursor=pointer]':
+                              - /url: /mexiaosqwq/mc-search-skill/commit/5025005e7948ed58e1d56ff1aaf187976071fa28
+                            - button "Open commit details" [ref=e207] [cursor=pointer]:
+                              - img [ref=e208]
+                        - generic [ref=e210]:
+                          - generic [ref=e212]:
+                            - link "Commit 5025005" [ref=e213] [cursor=pointer]:
+                              - /url: /mexiaosqwq/mc-search-skill/commit/5025005e7948ed58e1d56ff1aaf187976071fa28
+                              - text: "5025005"
+                            - text: ·
+                            - generic "Jun 13, 2026, 1:18 PM GMT+8" [ref=e214]: Jun 13, 2026last week
+                          - generic [ref=e215]:
+                            - heading "History" [level=2] [ref=e216]
+                            - link "239 Commits" [ref=e217] [cursor=pointer]:
+                              - /url: /mexiaosqwq/mc-search-skill/commits/main/
+                              - generic [ref=e218]:
+                                - generic:
+                                  - img
+                                - generic [ref=e219]: 239 Commits
+                  - 'row ".github/workflows, (Directory) fix: 6 bug 修复 — int 崩溃、超时不捕获、重试中断、wiki URL、skip-mr、团队切片 May 16, 2026last month" [ref=e220]':
+                    - cell ".github/workflows, (Directory)" [ref=e221]:
+                      - generic [ref=e222]:
+                        - img [ref=e223]
+                        - link ".github/workflows, (Directory)" [ref=e228] [cursor=pointer]:
+                          - /url: /mexiaosqwq/mc-search-skill/tree/main/.github/workflows
+                          - text: .github/workflows
+                    - 'cell "fix: 6 bug 修复 — int 崩溃、超时不捕获、重试中断、wiki URL、skip-mr、团队切片" [ref=e229]':
+                      - 'link "fix: 6 bug 修复 — int 崩溃、超时不捕获、重试中断、wiki URL、skip-mr、团队切片" [ref=e232] [cursor=pointer]':
+                        - /url: /mexiaosqwq/mc-search-skill/commit/c81ab5e74fd80083602b4d0721d6a981620eef79
+                    - cell "May 16, 2026last month" [ref=e233]:
+                      - generic [ref=e234]: May 16, 2026last month
+                  - 'row "skills/mc-search, (Directory) fix: core.py facade 移除死导出 Path（缓存已删，零消费者） Jun 13, 2026last week" [ref=e235]':
+                    - cell "skills/mc-search, (Directory)" [ref=e236]:
+                      - generic [ref=e237]:
+                        - img [ref=e238]
+                        - link "skills/mc-search, (Directory)" [ref=e243] [cursor=pointer]:
+                          - /url: /mexiaosqwq/mc-search-skill/tree/main/skills/mc-search
+                          - text: skills/mc-search
+                    - 'cell "fix: core.py facade 移除死导出 Path（缓存已删，零消费者）" [ref=e244]':
+                      - 'link "fix: core.py facade 移除死导出 Path（缓存已删，零消费者）" [ref=e247] [cursor=pointer]':
+                        - /url: /mexiaosqwq/mc-search-skill/commit/5025005e7948ed58e1d56ff1aaf187976071fa28
+                    - cell "Jun 13, 2026last week" [ref=e248]:
+                      - generic [ref=e249]: Jun 13, 2026last week
+                  - 'row "tests, (Directory) fix: validate_output.py 基础环境检查移除 set_cache 残留引用 Jun 13, 2026last week" [ref=e250]':
+                    - cell "tests, (Directory)" [ref=e251]:
+                      - generic [ref=e252]:
+                        - img [ref=e253]
+                        - link "tests, (Directory)" [ref=e258] [cursor=pointer]:
+                          - /url: /mexiaosqwq/mc-search-skill/tree/main/tests
+                          - text: tests
+                    - 'cell "fix: validate_output.py 基础环境检查移除 set_cache 残留引用" [ref=e259]':
+                      - 'link "fix: validate_output.py 基础环境检查移除 set_cache 残留引用" [ref=e262] [cursor=pointer]':
+                        - /url: /mexiaosqwq/mc-search-skill/commit/3cf45e0dabe37172396e656b0a364dbbc05c4a67
+                    - cell "Jun 13, 2026last week" [ref=e263]:
+                      - generic [ref=e264]: Jun 13, 2026last week
+                  - 'row ".gitignore, (File) feat: 模糊匹配去重 + Wiki缩略图 + SKILL.md精简 + 测试补全 May 31, 20263 weeks ago" [ref=e265]':
+                    - cell ".gitignore, (File)" [ref=e266]:
+                      - generic [ref=e267]:
+                        - img [ref=e268]
+                        - link ".gitignore, (File)" [ref=e273] [cursor=pointer]:
+                          - /url: /mexiaosqwq/mc-search-skill/blob/main/.gitignore
+                          - text: .gitignore
+                    - 'cell "feat: 模糊匹配去重 + Wiki缩略图 + SKILL.md精简 + 测试补全" [ref=e274]':
+                      - 'link "feat: 模糊匹配去重 + Wiki缩略图 + SKILL.md精简 + 测试补全" [ref=e277] [cursor=pointer]':
+                        - /url: /mexiaosqwq/mc-search-skill/commit/f2ae8272813386bbec160b8dd0ac63de25ff8359
+                    - cell "May 31, 20263 weeks ago" [ref=e278]:
+                      - generic [ref=e279]: May 31, 20263 weeks ago
+                  - 'row "CLAUDE.md, (File) docs: CLAUDE.md 更新文件结构/备份表以匹配代码拆分后的子模块布局 Jun 13, 2026last week" [ref=e280]':
+                    - cell "CLAUDE.md, (File)" [ref=e281]:
+                      - generic [ref=e282]:
+                        - img [ref=e283]
+                        - link "CLAUDE.md, (File)" [ref=e288] [cursor=pointer]:
+                          - /url: /mexiaosqwq/mc-search-skill/blob/main/CLAUDE.md
+                          - text: CLAUDE.md
+                    - 'cell "docs: CLAUDE.md 更新文件结构/备份表以匹配代码拆分后的子模块布局" [ref=e289]':
+                      - 'link "docs: CLAUDE.md 更新文件结构/备份表以匹配代码拆分后的子模块布局" [ref=e292] [cursor=pointer]':
+                        - /url: /mexiaosqwq/mc-search-skill/commit/3dc35095f5510e3ac1d50c69861e517030672e02
+                    - cell "Jun 13, 2026last week" [ref=e293]:
+                      - generic [ref=e294]: Jun 13, 2026last week
+                  - 'row "CONTEXT.md, (File) docs: CONTEXT/CLAUDE/core docstring移除全部bbsmc，五→四平台 Jun 7, 20262 weeks ago" [ref=e295]':
+                    - cell "CONTEXT.md, (File)" [ref=e296]:
+                      - generic [ref=e297]:
+                        - img [ref=e298]
+                        - link "CONTEXT.md, (File)" [ref=e303] [cursor=pointer]:
+                          - /url: /mexiaosqwq/mc-search-skill/blob/main/CONTEXT.md
+                          - text: CONTEXT.md
+                    - 'cell "docs: CONTEXT/CLAUDE/core docstring移除全部bbsmc，五→四平台" [ref=e304]':
+                      - 'link "docs: CONTEXT/CLAUDE/core docstring移除全部bbsmc，五→四平台" [ref=e307] [cursor=pointer]':
+                        - /url: /mexiaosqwq/mc-search-skill/commit/129a38f0c35ee6d89ae2f65e3ae321a8d61e6587
+                    - cell "Jun 7, 20262 weeks ago" [ref=e308]:
+                      - generic [ref=e309]: Jun 7, 20262 weeks ago
+                  - 'row "LICENSE, (File) chore: replace CC0 with MIT license Apr 3, 20262 months ago" [ref=e310]':
+                    - cell "LICENSE, (File)" [ref=e311]:
+                      - generic [ref=e312]:
+                        - img [ref=e313]
+                        - link "LICENSE, (File)" [ref=e318] [cursor=pointer]:
+                          - /url: /mexiaosqwq/mc-search-skill/blob/main/LICENSE
+                          - text: LICENSE
+                    - 'cell "chore: replace CC0 with MIT license" [ref=e319]':
+                      - 'link "chore: replace CC0 with MIT license" [ref=e322] [cursor=pointer]':
+                        - /url: /mexiaosqwq/mc-search-skill/commit/9a4061bc23d97b17b3b1cf68112ff0da5ce2c699
+                    - cell "Apr 3, 20262 months ago" [ref=e323]:
+                      - generic [ref=e324]: Apr 3, 20262 months ago
+                  - 'row "README.en.md, (File) docs: README 双版本移除 bbsmc，五平台→四平台 Jun 7, 20262 weeks ago" [ref=e325]':
+                    - cell "README.en.md, (File)" [ref=e326]:
+                      - generic [ref=e327]:
+                        - img [ref=e328]
+                        - link "README.en.md, (File)" [ref=e333] [cursor=pointer]:
+                          - /url: /mexiaosqwq/mc-search-skill/blob/main/README.en.md
+                          - text: README.en.md
+                    - 'cell "docs: README 双版本移除 bbsmc，五平台→四平台" [ref=e334]':
+                      - 'link "docs: README 双版本移除 bbsmc，五平台→四平台" [ref=e337] [cursor=pointer]':
+                        - /url: /mexiaosqwq/mc-search-skill/commit/6069d02a89327c90be6aed62005039ab0921e281
+                    - cell "Jun 7, 20262 weeks ago" [ref=e338]:
+                      - generic [ref=e339]: Jun 7, 20262 weeks ago
+                  - 'row "README.md, (File) docs: README 双版本移除 bbsmc，五平台→四平台 Jun 7, 20262 weeks ago" [ref=e340]':
+                    - cell "README.md, (File)" [ref=e341]:
+                      - generic [ref=e342]:
+                        - img [ref=e343]
+                        - link "README.md, (File)" [ref=e348] [cursor=pointer]:
+                          - /url: /mexiaosqwq/mc-search-skill/blob/main/README.md
+                          - text: README.md
+                    - 'cell "docs: README 双版本移除 bbsmc，五平台→四平台" [ref=e349]':
+                      - 'link "docs: README 双版本移除 bbsmc，五平台→四平台" [ref=e352] [cursor=pointer]':
+                        - /url: /mexiaosqwq/mc-search-skill/commit/6069d02a89327c90be6aed62005039ab0921e281
+                    - cell "Jun 7, 20262 weeks ago" [ref=e353]:
+                      - generic [ref=e354]: Jun 7, 20262 weeks ago
+            - generic [ref=e356]:
+              - generic [ref=e357]:
+                - heading "Repository files navigation" [level=2] [ref=e358]
+                - navigation "Repository files" [ref=e359]:
+                  - list [ref=e360]:
+                    - listitem [ref=e361]:
+                      - link "README" [ref=e362] [cursor=pointer]:
+                        - /url: "#"
+                        - img [ref=e364]
+                        - generic [ref=e366]: README
+                    - listitem [ref=e367]:
+                      - link "MIT license" [ref=e368] [cursor=pointer]:
+                        - /url: "#"
+                        - img [ref=e370]
+                        - generic [ref=e372]: MIT license
+                - button "Outline" [ref=e373] [cursor=pointer]:
+                  - img [ref=e374]
+              - article [ref=e377]:
+                - generic [ref=e378]:
+                  - heading "mc-search" [level=1] [ref=e379]
+                  - 'link "Permalink: mc-search" [ref=e380] [cursor=pointer]':
+                    - /url: "#mc-search"
+                    - img [ref=e381]
+                - paragraph [ref=e383]: AI Agent 优先的 Minecraft 聚合搜索 Skill，四平台并行，自动融合去重。
+                - paragraph [ref=e384]:
+                  - link "Version" [ref=e385] [cursor=pointer]:
+                    - /url: https://github.com/mexiaosqwq/mc-search-skill/releases
+                    - img "Version" [ref=e386]
+                  - link "License" [ref=e387] [cursor=pointer]:
+                    - /url: /mexiaosqwq/mc-search-skill/blob/main/LICENSE
+                    - img "License" [ref=e388]
+                  - link "Python" [ref=e389] [cursor=pointer]:
+                    - /url: https://www.python.org/
+                    - img "Python" [ref=e390]
+                  - link "Skill" [ref=e391] [cursor=pointer]:
+                    - /url: /mexiaosqwq/mc-search-skill/blob/main/skills/mc-search/SKILL.md
+                    - img "Skill" [ref=e392]
+                - paragraph [ref=e393]:
+                  - link "English Documentation →" [ref=e394] [cursor=pointer]:
+                    - /url: /mexiaosqwq/mc-search-skill/blob/main/README.en.md
+                - generic [ref=e395]:
+                  - heading "项目简介" [level=2] [ref=e396]
+                  - 'link "Permalink: 项目简介" [ref=e397] [cursor=pointer]':
+                    - /url: "#项目简介"
+                    - img [ref=e398]
+                - paragraph [ref=e400]:
+                  - text: mc-search 是为
+                  - strong [ref=e401]: Claude Code Agent
+                  - text: 设计的 Minecraft 内容搜索 Skill，四平台并行搜索：
+                - table [ref=e403]:
+                  - rowgroup [ref=e404]:
+                    - row "平台 内容 访问方式" [ref=e405]:
+                      - columnheader "平台" [ref=e406]
+                      - columnheader "内容" [ref=e407]
+                      - columnheader "访问方式" [ref=e408]
+                  - rowgroup [ref=e409]:
+                    - row "MC百科 (mcmod.cn) 中文模组/物品/整合包 HTML 解析 + CDN 绕过" [ref=e410]:
+                      - cell "MC百科 (mcmod.cn)" [ref=e411]:
+                        - strong [ref=e412]: MC百科
+                        - text: (mcmod.cn)
+                      - cell "中文模组/物品/整合包" [ref=e413]
+                      - cell "HTML 解析 + CDN 绕过" [ref=e414]
+                    - row "Modrinth 英文 mod/光影/材质包/整合包 REST API" [ref=e415]:
+                      - cell "Modrinth" [ref=e416]:
+                        - strong [ref=e417]: Modrinth
+                      - cell "英文 mod/光影/材质包/整合包" [ref=e418]
+                      - cell "REST API" [ref=e419]
+                - paragraph [ref=e420]:
+                  - text: "|"
+                  - strong [ref=e421]: minecraft.wiki
+                  - text: (EN/ZH) | 原版游戏 wiki | MediaWiki API + CDN 绕过 |
+                - generic [ref=e422]:
+                  - heading "核心特性" [level=2] [ref=e423]
+                  - 'link "Permalink: 核心特性" [ref=e424] [cursor=pointer]':
+                    - /url: "#核心特性"
+                    - img [ref=e425]
+                - list [ref=e427]:
+                  - listitem [ref=e428]:
+                    - paragraph [ref=e429]:
+                      - strong [ref=e430]: 跨语言桥接
+                      - text: ：中文关键词自动提取英文名去 Modrinth 补搜，Agent 无感知
+                  - listitem [ref=e431]:
+                    - paragraph [ref=e432]:
+                      - strong [ref=e433]: 本体判别
+                      - text: ：
+                      - code [ref=e434]: "is_primary: true"
+                      - text: 自动标记本体模组（C→B→A→兜底 四级联）
+                  - listitem [ref=e435]:
+                    - paragraph [ref=e436]:
+                      - strong [ref=e437]: 字段级融合
+                      - text: ：按字段逐源选取权威数据（name_zh→MC百科, name_en→Modrinth, downloads→Modrinth, relationships→MC百科）
+                  - listitem [ref=e438]:
+                    - paragraph [ref=e439]:
+                      - strong [ref=e440]: WAF/CDN 自动降级
+                      - text: ：MC百科 被拦截时回退搜索页数据，不阻断搜索
+                - generic [ref=e441]:
+                  - heading "安装" [level=2] [ref=e442]
+                  - 'link "Permalink: 安装" [ref=e443] [cursor=pointer]':
+                    - /url: "#安装"
+                    - img [ref=e444]
+                - generic [ref=e446]:
+                  - generic [ref=e447]: git clone https://github.com/mexiaosqwq/mc-search-skill.git && \ cp -r mc-search-skill/skills/mc-search ~/.claude/skills/ && \ cd ~/.claude/skills/mc-search && pip install -e . && \ cd ~ && rm -rf mc-search-skill
+                  - button "Copy code to clipboard" [ref=e449] [cursor=pointer]:
+                    - img [ref=e450]
+                - paragraph [ref=e453]:
+                  - text: 依赖：Python 3.8+，
+                  - code [ref=e454]: curl_cffi>=0.15.0
+                  - text: 。验证：
+                  - code [ref=e455]: mc-search --json search JEI -n 1 --platform mcmod
+                - generic [ref=e456]:
+                  - heading "快速使用" [level=2] [ref=e457]
+                  - 'link "Permalink: 快速使用" [ref=e458] [cursor=pointer]':
+                    - /url: "#快速使用"
+                    - img [ref=e459]
+                - paragraph [ref=e461]:
+                  - text: Agent 通过 Python API 调用（详见
+                  - link "SKILL.md" [ref=e462] [cursor=pointer]:
+                    - /url: /mexiaosqwq/mc-search-skill/blob/main/skills/mc-search/SKILL.md
+                  - text: ），CLI 用于手动测试：
+                - generic [ref=e463]:
+                  - generic [ref=e464]:
+                    - text: mc-search --json search 机械动力
+                    - generic [ref=e465]: "# 搜索"
+                    - text: mc-search --json show sodium --full
+                    - generic [ref=e466]: "# 详情"
+                    - text: mc-search --json show sodium --deps
+                    - generic [ref=e467]: "# 依赖"
+                    - text: mc-search --json wiki 红石 -r
+                    - generic [ref=e468]: "# wiki 搜+读"
+                  - button "Copy code to clipboard" [ref=e470] [cursor=pointer]:
+                    - img [ref=e471]
+                - paragraph [ref=e474]:
+                  - code [ref=e475]: search
+                  - text: 支持
+                  - code [ref=e476]: "--type mod/item/modpack/shader/resourcepack/vanilla/entity/biome/dimension"
+                  - text: ，
+                  - code [ref=e477]: "--author"
+                  - text: 按作者搜索，
+                  - code [ref=e478]: "--cache"
+                  - text: 启用缓存。
+                - generic [ref=e479]:
+                  - heading "项目结构" [level=2] [ref=e480]
+                  - 'link "Permalink: 项目结构" [ref=e481] [cursor=pointer]':
+                    - /url: "#项目结构"
+                    - img [ref=e482]
+                - generic [ref=e484]:
+                  - code [ref=e486]: "mc-search-skill/ ├── skills/mc-search/ │ ├── SKILL.md # Agent 调用定义 │ ├── scripts/ │ │ ├── core.py # 搜索/解析/融合/缓存 (~4074 行) │ │ └── cli.py # CLI 入口 (~1348 行) │ └── references/ # 错误码/平台对比/结果Schema ├── README.md └── README.en.md"
+                  - button "Copy code to clipboard" [ref=e488] [cursor=pointer]:
+                    - img [ref=e489]
+                - generic [ref=e492]:
+                  - heading "许可证" [level=2] [ref=e493]
+                  - 'link "Permalink: 许可证" [ref=e494] [cursor=pointer]':
+                    - /url: "#许可证"
+                    - img [ref=e495]
+                - paragraph [ref=e497]: MIT License
+                - generic [ref=e498]:
+                  - heading "致谢" [level=2] [ref=e499]
+                  - 'link "Permalink: 致谢" [ref=e500] [cursor=pointer]':
+                    - /url: "#致谢"
+                    - img [ref=e501]
+                - list [ref=e503]:
+                  - listitem [ref=e504]:
+                    - paragraph [ref=e505]:
+                      - link "MC 百科" [ref=e506] [cursor=pointer]:
+                        - /url: https://www.mcmod.cn/
+                      - text: — 中文 Minecraft 模组百科
+                  - listitem [ref=e507]:
+                    - paragraph [ref=e508]:
+                      - link "Modrinth" [ref=e509] [cursor=pointer]:
+                        - /url: https://modrinth.com/
+                      - text: — Minecraft 模组平台
+                  - listitem [ref=e510]:
+                    - paragraph [ref=e511]:
+                      - link "Minecraft Wiki" [ref=e512] [cursor=pointer]:
+                        - /url: https://minecraft.wiki/
+                      - text: — 原版游戏 wiki
+        - generic [ref=e516]:
+          - generic [ref=e519]:
+            - heading "About" [level=2] [ref=e520]
+            - paragraph [ref=e521]: AI Agent 优先的 Minecraft 聚合搜索工具 (Claude Code Skill) — 四平台并行：MC百科 + Modrinth + minecraft.wiki 中/英文
+            - heading "Resources" [level=3] [ref=e522]
+            - link "Readme" [ref=e524] [cursor=pointer]:
+              - /url: "#readme-ov-file"
+              - img [ref=e525]
+              - text: Readme
+            - heading "License" [level=3] [ref=e527]
+            - link "MIT license" [ref=e529] [cursor=pointer]:
+              - /url: "#MIT-1-ov-file"
+              - img [ref=e530]
+              - text: MIT license
+            - link "Activity" [ref=e533] [cursor=pointer]:
+              - /url: /mexiaosqwq/mc-search-skill/activity
+              - img [ref=e534]
+              - text: Activity
+            - heading "Stars" [level=3] [ref=e536]
+            - link "2 stars" [ref=e538] [cursor=pointer]:
+              - /url: /mexiaosqwq/mc-search-skill/stargazers
+              - img [ref=e539]
+              - strong [ref=e541]: "2"
+              - text: stars
+            - heading "Watchers" [level=3] [ref=e542]
+            - link "0 watching" [ref=e544] [cursor=pointer]:
+              - /url: /mexiaosqwq/mc-search-skill/watchers
+              - img [ref=e545]
+              - strong [ref=e547]: "0"
+              - text: watching
+            - heading "Forks" [level=3] [ref=e548]
+            - link "0 forks" [ref=e550] [cursor=pointer]:
+              - /url: /mexiaosqwq/mc-search-skill/forks
+              - img [ref=e551]
+              - strong [ref=e553]: "0"
+              - text: forks
+            - link "Report repository" [ref=e555] [cursor=pointer]:
+              - /url: /contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fmexiaosqwq%2Fmc-search-skill&report=mexiaosqwq+%28user%29
+          - generic [ref=e557]:
+            - heading "Releases 6" [level=2] [ref=e558]:
+              - link "Releases 6" [ref=e559] [cursor=pointer]:
+                - /url: /mexiaosqwq/mc-search-skill/releases
+                - text: Releases
+                - generic "6" [ref=e560]
+            - link "v6.0.0 Latest Jun 5, 20262 weeks ago" [ref=e561] [cursor=pointer]:
+              - /url: /mexiaosqwq/mc-search-skill/releases/tag/v6.0.0
+              - img [ref=e562]
+              - generic [ref=e564]:
+                - generic [ref=e565]:
+                  - generic [ref=e566]: v6.0.0
+                  - 'generic "Label: Latest" [ref=e567]': Latest
+                - generic [ref=e568]: Jun 5, 20262 weeks ago
+            - link "+ 5 releases" [ref=e570] [cursor=pointer]:
+              - /url: /mexiaosqwq/mc-search-skill/releases
+          - generic [ref=e572]:
+            - heading "Packages" [level=2] [ref=e573]:
+              - link "Packages" [ref=e574] [cursor=pointer]:
+                - /url: /users/mexiaosqwq/packages?repo_name=mc-search-skill
+            - generic [ref=e575]: No packages published
+          - generic [ref=e577]:
+            - heading "Contributors 3" [level=2] [ref=e578]:
+              - link "Contributors 3" [ref=e579] [cursor=pointer]:
+                - /url: /mexiaosqwq/mc-search-skill/graphs/contributors
+                - text: Contributors
+                - generic "3" [ref=e580]
+            - list [ref=e581]:
+              - listitem [ref=e582]:
+                - link "@actions-user" [ref=e583] [cursor=pointer]:
+                  - /url: https://github.com/actions-user
+                  - img "@actions-user" [ref=e584]
+                - link "actions-user" [ref=e586] [cursor=pointer]:
+                  - /url: https://github.com/actions-user
+                  - strong [ref=e587]: actions-user
+              - listitem [ref=e588]:
+                - link "@claude" [ref=e589] [cursor=pointer]:
+                  - /url: https://github.com/claude
+                  - img "@claude" [ref=e590]
+                - link "claude Claude" [ref=e592] [cursor=pointer]:
+                  - /url: https://github.com/claude
+                  - strong [ref=e593]: claude
+                  - text: Claude
+              - listitem [ref=e594]:
+                - link "@mexiaosqwq" [ref=e595] [cursor=pointer]:
+                  - /url: https://github.com/mexiaosqwq
+                  - img "@mexiaosqwq" [ref=e596]
+                - link "mexiaosqwq mexiaosh_qwq" [ref=e598] [cursor=pointer]:
+                  - /url: https://github.com/mexiaosqwq
+                  - strong [ref=e599]: mexiaosqwq
+                  - text: mexiaosh_qwq
+          - generic [ref=e601]:
+            - heading "Languages" [level=2] [ref=e602]
+            - list [ref=e606]:
+              - listitem [ref=e607]:
+                - link "Python 100.0%" [ref=e608] [cursor=pointer]:
+                  - /url: /mexiaosqwq/mc-search-skill/search?l=python
+                  - img [ref=e609]
+                  - generic [ref=e611]: Python
+                  - generic [ref=e612]: 100.0%
+  - contentinfo [ref=e614]:
+    - heading "Footer" [level=2] [ref=e615]
+    - generic [ref=e616]:
+      - generic [ref=e617]:
+        - link "GitHub Homepage" [ref=e618] [cursor=pointer]:
+          - /url: https://github.com
+          - img [ref=e619]
+        - generic [ref=e621]: © 2026 GitHub, Inc.
+      - navigation "Footer" [ref=e622]:
+        - heading "Footer navigation" [level=3] [ref=e623]
+        - list "Footer navigation" [ref=e624]:
+          - listitem [ref=e625]:
+            - link "Terms" [ref=e626] [cursor=pointer]:
+              - /url: https://docs.github.com/site-policy/github-terms/github-terms-of-service
+          - listitem [ref=e627]:
+            - link "Privacy" [ref=e628] [cursor=pointer]:
+              - /url: https://docs.github.com/site-policy/privacy-policies/github-privacy-statement
+          - listitem [ref=e629]:
+            - link "Security" [ref=e630] [cursor=pointer]:
+              - /url: https://github.com/security
+          - listitem [ref=e631]:
+            - link "Status" [ref=e632] [cursor=pointer]:
+              - /url: https://www.githubstatus.com/
+          - listitem [ref=e633]:
+            - link "Community" [ref=e634] [cursor=pointer]:
+              - /url: https://github.community/
+          - listitem [ref=e635]:
+            - link "Docs" [ref=e636] [cursor=pointer]:
+              - /url: https://docs.github.com/
+          - listitem [ref=e637]:
+            - link "Contact" [ref=e638] [cursor=pointer]:
+              - /url: https://support.github.com?tags=dotcom-footer
+          - listitem [ref=e639]:
+            - button "Manage cookies" [ref=e641] [cursor=pointer]
+          - listitem [ref=e642]:
+            - button "Do not share my personal information" [ref=e644] [cursor=pointer]
