@@ -91,25 +91,25 @@ export default {
           });
         }
 
-        // Preserve original filename from Content-Disposition header
-        const upstreamHeaders = Object.fromEntries(upstream.headers);
-        const contentDisposition = upstream.headers.get('content-disposition');
-        if (contentDisposition) {
-          upstreamHeaders['Content-Disposition'] = contentDisposition;
+        // Build headers explicitly to preserve Content-Disposition and Content-Type
+        const headers = new Headers();
+        upstream.headers.forEach((value, key) => {
+          headers.set(key, value);
+        });
+        // Ensure Content-Disposition is set for proper filename
+        if (!headers.has('content-disposition')) {
+          // Extract filename from URL as fallback
+          const urlPath = new URL(targetUrl).pathname;
+          const filename = urlPath.split('/').pop() || 'download';
+          headers.set('Content-Disposition', `attachment; filename="${filename}"`);
         }
-        // Ensure Content-Type is set for proper file handling
-        if (!upstreamHeaders['Content-Type']) {
-          upstreamHeaders['Content-Type'] = 'application/octet-stream';
-        }
+        headers.set('Cache-Control', `public, max-age=${cacheTtl}`);
+        headers.set('X-Proxy-Cache', 'MISS');
+        headers.set('Access-Control-Allow-Origin', '*');
 
         response = new Response(upstream.body, {
           status: upstream.status,
-          headers: {
-            ...upstreamHeaders,
-            'Cache-Control': `public, max-age=${cacheTtl}`,
-            'X-Proxy-Cache': 'MISS',
-            'Access-Control-Allow-Origin': '*',
-          },
+          headers,
         });
 
         cache.put(cacheKey, response.clone());
