@@ -19,6 +19,8 @@
   'use strict';
 
   const PROXY_BASE = 'https://github-proxy.xiaosh.xyz/?url=';
+  // 如果子域名路由未生效，临时改用下面这行：
+  // const PROXY_BASE = 'https://xiaosh.xyz/gh/?url=';
 
   // 专用下载/资源子域名（点击这些域名下的资源，或直接访问这些域名，均走代理）
   const DIRECT_PROXY_HOSTS = new Set([

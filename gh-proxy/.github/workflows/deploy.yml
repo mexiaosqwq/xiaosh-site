@@ -1,0 +1,21 @@
+name: Deploy GH Proxy Worker
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'gh-proxy/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gh-proxy
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          command: deploy
