@@ -315,7 +315,14 @@ export default {
 
     // ===== GitHub proxy: /gh/ or ?url= =====
     if (method === 'GET' && (path.startsWith('/gh/') || url.searchParams.has('url'))) {
+      // Debug: log to see if this route is reached
+      console.log('[GH Proxy] Route matched! path=' + path + ' url=' + url.searchParams.get('url'));
       return handleGitHubProxy(request, env);
+    }
+
+    // ===== Debug: log if request falls through =====
+    if (path === '/' && url.searchParams.has('url')) {
+      console.log('[GH Proxy] FALLTHROUGH! path=' + path + ' hasUrl=true');
     }
 
     // ===== Serve images from R2 =====
