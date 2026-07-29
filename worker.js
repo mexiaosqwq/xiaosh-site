@@ -299,6 +299,20 @@ export default {
       });
     }
 
+    // ===== Debug: inspect incoming request =====
+    if (path === '/__debug__') {
+      return new Response(JSON.stringify({
+        url: request.url,
+        path: path,
+        method: method,
+        hasUrlParam: url.searchParams.has('url'),
+        urlParamValue: url.searchParams.get('url'),
+        query: url.search,
+      }), {
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
     // ===== GitHub proxy: /gh/ or ?url= =====
     if (method === 'GET' && (path.startsWith('/gh/') || url.searchParams.has('url'))) {
       return handleGitHubProxy(request, env);
