@@ -144,6 +144,7 @@
       if (!shouldProxy(url)) return;
 
       processedImgs.add(el);
+      el.dataset.ghProxied = '1'; // 标记已处理，让定期扫描跳过
       const blobUrl = await fetchBlob(url.href);
       if (blobUrl) {
         el.src = blobUrl;
