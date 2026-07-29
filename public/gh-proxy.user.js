@@ -1,96 +1,99 @@
 // ==UserScript==
-// @name         GitHub 下载代理加速 (精准重构版)
+// @name         GitHub 下载代理
 // @namespace    https://xiaosh.xyz/
-// @version      1.2.0
-// @description  事件委托高性能拦截 + 真实下载路径精准匹配 + 直链访问自动重定向。
-// @author       xiaosh & DeepSeek
-// @match        https://github.com/*
-// @match        http://github.com/*
+// @version      1.7.0
+// @description  自动代理 GitHub 下载链接、Release 附件及资源直链，提升下载速度
+// @author       xiaosh
+// @match        *://github.com/*
+// @match        *://gist.github.com/*
 // @match        *://raw.githubusercontent.com/*
 // @match        *://codeload.github.com/*
 // @match        *://objects.githubusercontent.com/*
 // @match        *://gist.githubusercontent.com/*
 // @match        *://media.githubusercontent.com/*
+// @match        *://release-assets.githubusercontent.com/*
+// @match        *://github-releases.githubusercontent.com/*
+// @match        *://user-images.githubusercontent.com/*
+// @match        *://private-user-images.githubusercontent.com/*
 // @run-at       document-start
 // @grant        none
 // ==/UserScript==
 
-(function () {
+(() => {
   'use strict';
 
   const PROXY_BASE = 'https://github-proxy.xiaosh.xyz/?url=';
-  // 如果子域名路由未生效，临时改用下面这行：
-  // const PROXY_BASE = 'https://xiaosh.xyz/gh/?url=';
+  const PROXY_HOST = new URL(PROXY_BASE).hostname;
 
-  // 专用下载/资源子域名（点击这些域名下的资源，或直接访问这些域名，均走代理）
-  const DIRECT_PROXY_HOSTS = new Set([
+  // GitHub 资源下载域名（直接代理）
+  const DIRECT_HOSTS = new Set([
     'raw.githubusercontent.com',
     'codeload.github.com',
     'objects.githubusercontent.com',
     'gist.githubusercontent.com',
-    'media.githubusercontent.com'
+    'media.githubusercontent.com',
+    'release-assets.githubusercontent.com',
+    'github-releases.githubusercontent.com',
+    'user-images.githubusercontent.com',
+    'private-user-images.githubusercontent.com'
   ]);
 
-  // 场景 1：如果用户直接在地址栏打开了 raw / codeload 等资源直链，立即自动重定向至代理
-  if (DIRECT_PROXY_HOSTS.has(window.location.hostname)) {
-    window.location.replace(PROXY_BASE + encodeURIComponent(window.location.href));
+  // github.com / gist.github.com 上的下载路径
+  const DOWNLOAD_PATHS = [
+    /^\/[^/]+\/[^/]+\/releases\/download\//,
+    /^\/[^/]+\/[^/]+\/releases\/latest\/download\//,
+    /^\/[^/]+\/[^/]+\/(?:archive|zipball|tarball)\//,
+    /^\/[^/]+\/[^/]+\/(?:files|assets)\//,
+    /^\/user-attachments\/(?:files|assets)\//
+  ];
+
+  function shouldProxy(url) {
+    if (!url) return false;
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') return false;
+    if (url.hostname === PROXY_HOST) return false;
+    if (DIRECT_HOSTS.has(url.hostname)) return true;
+    return (url.hostname === 'github.com' || url.hostname === 'gist.github.com') &&
+      DOWNLOAD_PATHS.some(p => p.test(url.pathname));
+  }
+
+  // 直接访问 CDN 域名时自动跳转代理
+  if (DIRECT_HOSTS.has(location.hostname)) {
+    try {
+      const url = new URL(location.href);
+      if (shouldProxy(url)) {
+        location.replace(PROXY_BASE + encodeURIComponent(url.href));
+      }
+    } catch { /* ignore */ }
     return;
   }
 
-  // 场景 2：在 github.com 主站上的链接动态拦截逻辑
+  // 穿透 Shadow DOM 获取 <a> 元素
+  function getLink(event) {
+    const path = event.composedPath?.() || [];
+    for (const el of path) {
+      if (el?.tagName === 'A' && el.hasAttribute('href')) return el;
+    }
+    return null;
+  }
 
-  // github.com 主站上【严格限定】为下载/文件的路径正则（严禁包含 /blob/ 等页面查看路径）
-  const GITHUB_PROXY_PATTERNS = [
-    /\/releases\/download\//,          // Release 发布包
-    /\/archive\//,                     // 源码打包 (zip / tar.gz)
-    /\/raw\//,                         // Raw 原始文件直链
-    /\/user-attachments\/files\//     // Issue/PR 中上传的日志/附件
-  ];
+  function rewriteLink(event) {
+    const link = getLink(event);
+    if (!link || link.dataset.ghProxied) return;
 
-  function shouldProxy(urlStr) {
+    let url;
     try {
-      const u = new URL(urlStr);
-
-      // 已是代理链接则跳过
-      if (u.href.startsWith(PROXY_BASE)) return false;
-
-      // 1. 指向专用资源域名的链接
-      if (DIRECT_PROXY_HOSTS.has(u.hostname)) return true;
-
-      // 2. github.com 主站上的特定下载路径
-      if (u.hostname === 'github.com') {
-        return GITHUB_PROXY_PATTERNS.some(pattern => pattern.test(u.pathname));
-      }
-
-      return false;
+      url = new URL(link.href, location.href);
     } catch {
-      return false;
+      return;
     }
+
+    if (!shouldProxy(url)) return;
+
+    link.dataset.ghProxied = '1';
+    link.href = PROXY_BASE + encodeURIComponent(url.href);
   }
 
-  function getProxyUrl(originalUrl) {
-    return PROXY_BASE + encodeURIComponent(originalUrl);
-  }
-
-  function handleAction(e) {
-    const a = e.target.closest('a[href]');
-    if (!a) return;
-
-    // 读取原始 Href，防止重复拼接
-    const originalHref = a.getAttribute('data-original-href') || a.href;
-
-    if (shouldProxy(originalHref)) {
-      if (!a.hasAttribute('data-original-href')) {
-        a.setAttribute('data-original-href', originalHref);
-      }
-      a.href = getProxyUrl(originalHref);
-    }
-  }
-
-  // 捕获阶段事件委托：涵盖点击、右键菜单、中键后台打开
-  document.addEventListener('click', handleAction, true);
-  document.addEventListener('contextmenu', handleAction, true);
-  document.addEventListener('auxclick', handleAction, true);
-
-  console.log('[GH Proxy] 高性能代理拦截 (v1.2.0) 已启用 → ' + PROXY_BASE);
+  // pointerdown 覆盖左键/中键/右键，click 兜底键盘 Enter
+  document.addEventListener('pointerdown', rewriteLink, true);
+  document.addEventListener('click', rewriteLink, true);
 })();
