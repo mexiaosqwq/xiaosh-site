@@ -1,22 +1,17 @@
 // ==UserScript==
 // @name         GitHub 下载与图片代理
 // @namespace    https://xiaosh.xyz/
-// @version      3.0.0
-// @description  自动代理 GitHub 下载链接和图片，页面加载即替换，加速渲染
+// @version      3.2.0
+// @description  自动代理 GitHub 下载链接和图片，打破 CSP 限制，支持内存缓存与 6 并发控制
 // @author       xiaosh
 // @match        *://github.com/*
 // @match        *://gist.github.com/*
-// @match        *://raw.githubusercontent.com/*
+// @match        *://*.githubusercontent.com/*
 // @match        *://codeload.github.com/*
-// @match        *://objects.githubusercontent.com/*
-// @match        *://gist.githubusercontent.com/*
-// @match        *://media.githubusercontent.com/*
-// @match        *://release-assets.githubusercontent.com/*
-// @match        *://github-releases.githubusercontent.com/*
-// @match        *://user-images.githubusercontent.com/*
-// @match        *://private-user-images.githubusercontent.com/*
 // @run-at       document-start
-// @grant        none
+// @grant        GM_xmlhttpRequest
+// @connect      github-proxy.xiaosh.xyz
+// @connect      *
 // ==/UserScript==
 
 (() => {
@@ -25,18 +20,8 @@
   const PROXY_BASE = 'https://github-proxy.xiaosh.xyz/?url=';
   const PROXY_HOST = new URL(PROXY_BASE).hostname;
 
-  // GitHub 资源域名
-  const DIRECT_HOSTS = new Set([
-    'raw.githubusercontent.com',
-    'codeload.github.com',
-    'objects.githubusercontent.com',
-    'gist.githubusercontent.com',
-    'media.githubusercontent.com',
-    'release-assets.githubusercontent.com',
-    'github-releases.githubusercontent.com',
-    'user-images.githubusercontent.com',
-    'private-user-images.githubusercontent.com'
-  ]);
+  // GitHub 资源域名（自动包含所有 githubusercontent.com 子域名）
+  const IS_DIRECT_HOST = host => /(^|\.)githubusercontent\.com$|^codeload\.github\.com$/i.test(host);
 
   // github.com / gist.github.com 上的下载路径
   const DOWNLOAD_PATHS = [
@@ -47,29 +32,37 @@
     /^\/user-attachments\/(?:files|assets)\//
   ];
 
+  // 图片扩展名（用于判断 github.com 上的图片链接）
+  const IMAGE_EXT = /\.(?:png|jpe?g|gif|webp|svg|ico)(?:\?.*)?$/i;
+
   function shouldProxy(url) {
     if (!url || !url.protocol.startsWith('http') || url.hostname === PROXY_HOST) return false;
-    if (DIRECT_HOSTS.has(url.hostname)) return true;
+
+    // CDN 域名直接代理
+    if (IS_DIRECT_HOST(url.hostname)) return true;
+
+    // 排除 /blob/ 和 /tree/ 等查看页面
+    if (url.pathname.includes('/blob/') || url.pathname.includes('/tree/')) return false;
+
+    // github.com / gist.github.com 上的下载和图片路径
     return (url.hostname === 'github.com' || url.hostname === 'gist.github.com') &&
-      DOWNLOAD_PATHS.some(p => p.test(url.pathname));
+      (DOWNLOAD_PATHS.some(p => p.test(url.pathname)) || IMAGE_EXT.test(url.pathname));
   }
 
   function getProxyURL(url) {
     return PROXY_BASE + encodeURIComponent(url.href);
   }
 
-  // 直接访问 CDN 域名时自动跳转代理
-  if (DIRECT_HOSTS.has(location.hostname)) {
+  // 直接访问 CDN 域名时自动重定向
+  if (IS_DIRECT_HOST(location.hostname)) {
     try {
       const url = new URL(location.href);
-      if (shouldProxy(url)) {
-        location.replace(getProxyURL(url));
-      }
+      if (shouldProxy(url)) location.replace(getProxyURL(url));
     } catch { /* ignore */ }
     return;
   }
 
-  // --- 替换 <a> 下载链接 ---
+  // --- 模块 A: 替换 <a> 下载链接 ---
   function rewriteLink(element) {
     if (element.dataset.ghProxied) return;
     const href = element.getAttribute('href');
@@ -83,44 +76,132 @@
     } catch { /* ignore */ }
   }
 
-  // --- 替换 <img> 图片链接 ---
-  function rewriteImage(element) {
-    if (element.dataset.ghProxied) return;
+  // --- 模块 B: 6 并发队列与 Blob 缓存 ---
+  class ConcurrencyQueue {
+    constructor(maxConcurrent = 6) {
+      this.max = maxConcurrent;
+      this.active = 0;
+      this.queue = [];
+    }
+    add(fn) {
+      return new Promise((resolve, reject) => {
+        this.queue.push({ fn, resolve, reject });
+        this.next();
+      });
+    }
+    next() {
+      while (this.active < this.max && this.queue.length > 0) {
+        const { fn, resolve, reject } = this.queue.shift();
+        this.active++;
+        fn().then(resolve).catch(reject).finally(() => {
+          this.active--;
+          this.next();
+        });
+      }
+    }
+  }
+
+  const reqQueue = new ConcurrencyQueue(6);
+  const blobCache = new Map();
+  const MAX_CACHE_SIZE = 200; // 限制缓存数量防止内存泄漏
+  const processedImgs = new WeakSet();
+
+  function fetchImageBlob(targetUrlStr) {
+    if (blobCache.has(targetUrlStr)) return blobCache.get(targetUrlStr);
+
+    const promise = reqQueue.add(() => new Promise((resolve) => {
+      GM_xmlhttpRequest({
+        method: 'GET',
+        url: getProxyURL(new URL(targetUrlStr)),
+        responseType: 'blob',
+        timeout: 15000,
+        onload: (res) => {
+          if (res.status === 200 && res.response) {
+            resolve(URL.createObjectURL(res.response));
+          } else {
+            resolve(null);
+          }
+        },
+        onerror: () => resolve(null),
+        ontimeout: () => resolve(null)
+      });
+    }));
+
+    // 限制缓存大小，淘汰最旧的条目
+    if (blobCache.size >= MAX_CACHE_SIZE) {
+      const firstKey = blobCache.keys().next().value;
+      const oldBlob = blobCache.get(firstKey);
+      if (oldBlob) {
+        oldBlob.then(url => { if (url) URL.revokeObjectURL(url); }).catch(() => {});
+      }
+      blobCache.delete(firstKey);
+    }
+
+    blobCache.set(targetUrlStr, promise);
+    return promise;
+  }
+
+  // --- 模块 C: 替换 <img> 图片链接（使用 Blob 绕过 CSP） ---
+  async function rewriteImage(element) {
+    if (processedImgs.has(element)) return;
+
+    // 移除 <picture> 中的 <source>，防止干扰
+    if (element.parentElement?.tagName === 'PICTURE') {
+      element.parentElement.querySelectorAll('source').forEach(s => s.remove());
+    }
+
     const src = element.getAttribute('src');
-    if (!src || src.startsWith('blob:') || src.includes(PROXY_HOST)) return;
+    if (!src || src.startsWith('blob:')) return;
+
     try {
       const url = new URL(src, location.href);
-      if (shouldProxy(url)) {
-        element.src = getProxyURL(url);
-        element.dataset.ghProxied = '1';
-        // 移除懒加载，立即加载
-        if (element.hasAttribute('loading')) {
-          element.removeAttribute('loading');
-        }
+      if (!shouldProxy(url)) return;
+
+      processedImgs.add(element);
+
+      const blobUrl = await fetchImageBlob(url.href);
+      if (blobUrl) {
+        element.src = blobUrl;
+        if (element.hasAttribute('srcset')) element.removeAttribute('srcset');
+        if (element.hasAttribute('loading')) element.removeAttribute('loading');
       }
     } catch { /* ignore */ }
   }
 
-  // --- 扫描并替换节点 ---
+  // --- 视口优先懒加载 ---
+  const imgObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        imgObserver.unobserve(img);
+        rewriteImage(img);
+      }
+    });
+  }, { rootMargin: '200px' });
+
+  function handleImg(img) {
+    if (processedImgs.has(img)) return;
+    const src = img.getAttribute('src');
+    if (!src || src.startsWith('blob:')) return;
+    try {
+      const url = new URL(src, location.href);
+      if (shouldProxy(url)) {
+        imgObserver.observe(img);
+      }
+    } catch { /* ignore */ }
+  }
+
+  // --- 扫描与 Shadow DOM 穿透 ---
   function scanNode(node) {
-    if (node.tagName === 'IMG') {
-      rewriteImage(node);
-    } else if (node.tagName === 'A') {
-      rewriteLink(node);
-    }
-    // 处理 <picture> 内的 <source>
-    if (node.tagName === 'PICTURE') {
-      node.querySelectorAll('source').forEach(s => s.remove());
-    }
-    // 递归子节点
+    if (!node) return;
+    if (node.tagName === 'IMG') handleImg(node);
+    else if (node.tagName === 'A') rewriteLink(node);
+
     if (node.querySelectorAll) {
-      node.querySelectorAll('img').forEach(rewriteImage);
+      node.querySelectorAll('img').forEach(handleImg);
       node.querySelectorAll('a[href]').forEach(rewriteLink);
     }
-    // 穿透 Shadow DOM
-    if (node.shadowRoot) {
-      scanNode(node.shadowRoot);
-    }
+    if (node.shadowRoot) scanNode(node.shadowRoot);
   }
 
   // --- 初始扫描 ---
@@ -138,11 +219,8 @@
   const observer = new MutationObserver(mutations => {
     for (const m of mutations) {
       if (m.type === 'attributes') {
-        if (m.target.tagName === 'IMG' && m.attributeName === 'src') {
-          rewriteImage(m.target);
-        } else if (m.target.tagName === 'A' && m.attributeName === 'href') {
-          rewriteLink(m.target);
-        }
+        if (m.target.tagName === 'IMG' && m.attributeName === 'src') handleImg(m.target);
+        else if (m.target.tagName === 'A' && m.attributeName === 'href') rewriteLink(m.target);
       } else {
         m.addedNodes.forEach(node => {
           if (node.nodeType === 1) scanNode(node);
@@ -158,26 +236,14 @@
     attributeFilter: ['src', 'href']
   });
 
-  // --- 预加载可视区域图片 ---
-  if ('IntersectionObserver' in window) {
-    const imgObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const img = entry.target;
-          imgObserver.unobserve(img);
-          // 强制加载懒加载图片
-          if (img.dataset.src && !img.src) {
-            img.src = img.dataset.src;
-          }
-        }
-      });
-    }, { rootMargin: '200px' });
+  // 事件委托兜底 <a> 链接重写
+  ['pointerover', 'pointerdown', 'click'].forEach(type => {
+    document.addEventListener(type, e => {
+      const path = e.composedPath?.() || [];
+      const a = path.find(el => el?.tagName === 'A' && el.hasAttribute?.('href'));
+      if (a) rewriteLink(a);
+    }, true);
+  });
 
-    // 扫描已有懒加载图片
-    document.querySelectorAll('img[loading="lazy"], img[data-src]').forEach(img => {
-      imgObserver.observe(img);
-    });
-  }
-
-  console.log('[GH Proxy] v3.0.0 已启用，图片即时代理');
+  console.log('[GH Proxy] v3.2.0 已启用');
 })();
