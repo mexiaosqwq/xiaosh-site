@@ -1,5 +1,4 @@
 // ===== GitHub Proxy Config =====
-// 允许代理的 GitHub 相关域名（白名单，防止被滥用为开放代理）
 const GITHUB_HOSTS = [
   'github.com',
   'raw.githubusercontent.com',
@@ -9,7 +8,6 @@ const GITHUB_HOSTS = [
   'github-cloud.s3.amazonaws.com',
 ];
 
-// 允许代理的路径前缀（只代理下载类请求）
 const ALLOWED_PREFIXES = [
   '/releases/download/',
   '/archive/',
@@ -17,15 +15,13 @@ const ALLOWED_PREFIXES = [
   '/codeload/',
 ];
 
-// 缓存时间（秒）：Release/固定版本缓存 24 小时，其他 1 小时
-const CACHE_TTL_FIXED = 86400;
-const CACHE_TTL_DEFAULT = 3600;
+const CACHE_TTL_FIXED = 86400;  // 24h for versioned releases
+const CACHE_TTL_DEFAULT = 3600; // 1h for others
 
 function isAllowedUrl(targetUrl) {
   try {
     const u = new URL(targetUrl);
     if (!GITHUB_HOSTS.includes(u.hostname)) return false;
-    // 对于 github.com 主机，只允许下载类路径
     if (u.hostname === 'github.com') {
       return ALLOWED_PREFIXES.some(p => u.pathname.startsWith(p));
     }
@@ -38,16 +34,15 @@ function isAllowedUrl(targetUrl) {
 async function handleGitHubProxy(request, env) {
   const url = new URL(request.url);
 
-  // 支持两种调用方式：
-  // 1. ?url=<encoded>  （油猴脚本推荐）
-  // 2. /gh/<原始路径>   （直接浏览器访问）
+  // Support two call styles:
+  // 1. ?url=<encoded>  (Tampermonkey-friendly)
+  // 2. /<original-path> (direct browser access)
   let targetUrl = url.searchParams.get('url');
 
   if (!targetUrl) {
     const path = url.pathname;
-    if (path.startsWith('/gh/')) {
-      targetUrl = decodeURIComponent(path.slice(4));
-      // 自动补全协议
+    if (path.length > 1) {
+      targetUrl = decodeURIComponent(path.slice(1));
       if (!targetUrl.startsWith('http')) {
         targetUrl = 'https://' + targetUrl;
       }
@@ -58,13 +53,12 @@ async function handleGitHubProxy(request, env) {
     return new Response(
       JSON.stringify({
         error: 'Missing url parameter',
-        usage: '?url=https://github.com/.../releases/download/.../file.zip',
+        usage: 'https://github-proxy.xiaosh.xyz/?url=https://github.com/.../releases/download/.../file.zip',
       }),
       { status: 400, headers: { 'Content-Type': 'application/json' } }
     );
   }
 
-  // 安全校验：只允许白名单域名
   if (!isAllowedUrl(targetUrl)) {
     return new Response(
       JSON.stringify({
@@ -76,17 +70,14 @@ async function handleGitHubProxy(request, env) {
     );
   }
 
-  // 判断是否为固定版本（可长期缓存）
   const isFixedVersion = /\/(releases\/download\/v[\d.]+|archive\/refs\/tags\/v[\d.]+)/.test(targetUrl);
   const cacheTtl = isFixedVersion ? CACHE_TTL_FIXED : CACHE_TTL_DEFAULT;
 
-  // 尝试从 Cloudflare 缓存读取
   const cacheKey = new Request(targetUrl);
   const cache = caches.default;
   let response = await cache.match(cacheKey);
 
   if (!response) {
-    // 缓存未命中，请求 GitHub
     try {
       const upstream = await fetch(targetUrl, {
         redirect: 'follow',
@@ -96,9 +87,8 @@ async function handleGitHubProxy(request, env) {
         },
       });
 
-      // 只缓存成功的 200 响应
+      // Only cache successful 200 responses; pass through errors uncached
       if (upstream.status !== 200) {
-        // 透传错误状态码，不缓存
         return new Response(upstream.body, {
           status: upstream.status,
           statusText: upstream.statusText,
@@ -106,7 +96,6 @@ async function handleGitHubProxy(request, env) {
         });
       }
 
-      // 流式返回，同时写入缓存
       response = new Response(upstream.body, {
         status: upstream.status,
         headers: {
@@ -118,7 +107,7 @@ async function handleGitHubProxy(request, env) {
         },
       });
 
-      // 写入缓存（fire-and-forget，不阻塞当前响应）
+      // Fire-and-forget cache write (don't block response)
       cache.put(cacheKey, response.clone());
     } catch (e) {
       return new Response(
@@ -131,7 +120,7 @@ async function handleGitHubProxy(request, env) {
     }
   }
 
-  // 缓存命中，添加标记头
+  // Cache hit: add marker header
   response = new Response(response.body, response.headers);
   response.headers.set('X-Proxy-Cache', 'HIT');
 
@@ -144,7 +133,6 @@ export default {
     const path = url.pathname;
     const method = request.method;
 
-    // CORS headers (same-origin, but keep for safety)
     const cors = {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
@@ -194,7 +182,6 @@ export default {
 
         let name = file.name.replace(/[/\\]/g, '_');
 
-        // Handle duplicate filenames
         const existing = await env.IMAGE_BUCKET.get(name);
         if (existing) {
           const dot = name.lastIndexOf('.');
@@ -263,7 +250,6 @@ export default {
           });
         }
 
-        // Check new name doesn't already exist
         const existing = await env.IMAGE_BUCKET.get(newName);
         if (existing) {
           return new Response(JSON.stringify({ error: 'Name already exists' }), {
@@ -271,7 +257,6 @@ export default {
           });
         }
 
-        // Copy to new key, preserving metadata
         await env.IMAGE_BUCKET.put(newName, await object.arrayBuffer(), {
           httpMetadata: object.httpMetadata,
         });
@@ -288,59 +273,8 @@ export default {
       }
     }
 
-    // ===== Test route: verify Worker is running latest code =====
-    if (path === '/__version__') {
-      return new Response(JSON.stringify({
-        version: 'gh-proxy-v1',
-        time: new Date().toISOString(),
-        hasProxy: true,
-      }), {
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    // ===== Debug: inspect incoming request =====
-    if (path === '/__debug__') {
-      return new Response(JSON.stringify({
-        url: request.url,
-        path: path,
-        method: method,
-        hasUrlParam: url.searchParams.has('url'),
-        urlParamValue: url.searchParams.get('url'),
-        query: url.search,
-      }), {
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    // ===== TEST: root path =====
-    if (path === '/' && method === 'GET') {
-      return new Response(JSON.stringify({
-        ok: true,
-        matched: 'root-path',
-        hasUrlParam: url.searchParams.has('url'),
-        query: url.search,
-      }), {
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    // ===== TEST: does ?url= routing work at all? =====
-    if (method === 'GET' && url.searchParams.has('url')) {
-      const targetUrl = url.searchParams.get('url');
-      // Return JSON instead of proxying, to isolate routing from fetch logic
-      return new Response(JSON.stringify({
-        ok: true,
-        matched: 'query-param-route',
-        targetUrl: targetUrl,
-        isAllowed: isAllowedUrl(targetUrl),
-      }), {
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    // ===== GitHub proxy: /gh/ =====
-    if (method === 'GET' && path.startsWith('/gh/')) {
+    // ===== GitHub proxy: ?url= or /<path> =====
+    if (method === 'GET' && (path.length > 1 || url.searchParams.has('url'))) {
       return handleGitHubProxy(request, env);
     }
 
@@ -358,7 +292,6 @@ export default {
             },
           });
         }
-        // Fall through to static assets if not in R2
       }
     }
 

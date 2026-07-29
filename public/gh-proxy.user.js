@@ -4,7 +4,8 @@
 // @version      1.2.0
 // @description  事件委托高性能拦截 + 真实下载路径精准匹配 + 直链访问自动重定向。
 // @author       xiaosh & DeepSeek
-// @match        *://github.com/*
+// @match        https://github.com/*
+// @match        http://github.com/*
 // @match        *://raw.githubusercontent.com/*
 // @match        *://codeload.github.com/*
 // @match        *://objects.githubusercontent.com/*
@@ -17,7 +18,7 @@
 (function () {
   'use strict';
 
-  const PROXY_BASE = 'https://xiaosh.xyz/?url=';
+  const PROXY_BASE = 'https://github-proxy.xiaosh.xyz/?url=';
 
   // 专用下载/资源子域名（点击这些域名下的资源，或直接访问这些域名，均走代理）
   const DIRECT_PROXY_HOSTS = new Set([
