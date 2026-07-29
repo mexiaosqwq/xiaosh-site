@@ -313,16 +313,23 @@ export default {
       });
     }
 
-    // ===== GitHub proxy: /gh/ or ?url= =====
-    if (method === 'GET' && (path.startsWith('/gh/') || url.searchParams.has('url'))) {
-      // Debug: log to see if this route is reached
-      console.log('[GH Proxy] Route matched! path=' + path + ' url=' + url.searchParams.get('url'));
-      return handleGitHubProxy(request, env);
+    // ===== TEST: does ?url= routing work at all? =====
+    if (method === 'GET' && url.searchParams.has('url')) {
+      const targetUrl = url.searchParams.get('url');
+      // Return JSON instead of proxying, to isolate routing from fetch logic
+      return new Response(JSON.stringify({
+        ok: true,
+        matched: 'query-param-route',
+        targetUrl: targetUrl,
+        isAllowed: isAllowedUrl(targetUrl),
+      }), {
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
-    // ===== Debug: log if request falls through =====
-    if (path === '/' && url.searchParams.has('url')) {
-      console.log('[GH Proxy] FALLTHROUGH! path=' + path + ' hasUrl=true');
+    // ===== GitHub proxy: /gh/ =====
+    if (method === 'GET' && path.startsWith('/gh/')) {
+      return handleGitHubProxy(request, env);
     }
 
     // ===== Serve images from R2 =====
