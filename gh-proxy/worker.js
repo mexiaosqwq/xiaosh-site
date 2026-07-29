@@ -126,8 +126,6 @@ export default {
           status: upstream.status,
           headers,
         });
-
-        cache.put(cacheKey, response.clone());
       } catch (e) {
         return new Response(
           JSON.stringify({ error: 'Fetch failed', message: e.message }),
