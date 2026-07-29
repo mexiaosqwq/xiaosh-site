@@ -106,17 +106,19 @@ export default {
           });
         }
 
-        // Build headers explicitly to preserve Content-Disposition and Content-Type
+        // Extract filename from URL for Content-Disposition
+        const urlPath = new URL(targetUrl).pathname;
+        const filename = urlPath.split('/').pop() || 'download';
+
+        // Build response headers, always set Content-Disposition manually
         const headers = new Headers();
         upstream.headers.forEach((value, key) => {
-          headers.set(key, value);
+          // Skip content-disposition and content-type, we set them manually
+          if (key.toLowerCase() !== 'content-disposition') {
+            headers.set(key, value);
+          }
         });
-        // Ensure Content-Disposition is set for proper filename
-        if (!headers.has('content-disposition')) {
-          const urlPath = new URL(targetUrl).pathname;
-          const filename = urlPath.split('/').pop() || 'download';
-          headers.set('Content-Disposition', `attachment; filename="${filename}"`);
-        }
+        headers.set('Content-Disposition', `attachment; filename="${filename}"`);
         headers.set('Cache-Control', `public, max-age=${cacheTtl}`);
         headers.set('X-Proxy-Cache', 'MISS');
         headers.set('Access-Control-Allow-Origin', '*');
