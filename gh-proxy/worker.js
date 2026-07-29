@@ -91,6 +91,14 @@ export default {
           });
         }
 
+        // Debug: log upstream headers to see what's available
+        const debugHeaders = {};
+        upstream.headers.forEach((value, key) => {
+          debugHeaders[key] = value;
+        });
+        console.log('[GH Proxy] Upstream headers:', JSON.stringify(debugHeaders));
+        console.log('[GH Proxy] Content-Disposition:', upstream.headers.get('content-disposition'));
+
         // Build headers explicitly to preserve Content-Disposition and Content-Type
         const headers = new Headers();
         upstream.headers.forEach((value, key) => {
