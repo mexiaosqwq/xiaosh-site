@@ -118,7 +118,7 @@ export default {
           }
         });
         headers.set('Content-Disposition', `attachment; filename="${filename}"`);
-        headers.set('Cache-Control', `public, max-age=${cacheTtl}`);
+        headers.set('Cache-Control', 'no-store, private');
         headers.set('X-Proxy-Cache', 'MISS');
         headers.set('Access-Control-Allow-Origin', '*');
 
