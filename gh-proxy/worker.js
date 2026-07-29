@@ -109,18 +109,19 @@ export default {
         const urlPath = new URL(targetUrl).pathname;
         const filename = urlPath.split('/').pop() || 'download';
 
-        // Build response headers, always set Content-Disposition manually
-        const headers = new Headers();
+        // Use plain object for headers to avoid Headers API issues
+        const headers = {
+          'Content-Disposition': `attachment; filename="${filename}"`,
+          'Cache-Control': 'no-store, private',
+          'X-Proxy-Cache': 'MISS',
+          'Access-Control-Allow-Origin': '*',
+        };
+        // Copy upstream headers except content-disposition
         upstream.headers.forEach((value, key) => {
-          // Skip content-disposition and content-type, we set them manually
           if (key.toLowerCase() !== 'content-disposition') {
-            headers.set(key, value);
+            headers[key] = value;
           }
         });
-        headers.set('Content-Disposition', `attachment; filename="${filename}"`);
-        headers.set('Cache-Control', 'no-store, private');
-        headers.set('X-Proxy-Cache', 'MISS');
-        headers.set('Access-Control-Allow-Origin', '*');
 
         response = new Response(upstream.body, {
           status: upstream.status,
