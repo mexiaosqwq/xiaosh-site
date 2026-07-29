@@ -22,7 +22,7 @@ function isAllowedUrl(targetUrl) {
     const u = new URL(targetUrl);
     if (!GITHUB_HOSTS.includes(u.hostname)) return false;
     if (u.hostname === 'github.com') {
-      return ALLOWED_PREFIXES.some(p => u.pathname.startsWith(p));
+      return ALLOWED_PREFIXES.some(p => u.pathname.includes(p));
     }
     return true;
   } catch {
