@@ -313,6 +313,18 @@ export default {
       });
     }
 
+    // ===== TEST: root path =====
+    if (path === '/' && method === 'GET') {
+      return new Response(JSON.stringify({
+        ok: true,
+        matched: 'root-path',
+        hasUrlParam: url.searchParams.has('url'),
+        query: url.search,
+      }), {
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
     // ===== TEST: does ?url= routing work at all? =====
     if (method === 'GET' && url.searchParams.has('url')) {
       const targetUrl = url.searchParams.get('url');
