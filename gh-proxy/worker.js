@@ -69,7 +69,7 @@ export default {
     const isFixedVersion = /\/(releases\/download\/v[\d.]+|archive\/refs\/tags\/v[\d.]+)/.test(targetUrl);
     const cacheTtl = isFixedVersion ? CACHE_TTL_FIXED : CACHE_TTL_DEFAULT;
 
-    const cacheKey = new Request(targetUrl);
+    const cacheKey = new Request(targetUrl + '-v3'); // bust cache
     const cache = caches.default;
     let response = await cache.match(cacheKey);
 
