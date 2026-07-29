@@ -199,5 +199,10 @@
     }, true);
   });
 
+  // 定期扫描兜底（捕获 JS 动态插入的图片）
+  setInterval(() => {
+    document.querySelectorAll('img:not([data-gh-proxied])').forEach(rewriteImage);
+  }, 2000);
+
   console.log('[GH Proxy] v4.0.0 已启用');
 })();
