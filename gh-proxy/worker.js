@@ -1,3 +1,6 @@
+const CACHE_TTL_FIXED = 86400;  // 24h for versioned releases
+const CACHE_TTL_DEFAULT = 3600; // 1h for others
+
 const GITHUB_HOSTS = [
   'github.com',
   'raw.githubusercontent.com',
@@ -63,6 +66,20 @@ export default {
       );
     }
 
+    // Check Worker cache first (use versioned cache key to avoid stale entries)
+    const isFixedVersion = /\/(releases\/download\/v[\d.]+|archive\/refs\/tags\/v[\d.]+)/.test(targetUrl);
+    const cacheTtl = isFixedVersion ? CACHE_TTL_FIXED : CACHE_TTL_DEFAULT;
+    const cacheKey = new Request(targetUrl + '-v4');
+    const cache = caches.default;
+    const cached = await cache.match(cacheKey);
+    if (cached) {
+      // Return cached response with HIT marker
+      const headers = {};
+      cached.headers.forEach((value, key) => { headers[key] = value; });
+      headers['X-Proxy-Cache'] = 'HIT';
+      return new Response(cached.body, { status: 200, headers });
+    }
+
     try {
       let upstream = await fetch(targetUrl, {
         redirect: 'manual',
@@ -100,16 +117,20 @@ export default {
       const filename = urlPath.split('/').pop() || 'download';
 
       // Build response with Content-Disposition
-      return new Response(upstream.body, {
+      const response = new Response(upstream.body, {
         status: 200,
         headers: {
           'Content-Type': upstream.headers.get('content-type') || 'application/octet-stream',
           'Content-Disposition': `attachment; filename="${filename}"`,
-          'Cache-Control': 'no-store',
+          'Cache-Control': `public, max-age=${cacheTtl}`,
           'Access-Control-Allow-Origin': '*',
-          'X-Proxy': 'gh-proxy-xiaosh',
+          'X-Proxy-Cache': 'MISS',
         },
       });
+
+      // Store in Worker cache
+      cache.put(cacheKey, response.clone());
+      return response;
     } catch (e) {
       return new Response(
         JSON.stringify({ error: 'Fetch failed', message: e.message }),
