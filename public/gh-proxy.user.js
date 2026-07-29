@@ -168,17 +168,7 @@
     } catch { /* ignore */ }
   }
 
-  // --- 视口优先懒加载 ---
-  const imgObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const img = entry.target;
-        imgObserver.unobserve(img);
-        rewriteImage(img);
-      }
-    });
-  }, { rootMargin: '200px' });
-
+  // --- 立即代理所有图片（不走 IntersectionObserver） ---
   function handleImg(img) {
     if (processedImgs.has(img)) return;
     const src = img.getAttribute('src');
@@ -186,7 +176,7 @@
     try {
       const url = new URL(src, location.href);
       if (shouldProxy(url)) {
-        imgObserver.observe(img);
+        rewriteImage(img); // 立即代理，不等滚动
       }
     } catch { /* ignore */ }
   }
