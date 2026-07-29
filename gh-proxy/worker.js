@@ -3,11 +3,17 @@ const CACHE_TTL_DEFAULT = 3600; // 1h for others
 
 const GITHUB_HOSTS = [
   'github.com',
+  'gist.github.com',
   'raw.githubusercontent.com',
   'objects.githubusercontent.com',
   'codeload.github.com',
   'github-releases.githubusercontent.com',
   'github-cloud.s3.amazonaws.com',
+  'release-assets.githubusercontent.com',
+  'gist.githubusercontent.com',
+  'media.githubusercontent.com',
+  'user-images.githubusercontent.com',
+  'private-user-images.githubusercontent.com'
 ];
 
 const ALLOWED_PREFIXES = [
