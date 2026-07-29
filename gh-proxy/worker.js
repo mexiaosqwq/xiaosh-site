@@ -91,10 +91,21 @@ export default {
           });
         }
 
+        // Preserve original filename from Content-Disposition header
+        const upstreamHeaders = Object.fromEntries(upstream.headers);
+        const contentDisposition = upstream.headers.get('content-disposition');
+        if (contentDisposition) {
+          upstreamHeaders['Content-Disposition'] = contentDisposition;
+        }
+        // Ensure Content-Type is set for proper file handling
+        if (!upstreamHeaders['Content-Type']) {
+          upstreamHeaders['Content-Type'] = 'application/octet-stream';
+        }
+
         response = new Response(upstream.body, {
           status: upstream.status,
           headers: {
-            ...Object.fromEntries(upstream.headers),
+            ...upstreamHeaders,
             'Cache-Control': `public, max-age=${cacheTtl}`,
             'X-Proxy-Cache': 'MISS',
             'Access-Control-Allow-Origin': '*',
