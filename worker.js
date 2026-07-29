@@ -1,3 +1,143 @@
+// ===== GitHub Proxy Config =====
+// 允许代理的 GitHub 相关域名（白名单，防止被滥用为开放代理）
+const GITHUB_HOSTS = [
+  'github.com',
+  'raw.githubusercontent.com',
+  'objects.githubusercontent.com',
+  'codeload.github.com',
+  'github-releases.githubusercontent.com',
+  'github-cloud.s3.amazonaws.com',
+];
+
+// 允许代理的路径前缀（只代理下载类请求）
+const ALLOWED_PREFIXES = [
+  '/releases/download/',
+  '/archive/',
+  '/raw/',
+  '/codeload/',
+];
+
+// 缓存时间（秒）：Release/固定版本缓存 24 小时，其他 1 小时
+const CACHE_TTL_FIXED = 86400;
+const CACHE_TTL_DEFAULT = 3600;
+
+function isAllowedUrl(targetUrl) {
+  try {
+    const u = new URL(targetUrl);
+    if (!GITHUB_HOSTS.includes(u.hostname)) return false;
+    // 对于 github.com 主机，只允许下载类路径
+    if (u.hostname === 'github.com') {
+      return ALLOWED_PREFIXES.some(p => u.pathname.startsWith(p));
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function handleGitHubProxy(request, env) {
+  const url = new URL(request.url);
+
+  // 支持两种调用方式：
+  // 1. ?url=<encoded>  （油猴脚本推荐）
+  // 2. /gh/<原始路径>   （直接浏览器访问）
+  let targetUrl = url.searchParams.get('url');
+
+  if (!targetUrl) {
+    const path = url.pathname;
+    if (path.startsWith('/gh/')) {
+      targetUrl = decodeURIComponent(path.slice(4));
+      // 自动补全协议
+      if (!targetUrl.startsWith('http')) {
+        targetUrl = 'https://' + targetUrl;
+      }
+    }
+  }
+
+  if (!targetUrl) {
+    return new Response(
+      JSON.stringify({
+        error: 'Missing url parameter',
+        usage: '?url=https://github.com/.../releases/download/.../file.zip',
+      }),
+      { status: 400, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
+
+  // 安全校验：只允许白名单域名
+  if (!isAllowedUrl(targetUrl)) {
+    return new Response(
+      JSON.stringify({
+        error: 'URL not allowed',
+        message: 'Only GitHub download URLs are permitted',
+        allowedHosts: GITHUB_HOSTS,
+      }),
+      { status: 403, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
+
+  // 判断是否为固定版本（可长期缓存）
+  const isFixedVersion = /\/(releases\/download\/v[\d.]+|archive\/refs\/tags\/v[\d.]+)/.test(targetUrl);
+  const cacheTtl = isFixedVersion ? CACHE_TTL_FIXED : CACHE_TTL_DEFAULT;
+
+  // 尝试从 Cloudflare 缓存读取
+  const cacheKey = new Request(targetUrl);
+  const cache = caches.default;
+  let response = await cache.match(cacheKey);
+
+  if (!response) {
+    // 缓存未命中，请求 GitHub
+    try {
+      const upstream = await fetch(targetUrl, {
+        redirect: 'follow',
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; xiaosh-gh-proxy/1.0)',
+          'Accept': '*/*',
+        },
+      });
+
+      // 只缓存成功的 200 响应
+      if (upstream.status !== 200) {
+        // 透传错误状态码，不缓存
+        return new Response(upstream.body, {
+          status: upstream.status,
+          statusText: upstream.statusText,
+          headers: upstream.headers,
+        });
+      }
+
+      // 流式返回，同时写入缓存
+      response = new Response(upstream.body, {
+        status: upstream.status,
+        headers: {
+          ...Object.fromEntries(upstream.headers),
+          'Cache-Control': `public, max-age=${cacheTtl}`,
+          'X-Proxy-Cache': 'MISS',
+          'X-Proxy-Target': targetUrl,
+          'Access-Control-Allow-Origin': '*',
+        },
+      });
+
+      // 写入缓存（fire-and-forget，不阻塞当前响应）
+      cache.put(cacheKey, response.clone());
+    } catch (e) {
+      return new Response(
+        JSON.stringify({
+          error: 'Fetch failed',
+          message: e.message,
+        }),
+        { status: 502, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+  }
+
+  // 缓存命中，添加标记头
+  response = new Response(response.body, response.headers);
+  response.headers.set('X-Proxy-Cache', 'HIT');
+
+  return response;
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -146,6 +286,11 @@ export default {
           headers: { ...cors, 'Content-Type': 'application/json' },
         });
       }
+    }
+
+    // ===== GitHub proxy: /gh/ or ?url= =====
+    if (method === 'GET' && (path.startsWith('/gh/') || url.searchParams.has('url'))) {
+      return handleGitHubProxy(request, env);
     }
 
     // ===== Serve images from R2 =====
