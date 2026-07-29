@@ -1,21 +1,6 @@
 const CACHE_TTL_FIXED = 86400;  // 24h for versioned releases
 const CACHE_TTL_DEFAULT = 3600; // 1h for others
 
-const GITHUB_HOSTS = [
-  'github.com',
-  'gist.github.com',
-  'raw.githubusercontent.com',
-  'objects.githubusercontent.com',
-  'codeload.github.com',
-  'github-releases.githubusercontent.com',
-  'github-cloud.s3.amazonaws.com',
-  'release-assets.githubusercontent.com',
-  'gist.githubusercontent.com',
-  'media.githubusercontent.com',
-  'user-images.githubusercontent.com',
-  'private-user-images.githubusercontent.com'
-];
-
 const ALLOWED_PREFIXES = [
   '/releases/download/',
   '/archive/',
@@ -26,11 +11,19 @@ const ALLOWED_PREFIXES = [
 function isAllowedUrl(targetUrl) {
   try {
     const u = new URL(targetUrl);
-    if (!GITHUB_HOSTS.includes(u.hostname)) return false;
-    if (u.hostname === 'github.com') {
+    const host = u.hostname;
+
+    // 所有 *.githubusercontent.com 子域名 + codeload
+    if (/(^|\.)githubusercontent\.com$|^codeload\.github\.com$/i.test(host)) {
+      return true;
+    }
+
+    // github.com / gist.github.com 上的下载路径
+    if (host === 'github.com' || host === 'gist.github.com') {
       return ALLOWED_PREFIXES.some(p => u.pathname.includes(p));
     }
-    return true;
+
+    return false;
   } catch {
     return false;
   }
