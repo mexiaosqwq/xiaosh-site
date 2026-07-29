@@ -288,6 +288,17 @@ export default {
       }
     }
 
+    // ===== Test route: verify Worker is running latest code =====
+    if (path === '/__version__') {
+      return new Response(JSON.stringify({
+        version: 'gh-proxy-v1',
+        time: new Date().toISOString(),
+        hasProxy: true,
+      }), {
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
     // ===== GitHub proxy: /gh/ or ?url= =====
     if (method === 'GET' && (path.startsWith('/gh/') || url.searchParams.has('url'))) {
       return handleGitHubProxy(request, env);
