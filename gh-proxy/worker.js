@@ -75,13 +75,28 @@ export default {
 
     if (!response) {
       try {
-        const upstream = await fetch(targetUrl, {
-          redirect: 'follow',
+        let upstream = await fetch(targetUrl, {
+          redirect: 'manual',
           headers: {
             'User-Agent': 'Mozilla/5.0 (compatible; xiaosh-gh-proxy/1.0)',
             'Accept': '*/*',
           },
         });
+
+        // Manually follow redirects to preserve final response headers
+        let redirectCount = 0;
+        while (upstream.status >= 300 && upstream.status < 400 && redirectCount < 10) {
+          const location = upstream.headers.get('location');
+          if (!location) break;
+          upstream = await fetch(location, {
+            redirect: 'manual',
+            headers: {
+              'User-Agent': 'Mozilla/5.0 (compatible; xiaosh-gh-proxy/1.0)',
+              'Accept': '*/*',
+            },
+          });
+          redirectCount++;
+        }
 
         if (upstream.status !== 200) {
           return new Response(upstream.body, {
@@ -91,14 +106,6 @@ export default {
           });
         }
 
-        // Debug: log upstream headers to see what's available
-        const debugHeaders = {};
-        upstream.headers.forEach((value, key) => {
-          debugHeaders[key] = value;
-        });
-        console.log('[GH Proxy] Upstream headers:', JSON.stringify(debugHeaders));
-        console.log('[GH Proxy] Content-Disposition:', upstream.headers.get('content-disposition'));
-
         // Build headers explicitly to preserve Content-Disposition and Content-Type
         const headers = new Headers();
         upstream.headers.forEach((value, key) => {
@@ -106,7 +113,6 @@ export default {
         });
         // Ensure Content-Disposition is set for proper filename
         if (!headers.has('content-disposition')) {
-          // Extract filename from URL as fallback
           const urlPath = new URL(targetUrl).pathname;
           const filename = urlPath.split('/').pop() || 'download';
           headers.set('Content-Disposition', `attachment; filename="${filename}"`);
