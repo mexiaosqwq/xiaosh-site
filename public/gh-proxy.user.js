@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub 下载与图片代理
 // @namespace    https://xiaosh.xyz/
-// @version      6.2.0
+// @version      6.2.1
 // @description  代理 GitHub 下载链接与图片；Blob/data 双通道、srcset 与 picture 完整支持、懒加载、Shadow DOM、SPA 与延迟回收
 // @author       xiaosh
 // @match        *://github.com/*
@@ -1988,11 +1988,75 @@
     }
   }
 
+  /**
+   * 下载链接点击兜底：即便 href 尚未被改写，也在点击时接管导航。
+   * 保留 Ctrl/Meta/Shift/中键的新标签语义。
+   *
+   * 消除程序化 .click() 抢跑的罕见 race：GitHub JS 动态创建 <a>
+   * 并立即同步 .click() 时，MutationObserver（异步）和委托事件都还没
+   * 来得及改写 href，导航会走原始 github.com 地址。这个兜底在点击
+   * 发生时直接接管导航，确保走代理，且不缓冲到内存（仍是导航式下载）。
+   */
+  function handleDownloadClick(event) {
+    // 只处理主键普通点击；带修饰键或中键交给浏览器原生新标签逻辑，
+    // 那些路径下 href 已被捕获阶段的 rewriteLink 改写。
+    if (event.defaultPrevented) {
+      return;
+    }
+
+    if (
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) {
+      return;
+    }
+
+    const path = typeof event.composedPath === 'function'
+      ? event.composedPath()
+      : [];
+
+    let anchor = path.find(node => (
+      node?.tagName === 'A' && node.hasAttribute?.('href')
+    ));
+
+    if (!anchor && event.target?.closest) {
+      anchor = event.target.closest('a[href]');
+    }
+
+    if (!anchor) {
+      return;
+    }
+
+    const rawHref = anchor.getAttribute('href');
+    const url = parseURL(rawHref);
+
+    if (!url) {
+      return;
+    }
+
+    // 已是代理链接，放行。
+    if (url.hostname === PROXY_HOST) {
+      return;
+    }
+
+    if (!shouldProxy(url)) {
+      return;
+    }
+
+    // 接管导航，确保走代理，消除 href 未及时改写的竞态。
+    event.preventDefault();
+    location.href = proxyURL(url);
+  }
+
   // composedPath 已能穿透 Shadow DOM，所以只在 document 上注册一次。
   function installDelegatedEvents() {
     for (const eventName of DELEGATED_EVENTS) {
       document.addEventListener(eventName, delegatedLinkHandler, true);
     }
+    document.addEventListener('click', handleDownloadClick, true);
   }
 
   // ============================================================
