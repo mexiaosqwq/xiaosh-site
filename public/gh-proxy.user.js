@@ -1472,43 +1472,54 @@
       return true;
     }
 
+    // 去重：同一 URL 已有进行中的请求则复用，避免重复 fetch
+    if (state.pendingLogical === rawURL && state.pendingPromise) {
+      return state.pendingPromise;
+    }
+
     const domValueAtStart = image.getAttribute('src');
     const version = ++state.version;
     state.pendingLogical = rawURL;
 
-    try {
-      const blob = await fetchBlob(resourceURL.href);
+    const promise = (async () => {
+      try {
+        const blob = await fetchBlob(resourceURL.href);
 
-      if (!blob) {
-        return false;
+        if (!blob) {
+          return false;
+        }
+
+        if (state.version !== version || !image.isConnected) {
+          return false;
+        }
+
+        const materialized = await materializeBlob(blob);
+
+        if (!materialized) {
+          return false;
+        }
+
+        return commitAttribute({
+          element: image,
+          attributeName: 'src',
+          state,
+          version,
+          domValueAtStart,
+          logical: rawURL,
+          outputValue: composeValue(materialized, resourceURL),
+          revocables: materialized.revocable ? [materialized.value] : []
+        });
+      } finally {
+        if (state.version === version && state.pendingLogical === rawURL) {
+          state.pendingLogical = null;
+          state.pendingPromise = null;
+        }
       }
+    })();
 
-      if (state.version !== version || !image.isConnected) {
-        return false;
-      }
+    state.pendingPromise = promise;
 
-      const materialized = await materializeBlob(blob);
-
-      if (!materialized) {
-        return false;
-      }
-
-      return commitAttribute({
-        element: image,
-        attributeName: 'src',
-        state,
-        version,
-        domValueAtStart,
-        logical: rawURL,
-        outputValue: composeValue(materialized, resourceURL),
-        revocables: materialized.revocable ? [materialized.value] : []
-      });
-    } finally {
-      if (state.version === version && state.pendingLogical === rawURL) {
-        state.pendingLogical = null;
-        state.pendingPromise = null;
-      }
-    }
+    return promise;
   }
 
   /**
