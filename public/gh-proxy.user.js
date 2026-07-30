@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub 下载与图片代理
 // @namespace    https://xiaosh.xyz/
-// @version      6.0.0
+// @version      6.1.0
 // @description  自动代理 GitHub 下载链接和图片；支持 Blob、srcset、picture、懒加载、Shadow DOM、SPA 与并发控制
 // @author       xiaosh
 // @match        *://github.com/*
@@ -219,6 +219,9 @@
           responseType: 'blob',
           timeout: CONFIG.REQUEST_TIMEOUT_MS,
           anonymous: true,
+          headers: {
+            accept: 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8'
+          },
           onload: res => {
             try {
               const status = Number(res?.status || 0);
