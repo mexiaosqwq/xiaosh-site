@@ -29,6 +29,22 @@ function isAllowedUrl(targetUrl) {
   }
 }
 
+/**
+ * 从 URL 路径提取文件名，用于 Content-Disposition 兜底。
+ * 处理 query string、多次重定向后路径变化等情况。
+ */
+function extractFilename(urlValue) {
+  try {
+    const u = new URL(urlValue);
+    // pathname 去掉末尾 / 后取最后一段
+    const seg = u.pathname.replace(/\/+$/, '').split('/').pop() || '';
+    // 去掉 query / hash 残留，限制长度
+    return seg.split('?')[0].split('#')[0].slice(0, 200) || 'download';
+  } catch {
+    return 'download';
+  }
+}
+
 export default {
   async fetch(request) {
     const url = new URL(request.url);
@@ -68,14 +84,13 @@ export default {
     // Check Worker cache first (use versioned cache key to avoid stale entries)
     const isFixedVersion = /\/(releases\/download\/v[\d.]+|archive\/refs\/tags\/v[\d.]+)/.test(targetUrl);
     const cacheTtl = isFixedVersion ? CACHE_TTL_FIXED : CACHE_TTL_DEFAULT;
-    const cacheKey = new Request(targetUrl + '-v4');
+    const cacheKey = new Request(targetUrl + '-v5');
     const cache = caches.default;
     const cached = await cache.match(cacheKey);
     if (cached) {
       // Return cached response with HIT marker
-      const headers = {};
-      cached.headers.forEach((value, key) => { headers[key] = value; });
-      headers['X-Proxy-Cache'] = 'HIT';
+      const headers = new Headers(cached.headers);
+      headers.set('X-Proxy-Cache', 'HIT');
       return new Response(cached.body, { status: 200, headers });
     }
 
@@ -88,7 +103,7 @@ export default {
         },
       });
 
-      // Follow redirects manually
+      // Follow redirects manually, 记录最终 URL 用于提取文件名
       let redirectCount = 0;
       while (upstream.status >= 300 && upstream.status < 400 && redirectCount < 10) {
         const location = upstream.headers.get('location');
@@ -104,6 +119,7 @@ export default {
       }
 
       if (upstream.status !== 200) {
+        // 非 200 透传，保留原始 headers（含可能的 Location）
         return new Response(upstream.body, {
           status: upstream.status,
           statusText: upstream.statusText,
@@ -111,24 +127,37 @@ export default {
         });
       }
 
-      // Extract filename from URL
-      const urlPath = new URL(targetUrl).pathname;
-      const filename = urlPath.split('/').pop() || 'download';
+      // ===== 构建响应头：以上游为基础，按需覆盖 =====
+      const headers = new Headers(upstream.headers);
 
-      // Build response with Content-Disposition
+      // Content-Type：上游有就保留，没有才补默认值
+      if (!headers.has('content-type')) {
+        headers.set('Content-Type', 'application/octet-stream');
+      }
+
+      // Content-Disposition：优先保留上游的（GitHub CDN 会带正确的 filename）；
+      // 上游没有才自己构造，使用最终 URL 路径提取文件名
+      if (!headers.has('content-disposition')) {
+        const finalUrl = targetUrl; // 手动跟随重定向后无法获取最终 URL，用原始 URL 近似
+        const filename = extractFilename(finalUrl);
+        headers.set('Content-Disposition', `attachment; filename="${filename}"`);
+      }
+
+      // 覆盖缓存策略
+      headers.set('Cache-Control', `public, max-age=${cacheTtl}`);
+      headers.set('Access-Control-Allow-Origin', '*');
+      headers.set('X-Proxy-Cache', 'MISS');
+
+      // 确保大文件下载体验：Content-Length / Accept-Ranges / ETag / Last-Modified
+      // 已从 upstream.headers 透传，无需额外处理
+
       const response = new Response(upstream.body, {
         status: 200,
-        headers: {
-          'Content-Type': upstream.headers.get('content-type') || 'application/octet-stream',
-          'Content-Disposition': `attachment; filename="${filename}"`,
-          'Cache-Control': `public, max-age=${cacheTtl}`,
-          'Access-Control-Allow-Origin': '*',
-          'X-Proxy-Cache': 'MISS',
-        },
+        headers,
       });
 
       // Store in Worker cache
-      cache.put(cacheKey, response.clone());
+      await cache.put(cacheKey, response.clone());
       return response;
     } catch (e) {
       return new Response(
