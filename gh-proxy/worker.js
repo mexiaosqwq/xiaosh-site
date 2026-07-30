@@ -423,8 +423,19 @@ export default {
       headers.delete(name);
     }
 
-    // 上游若返回压缩内容而运行时已解压，原长度不可信。
-    if (headers.has('content-encoding')) {
+    // 仅当上游声明了压缩、且属于会被运行时自动解压的文本类型时，
+    // 才丢弃可能失真的 content-length。二进制下载保留上游长度，
+    // 让浏览器能显示文件大小和下载进度。
+    const encoding = (headers.get('content-encoding') || '').toLowerCase();
+    const typeForLen = (headers.get('content-type') || '').toLowerCase();
+
+    const isTextLike =
+      typeForLen.startsWith('text/') ||
+      typeForLen.includes('json') ||
+      typeForLen.includes('xml') ||
+      typeForLen.includes('javascript');
+
+    if (encoding && encoding !== 'identity' && isTextLike) {
       headers.delete('content-length');
     }
 
