@@ -10,6 +10,12 @@ export default {
       'Access-Control-Allow-Headers': 'Content-Type',
     };
 
+    const jsonHeaders = {
+      ...cors,
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-store',
+    };
+
     if (method === 'OPTIONS') {
       return new Response(null, { headers: cors });
     }
@@ -25,12 +31,12 @@ export default {
           }))
           .sort((a, b) => new Date(b.uploaded || 0) - new Date(a.uploaded || 0));
         return new Response(JSON.stringify(files), {
-          headers: { ...cors, 'Content-Type': 'application/json' },
+          headers: jsonHeaders,
         });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), {
           status: 500,
-          headers: { ...cors, 'Content-Type': 'application/json' },
+          headers: jsonHeaders,
         });
       }
     }
@@ -42,12 +48,12 @@ export default {
         const file = formData.get('file');
         if (!file) {
           return new Response(JSON.stringify({ error: 'No file' }), {
-            status: 400, headers: { ...cors, 'Content-Type': 'application/json' },
+            status: 400, headers: jsonHeaders,
           });
         }
         if (!file.type.startsWith('image/')) {
           return new Response(JSON.stringify({ error: 'Not an image' }), {
-            status: 400, headers: { ...cors, 'Content-Type': 'application/json' },
+            status: 400, headers: jsonHeaders,
           });
         }
 
@@ -68,12 +74,12 @@ export default {
         });
 
         return new Response(JSON.stringify({ url: '/image/' + encodeURIComponent(name), name }), {
-          headers: { ...cors, 'Content-Type': 'application/json' },
+          headers: jsonHeaders,
         });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), {
           status: 500,
-          headers: { ...cors, 'Content-Type': 'application/json' },
+          headers: jsonHeaders,
         });
       }
     }
@@ -84,17 +90,17 @@ export default {
         const name = url.searchParams.get('name');
         if (!name) {
           return new Response(JSON.stringify({ error: 'Missing name' }), {
-            status: 400, headers: { ...cors, 'Content-Type': 'application/json' },
+            status: 400, headers: jsonHeaders,
           });
         }
         await env.IMAGE_BUCKET.delete(name);
         return new Response(JSON.stringify({ success: true }), {
-          headers: { ...cors, 'Content-Type': 'application/json' },
+          headers: jsonHeaders,
         });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), {
           status: 500,
-          headers: { ...cors, 'Content-Type': 'application/json' },
+          headers: jsonHeaders,
         });
       }
     }
@@ -105,26 +111,26 @@ export default {
         const { oldName, newName } = await request.json();
         if (!oldName || !newName) {
           return new Response(JSON.stringify({ error: 'Missing oldName or newName' }), {
-            status: 400, headers: { ...cors, 'Content-Type': 'application/json' },
+            status: 400, headers: jsonHeaders,
           });
         }
         if (newName.includes('/') || newName.includes('\\')) {
           return new Response(JSON.stringify({ error: 'Invalid name' }), {
-            status: 400, headers: { ...cors, 'Content-Type': 'application/json' },
+            status: 400, headers: jsonHeaders,
           });
         }
 
         const object = await env.IMAGE_BUCKET.get(oldName);
         if (!object) {
           return new Response(JSON.stringify({ error: 'Image not found' }), {
-            status: 404, headers: { ...cors, 'Content-Type': 'application/json' },
+            status: 404, headers: jsonHeaders,
           });
         }
 
         const existing = await env.IMAGE_BUCKET.get(newName);
         if (existing) {
           return new Response(JSON.stringify({ error: 'Name already exists' }), {
-            status: 409, headers: { ...cors, 'Content-Type': 'application/json' },
+            status: 409, headers: jsonHeaders,
           });
         }
 
@@ -134,12 +140,12 @@ export default {
         await env.IMAGE_BUCKET.delete(oldName);
 
         return new Response(JSON.stringify({ success: true, name: newName }), {
-          headers: { ...cors, 'Content-Type': 'application/json' },
+          headers: jsonHeaders,
         });
       } catch (e) {
         return new Response(JSON.stringify({ error: e.message }), {
           status: 500,
-          headers: { ...cors, 'Content-Type': 'application/json' },
+          headers: jsonHeaders,
         });
       }
     }
