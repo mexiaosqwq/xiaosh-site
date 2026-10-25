@@ -298,6 +298,220 @@ function errorResponse(request, message, status) {
 }
 
 // ============================================================
+// 整站镜像：任意路径 → github.com
+//
+// 用法：https://<host>/oven-sh/bun  ⇄  https://github.com/oven-sh/bun
+// 旧的 ?url=<encoded> 与 /https://... 两种入口保持不变。
+// ============================================================
+
+const MIRROR_ORIGIN = 'https://github.com';
+// 去掉前导斜杠后再判：/https://github.com/x 是老式的路径式入口。
+const MIRROR_PATH_PREFIX = /^https?:\/{1,2}/i;
+const MIRROR_METHODS = new Set(['GET', 'HEAD', 'POST']);
+
+// 转发给 GitHub 的请求头。GitHub 会按 UA/Referer 判定客户端，
+// 缺了更容易被中间页拦下来。
+const MIRROR_REQUEST_HEADERS = [
+  'accept',
+  'accept-language',
+  'authorization',
+  'cache-control',
+  'content-type',
+  'cookie',
+  'origin',
+  'pragma',
+  'referer',
+  'user-agent',
+  'x-github-api-version',
+  'x-requested-with',
+];
+
+function isMirrorRequest(requestURL) {
+  if (requestURL.searchParams.has('url')) {
+    return false;
+  }
+
+  return !MIRROR_PATH_PREFIX.test(requestURL.pathname.replace(/^\/+/, ''));
+}
+
+function proxyAssetURL(origin, url) {
+  return `${origin}/?url=${encodeURIComponent(url)}`;
+}
+
+/**
+ * 重写 GitHub 页面。
+ *
+ * 只改写绝对地址：
+ *   1. https://github.com/...        → 镜像同源（相对路径天然就映射到 github.com，不用动）
+ *   2. //github.com/...              → 同上，协议相对形式
+ *   3. *.githubusercontent.com / codeload → 走 ?url= 资源代理（这些域在本机多半半死不活）
+ * github.githubassets.com 能直连，保持原样（少一跳）。
+ */
+function rewriteHTML(html, origin) {
+  const host = new URL(origin).host;
+
+  let out = html.replace(/https?:\/\/github\.com(?![.\w-])/gi, origin);
+
+  out = out.replace(/(?<![:\w])\/\/github\.com(?![.\w-])/gi, `//${host}`);
+
+  // HTML 实体先还原再编码，否则 ?url= 的 query 会被 &amp; 污染。
+  const proxify = match => proxyAssetURL(origin, match.replace(/&amp;/g, '&'));
+
+  out = out.replace(
+    /https?:\/\/(?:[a-z0-9-]+\.)*githubusercontent\.com\/[^"'\s<>\\]*/gi,
+    proxify
+  );
+
+  out = out.replace(
+    /https?:\/\/codeload\.github\.com\/[^"'\s<>\\]*/gi,
+    proxify
+  );
+
+  return out;
+}
+
+function rewriteLocation(location, origin) {
+  try {
+    const absolute = new URL(location, MIRROR_ORIGIN);
+
+    if (absolute.hostname === 'github.com') {
+      return absolute.pathname + absolute.search + absolute.hash;
+    }
+
+    if (
+      /(^|\.)githubusercontent\.com$/i.test(absolute.hostname) ||
+      absolute.hostname === 'codeload.github.com'
+    ) {
+      return proxyAssetURL(origin, absolute.href);
+    }
+
+    return location;
+  } catch {
+    return location;
+  }
+}
+
+// GitHub 的 Cookie 带 Domain=.github.com，落到镜像域上必须去掉，
+// 否则浏览器直接丢弃，登录态保不住。
+function rewriteSetCookie(cookie) {
+  return cookie.replace(/;\s*domain=[^;]*/gi, '');
+}
+
+function rewriteUpstreamHeader(name, value, origin) {
+  if (name === 'origin') {
+    return MIRROR_ORIGIN;
+  }
+
+  if (name === 'referer' && value.startsWith(origin)) {
+    return MIRROR_ORIGIN + value.slice(origin.length);
+  }
+
+  return value;
+}
+
+async function handleMirror(request, requestURL) {
+  if (!MIRROR_METHODS.has(request.method)) {
+    return errorResponse(request, '镜像仅支持 GET/HEAD/POST', 405);
+  }
+
+  const target = MIRROR_ORIGIN + requestURL.pathname + requestURL.search;
+  const headers = new Headers();
+
+  for (const name of MIRROR_REQUEST_HEADERS) {
+    const value = request.headers.get(name);
+
+    if (value) {
+      headers.set(name, rewriteUpstreamHeader(name, value, requestURL.origin));
+    }
+  }
+
+  headers.set('accept-encoding', 'identity');
+
+  if (!headers.has('user-agent')) {
+    headers.set('user-agent', 'github-proxy-worker');
+  }
+
+  const hasBody = request.method !== 'GET' && request.method !== 'HEAD';
+  let upstream;
+
+  try {
+    upstream = await fetch(target, {
+      method: request.method,
+      headers,
+      body: hasBody ? await request.arrayBuffer() : undefined,
+      redirect: 'manual',
+    });
+  } catch (error) {
+    return errorResponse(
+      request,
+      `镜像请求失败：${error?.message || error}`,
+      502
+    );
+  }
+
+  const responseHeaders = new Headers(upstream.headers);
+
+  for (const name of STRIP_RESPONSE_HEADERS) {
+    responseHeaders.delete(name);
+  }
+
+  const cookies = upstream.headers.getSetCookie?.() || [];
+
+  if (cookies.length) {
+    responseHeaders.delete('set-cookie');
+
+    for (const cookie of cookies) {
+      responseHeaders.append('set-cookie', rewriteSetCookie(cookie));
+    }
+  }
+
+  const location = responseHeaders.get('location');
+
+  if (location) {
+    responseHeaders.set(
+      'location',
+      rewriteLocation(location, requestURL.origin)
+    );
+  }
+
+  const contentType = (responseHeaders.get('content-type') || '').toLowerCase();
+
+  if (!contentType.includes('text/html')) {
+    return new Response(upstream.body, {
+      status: upstream.status,
+      statusText: upstream.statusText,
+      headers: responseHeaders,
+    });
+  }
+
+  let html;
+
+  try {
+    html = await upstream.text();
+  } catch (error) {
+    return errorResponse(
+      request,
+      `镜像正文读取失败：${error?.message || error}`,
+      502
+    );
+  }
+
+  // 重写之后长度与编码都不再可信。
+  responseHeaders.delete('content-length');
+  responseHeaders.delete('content-encoding');
+  responseHeaders.set('cache-control', 'no-store');
+
+  return new Response(
+    request.method === 'HEAD' ? null : rewriteHTML(html, requestURL.origin),
+    {
+      status: upstream.status,
+      statusText: upstream.statusText,
+      headers: responseHeaders,
+    }
+  );
+}
+
+// ============================================================
 // 主逻辑
 // ============================================================
 
@@ -308,6 +522,14 @@ export default {
         status: 204,
         headers: corsHeaders(request),
       });
+    }
+
+    const requestURL = new URL(request.url);
+
+    // 整站镜像：除 ?url=<encoded> 与 /https://... 之外的路径全部落到 github.com。
+    // ?url= 是老接口（脚本、下载代理都在用），先让它走自己的分支。
+    if (isMirrorRequest(requestURL)) {
+      return handleMirror(request, requestURL);
     }
 
     if (request.method !== 'GET' && request.method !== 'HEAD') {
@@ -565,3 +787,6 @@ export default {
     return response;
   },
 };
+
+// 仅用于本地单元测试（wrangler 打包时会忽略未使用的导出）。
+export { rewriteHTML, rewriteLocation, rewriteSetCookie, isMirrorRequest };
