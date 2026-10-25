@@ -338,6 +338,26 @@ function proxyAssetURL(origin, url) {
   return `${origin}/?url=${encodeURIComponent(url)}`;
 }
 
+// GitHub 的 React 组件（PR 列表、hovercard 等）会用写死的 github.com 拼链接，
+// 这些链接在 HTML 里根本查不到，只能等 JS 跑出来再改，所以补一段运行时兜底。
+const MIRROR_CLIENT_FIX =
+  '<script>(function(){' +
+  'var G="https://git"+"hub.com",O=location.origin;' +
+  'function fix(a){var h=a.getAttribute&&a.getAttribute("href");' +
+  'if(!h||h.indexOf(G)!==0)return;var n=h.charAt(G.length);' +
+  'if(n&&n!=="/")return;a.setAttribute("href",O+h.slice(G.length));}' +
+  'function scan(root){var q=root&&root.querySelectorAll?root:document;' +
+  'q.querySelectorAll("a[href]").forEach(fix);}' +
+  'document.addEventListener("click",function(e){' +
+  'var t=e.target,a=t&&t.closest?t.closest("a[href]"):null;if(!a)return;' +
+  'var h=a.getAttribute("href");if(h&&h.indexOf(G)===0){' +
+  'e.preventDefault();location.assign(O+h.slice(G.length));}},true);' +
+  'new MutationObserver(function(list){list.forEach(function(m){' +
+  'if(m.type==="attributes"){fix(m.target);return;}' +
+  'm.addedNodes.forEach(function(n){if(n.nodeType===1){fix(n);scan(n);}});});})' +
+  '.observe(document.documentElement,{childList:true,subtree:true,' +
+  'attributes:true,attributeFilter:["href"]});scan(document);})();</script>';
+
 /**
  * 重写 GitHub 页面。
  *
@@ -366,6 +386,10 @@ function rewriteHTML(html, origin) {
     /https?:\/\/codeload\.github\.com\/[^"'\s<>\\]*/gi,
     proxify
   );
+
+  if (out.includes('</body>')) {
+    out = out.replace('</body>', MIRROR_CLIENT_FIX + '</body>');
+  }
 
   return out;
 }

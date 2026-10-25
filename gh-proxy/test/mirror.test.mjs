@@ -131,3 +131,20 @@ test('镜像请求识别：普通路径进镜像，两个老入口不进', () =>
   assert.equal(mirror('/https://github.com/oven-sh/bun'), false);
   assert.equal(mirror('/http://github.com/oven-sh/bun'), false);
 });
+
+test('注入运行时兜底脚本：只在有 body 的完整页面注入一次', () => {
+  const page = rewriteHTML(
+    '<html><body><a href="/x">x</a></body></html>',
+    ORIGIN
+  );
+
+  assert.equal(page.match(/MutationObserver/g).length, 1);
+  assert.ok(page.indexOf('MutationObserver') < page.indexOf('</body>'));
+
+  // 兜底脚本用字符串拼接构造域名，不能自己把裸地址又写回页面。
+  assert.equal(page.includes('https://github.com'), false);
+
+  const fragment = rewriteHTML('<div>partial</div>', ORIGIN);
+
+  assert.equal(fragment.includes('MutationObserver'), false);
+});
